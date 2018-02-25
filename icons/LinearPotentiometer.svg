@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    viewBox="0 0 64 64"
-   sodipodi:docname="WorkbenchIcon.svg">
+   sodipodi:docname="LinearPotentiometer.svg">
   <defs
      id="defs4154">
     <marker
@@ -698,9 +698,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11"
-     inkscape:cx="44.145366"
-     inkscape:cy="27.408825"
+     inkscape:zoom="7.7781746"
+     inkscape:cx="40.771157"
+     inkscape:cy="28.64258"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:document-units="px"
@@ -727,73 +727,27 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
     <rect
-       style="fill:#aaccff;stroke:#000000"
-       id="rect4010"
-       width="62.18182"
-       height="59.727272"
-       x="0.72727275"
-       y="2.5454545" />
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.99824691;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4309"
+       width="19.282612"
+       height="60.492569"
+       x="22.104494"
+       y="-62.25893"
+       transform="matrix(0,1,-1,0,0,0)" />
     <rect
-       style="fill:#000000;stroke:#000000;stroke-width:0.7913357"
-       id="rect4012"
-       width="37.935936"
-       height="15.390481"
-       x="6.077486"
-       y="7.804759" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014"
-       cx="13.943574"
-       cy="50.36364"
-       rx="5.5297804"
-       ry="5.8369908"
-       inkscape:transform-center-x="-36"
-       inkscape:transform-center-y="-34.181818" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014-7"
-       cx="35.090908"
-       cy="50.18182"
-       rx="5.5297804"
-       ry="5.8369908" />
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.51212621;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4313"
+       width="48.983513"
+       height="1.1172298"
+       x="7.5863872"
+       y="31.27582" />
     <rect
-       style="fill:#000000;stroke:#000000;stroke-width:1.55921996"
-       id="rect4054-9"
-       width="4.5316892"
-       height="48.168053"
-       x="50.46143"
-       y="8.6432447" />
-    <rect
-       style="fill:#000000;stroke:#000000"
-       id="rect4056-1"
-       width="9.818182"
-       height="1.7272727"
-       x="47.636364"
-       y="33.363636" />
-    <rect
-       style="fill:#e6e6e6;stroke:#000000;stroke-width:2.67600012;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect4307"
-       width="2.1818182"
-       height="0.90909094"
-       x="20.545454"
-       y="16.545454" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014-3"
-       cx="13.636364"
-       cy="34"
-       rx="5.5297804"
-       ry="5.8369908"
-       inkscape:transform-center-x="-36"
-       inkscape:transform-center-y="-34.181818" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014-6"
-       cx="34.727272"
-       cy="34"
-       rx="5.5297804"
-       ry="5.8369908"
-       inkscape:transform-center-x="-36"
-       inkscape:transform-center-y="-34.181818" />
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.23569322;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4311"
+       width="33.884518"
+       height="11.542175"
+       x="14.852242"
+       y="-48.073807"
+       transform="matrix(0,1,-1,0,0,0)" />
   </g>
 </svg>

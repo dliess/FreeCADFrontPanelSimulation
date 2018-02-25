@@ -26,31 +26,32 @@
 import FreeCAD
 import FreeCADGui
 
-
 class FrontPanelSim (Workbench):
-    import FPSimInit
+    import FPSimDir
     # __dir__ = os.path.dirname( __file__ ) # __file__ is not working
-    Icon = FPSimInit.__dir__ + '/icons/WorkbenchIcon.svg'
+    Icon = FPSimDir.__dir__ + '/icons/WorkbenchIcon.svg'
     ToolTip = "This Workbench brings the frontpanel to life"
     MenuText = 'Frontpanel simulation'
 
     def Initialize(self):
         "This function is executed when FreeCAD starts"
         # import MyModuleA, MyModuleB # import here all the needed files that create your FreeCAD commands
-        import FPSimInit
-        self.list = ["CreateDisplay", "CreateButton"] # A list of command names created in the line above
-        self.appendToolbar("My Commands",self.list) # creates a new toolbar with your commands
-        self.appendMenu("My New Menu",self.list) # creates a new menu
-        self.appendMenu(["An existing Menu","My submenu"],self.list) # appends a submenu to an existing menu
+        import FPSimCommands
+        self.list = ["CreateDisplay", "CreateLinButton", "CreateRotButton", "CreateRotaryEncoder", "CreateLinearPotentiometer", "StartSimulation", "StopSimulation"] # A list of command names created in the line above
+        self.appendToolbar("FrontPanelSimToolbar",self.list) # creates a new toolbar with your commands
+        self.appendMenu("FrontPanelSimMenu",self.list) # creates a new menu
+        #self.appendMenu(["An existing Menu","My submenu"],self.list) # appends a submenu to an existing menu
 
     def Activated(self):
         "This function is executed when the workbench is activated"
-        FreeCAD.Console.PrintMessage("FrontPanelSim WB activated")
+        #FreeCAD.Console.PrintMessage("FrontPanelSim WB activated")
         return
 
     def Deactivated(self):
         "This function is executed when the workbench is deactivated"
-        FreeCAD.Console.PrintMessage("FrontPanelSim WB deactivated")
+        import FPSimulation
+        FPSimulation.stopSimulation()
+        #FreeCAD.Console.PrintMessage("FrontPanelSim WB deactivated")
         return
 
     def ContextMenu(self, recipient):
@@ -63,15 +64,4 @@ class FrontPanelSim (Workbench):
         return "Gui::PythonWorkbench"
        
 FreeCADGui.addWorkbench(FrontPanelSim())
-
-
-
-#    def Activated(self):
-#        import ExplodedAssembly as ea
-#        if not(FreeCAD.ActiveDocument):
-#            FreeCAD.newDocument()
-
-#        ea.checkDocumentStructure()
-#        FreeCAD.Console.PrintMessage('Exploded Assembly workbench loaded\n')
-
 

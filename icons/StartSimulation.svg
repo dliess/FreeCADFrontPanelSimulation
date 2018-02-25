@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    viewBox="0 0 64 64"
-   sodipodi:docname="WorkbenchIcon.svg">
+   sodipodi:docname="StartSimulation.svg">
   <defs
      id="defs4154">
     <marker
@@ -698,17 +698,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11"
-     inkscape:cx="44.145366"
-     inkscape:cy="27.408825"
+     inkscape:zoom="5.5"
+     inkscape:cx="-16.551397"
+     inkscape:cy="26.455295"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-width="1080"
+     inkscape:window-height="1883"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata4157">
@@ -726,74 +726,16 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
-    <rect
-       style="fill:#aaccff;stroke:#000000"
-       id="rect4010"
-       width="62.18182"
-       height="59.727272"
-       x="0.72727275"
-       y="2.5454545" />
-    <rect
-       style="fill:#000000;stroke:#000000;stroke-width:0.7913357"
-       id="rect4012"
-       width="37.935936"
-       height="15.390481"
-       x="6.077486"
-       y="7.804759" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014"
-       cx="13.943574"
-       cy="50.36364"
-       rx="5.5297804"
-       ry="5.8369908"
-       inkscape:transform-center-x="-36"
-       inkscape:transform-center-y="-34.181818" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014-7"
-       cx="35.090908"
-       cy="50.18182"
-       rx="5.5297804"
-       ry="5.8369908" />
-    <rect
-       style="fill:#000000;stroke:#000000;stroke-width:1.55921996"
-       id="rect4054-9"
-       width="4.5316892"
-       height="48.168053"
-       x="50.46143"
-       y="8.6432447" />
-    <rect
-       style="fill:#000000;stroke:#000000"
-       id="rect4056-1"
-       width="9.818182"
-       height="1.7272727"
-       x="47.636364"
-       y="33.363636" />
-    <rect
-       style="fill:#e6e6e6;stroke:#000000;stroke-width:2.67600012;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect4307"
-       width="2.1818182"
-       height="0.90909094"
-       x="20.545454"
-       y="16.545454" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014-3"
-       cx="13.636364"
-       cy="34"
-       rx="5.5297804"
-       ry="5.8369908"
-       inkscape:transform-center-x="-36"
-       inkscape:transform-center-y="-34.181818" />
-    <ellipse
-       style="fill:#000000;stroke:#000000;stroke-width:1.68965518"
-       id="path4014-6"
-       cx="34.727272"
-       cy="34"
-       rx="5.5297804"
-       ry="5.8369908"
-       inkscape:transform-center-x="-36"
-       inkscape:transform-center-y="-34.181818" />
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.89738989;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path4306"
+       cx="32.181816"
+       cy="31.999998"
+       r="30.282972" />
+    <path
+       style="fill:#00ff00;fill-rule:evenodd;stroke:#000000;stroke-width:3.29999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 19.454546,14.363637 0,36.181818 33.630242,-19.41643 z"
+       id="path4308"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

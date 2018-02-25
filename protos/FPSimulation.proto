@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+service FPSimulation {
+  rpc led_setColor (LedSetColorRequest) returns (Empty) {}
+  rpc display_setPixels (DisplaySetPixelsRequest) returns (Empty) {}
+  rpc display_setSubWindowPixels (DisplaySubWindowPixelsRequest) returns (Empty) {}
+  rpc display_drawRectangle (DisplayDrawRectangleRequest) returns (Empty) {}
+  rpc display_drawLine (DisplayDrawLineRequest) returns (Empty) {}
+  rpc display_getResolution (DisplayResolutionRequest) returns (DisplayResolutionAnswer) {}
+  rpc display_clearDisplay(DisplayClearDisplayRequest) returns (Empty) {}
+  rpc getButtonStates(Empty) returns (stream GetButtonStateAnswer) {}
+  rpc getEncoderIncrements(Empty) returns (stream GetEncoderIncrementsAnswer) {}
+  rpc getPotentiometerValues(Empty) returns (stream GetPotentiometerValuesAnswer) {}
+  rpc getTouchValue(Empty) returns (stream GetTouchValueAnswer) {}
+}
+
+message Empty {
+}
+
+message PixelPos{
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message ColorRGB{
+  float red   = 1;
+  float green = 2;
+  float blue  = 3;
+}
+
+message PixelData{
+  PixelPos pos   = 1;
+  ColorRGB color = 2;
+}
+
+message DisplaySubWindowData{
+  PixelPos p1                  = 1;
+  PixelPos p2                  = 2;
+  repeated ColorRGB pixelColor = 3;
+}
+
+message PixelDataList{
+  repeated PixelData pixelData = 1;
+}
+
+message LedSetColorRequest {
+  string objLabel = 1;
+  ColorRGB color  = 2;
+}
+
+message DisplaySetPixelsRequest {
+  string objLabel             = 1;
+  PixelDataList pixelDataList = 2;
+}
+
+message DisplaySubWindowPixelsRequest{
+  string objLabel           = 1;
+  DisplaySubWindowData data = 2;
+}
+
+message RectangleData{
+  PixelPos p1          = 1;
+  PixelPos p2          = 2;
+  ColorRGB pixelColor  = 3;
+  bool filled          = 4;
+}
+
+message DisplayDrawRectangleRequest{
+  string objLabel    = 1;
+  RectangleData data = 2;          
+}
+
+message LineData{
+  PixelPos p1          = 1;
+  PixelPos p2          = 2;
+  ColorRGB pixelColor  = 3;
+}
+
+message DisplayDrawLineRequest{
+  string objLabel = 1;
+  LineData data   = 2;          
+}
+
+
+message DisplayResolutionRequest{
+   string objLabel = 1;
+}
+
+message DisplayClearDisplayRequest{
+  string objLabel    = 1;
+}
+
+message DisplayResolutionAnswer{
+  uint32 x = 1;
+  uint32 y = 2;
+}
+
+
+enum ButtonState{
+  BUTTON_RELEASED  = 0;
+  BUTTON_PRESSED   = 1;
+}
+
+message GetButtonStateAnswer{
+  string objLabel   = 1;
+  ButtonState state = 2;
+}
+
+message GetEncoderIncrementsAnswer{
+  string objLabel   = 1;
+  sint32 increments = 2;
+}
+
+message GetPotentiometerValuesAnswer{
+  string objLabel = 1;
+  uint32 value    = 2;
+}
+
+message GetTouchValueAnswer{
+  string objLabel = 1;
+  PixelPos pos    = 2;
+}
