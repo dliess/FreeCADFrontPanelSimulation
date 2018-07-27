@@ -6,9 +6,10 @@
 With this FreeCAD plugin, you can turn your FreeCAD objects into knobs, faders, displays, etc. that you can push/move/turn by your mouse and that provides/receives data to an external application via grpc. 
 
 Featured widgets:
-* Rotary Encoders
+* Rotary encoders
+* Rotary potentiometer
 * Pushbuttons
-* Linear Potentiometers
+* Linear potentiometers
 * LEDs
 * Displays
 
@@ -36,7 +37,6 @@ Featured widgets:
 * Start turning/pushing knobs and faders
 
 # Future Todos:
-* Implement rotary potentiometer
 * Implement pushbutton with multiple states
 * Implement rotary encoder with pushbutton functionality
 * Implement touch-surface 

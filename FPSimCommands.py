@@ -95,6 +95,22 @@ class CreateRotaryEncoder:
         import FPSimRotaryEncoder
         FPSimRotaryEncoder.createFPSimRotaryEncoder()
 
+class CreateRotaryPotentiometer:
+    def GetResources(self):
+        return {'Pixmap': FPSimDir.__dir__ + '/icons/RotPotentiometer.svg',
+                'MenuText': 'Create rotary potentiometer',
+                'ToolTip': 'Create rotary potentiometer'}
+
+    def IsActive(self):
+        if FreeCADGui.ActiveDocument and not FPSimulation.simulationRunning:
+            return True
+        else:
+            return False
+
+    def Activated(self):
+        import FPSimRotaryPotentiometer
+        FPSimRotaryPotentiometer.createFPSimRotaryPotentiometer()
+
 class CreateLinearPotentiometer:
     def GetResources(self):
         return {'Pixmap': FPSimDir.__dir__ + '/icons/LinearPotentiometer.svg',
@@ -150,6 +166,7 @@ FreeCAD.Gui.addCommand('CreateDisplay', CreateDisplay())
 FreeCAD.Gui.addCommand('CreateLinButton', CreateLinButton())
 FreeCAD.Gui.addCommand('CreateRotButton', CreateRotButton())
 FreeCAD.Gui.addCommand('CreateRotaryEncoder', CreateRotaryEncoder())
+FreeCAD.Gui.addCommand('CreateRotaryPotentiometer', CreateRotaryPotentiometer())
 FreeCAD.Gui.addCommand('CreateLinearPotentiometer', CreateLinearPotentiometer())
 FreeCAD.Gui.addCommand('StartSimulation', StartSimulation())
 FreeCAD.Gui.addCommand('StopSimulation', StopSimulation())
