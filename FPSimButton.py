@@ -14,6 +14,8 @@ class FPSimButton(InitialPlacements):
         obj.addProperty('App::PropertyFloat', 'RotationAngle').RotationAngle = 0
         obj.addProperty('App::PropertyVector', 'RotationCenter').RotationCenter = (0,0,0)
         obj.addProperty('App::PropertyVector', 'Translation').Translation = (0,0,0)
+        obj.addProperty('App::PropertyBool', 'SwitchMode').SwitchMode = False
+
         obj.Proxy = self
 
     def _registerEventCallbacks(self, objName):
@@ -41,18 +43,29 @@ class FPSimButton(InitialPlacements):
 
         FPSimServer.dataAquisitionCBHolder.setButtonCB(objName, self.getState)
         rot = FreeCAD.Rotation(obj.RotationAxis, obj.RotationAngle)
+        if state == FPEventDispatcher.FPEventDispatcher.PRESSED:
+            if not obj.SwitchMode:
+                buttonState[objName] = Proto.BUTTON_PRESSED
+            else:
+                if buttonState[objName] == Proto.BUTTON_PRESSED:
+                    buttonState[objName] = Proto.BUTTON_RELEASED
+                elif buttonState[objName] == Proto.BUTTON_RELEASED:
+                    buttonState[objName] = Proto.BUTTON_PRESSED
+        else:
+            if not obj.SwitchMode:
+                buttonState[objName] = Proto.BUTTON_RELEASED
+            else:
+                return
         for child in obj.Group:
-            if state == FPEventDispatcher.FPEventDispatcher.PRESSED:
+            if buttonState[objName] == Proto.BUTTON_PRESSED:
                 pos = child.Placement.Base + obj.Translation
                 rotPlacement = FreeCAD.Placement(pos, rot, obj.RotationCenter - child.Placement.Base)
                 newRot = rotPlacement.Rotation.multiply( child.Placement.Rotation )
                 newBase = rotPlacement.Base
                 child.Placement.Base = newBase
                 child.Placement.Rotation = newRot
-                buttonState[objName] = Proto.BUTTON_PRESSED
-            else:
+            elif buttonState[objName] == Proto.BUTTON_RELEASED:
                 child.Placement = self.getInitialPlacement(obj, child.Name)
-                buttonState[objName] = Proto.BUTTON_RELEASED
 
         
     def getState(self, objName):

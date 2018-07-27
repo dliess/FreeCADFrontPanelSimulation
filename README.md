@@ -8,7 +8,7 @@ With this FreeCAD plugin, you can turn your FreeCAD objects into knobs, faders, 
 Featured widgets:
 * Rotary encoders
 * Rotary potentiometer
-* Pushbuttons
+* Pushbuttons(also in switch mode)
 * Linear potentiometers
 * LEDs
 * Displays
@@ -37,7 +37,6 @@ Featured widgets:
 * Start turning/pushing knobs and faders
 
 # Future Todos:
-* Implement pushbutton with multiple states
 * Implement rotary encoder with pushbutton functionality
 * Implement touch-surface 
 * Documentation
