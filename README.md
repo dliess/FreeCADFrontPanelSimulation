@@ -40,9 +40,12 @@ Featured widgets:
 see Wiki
 
 # Future Todos:
-* Implement rotary encoder with pushbutton functionality
-* Implement touch-surface 
-* Documentation
+* Implement touch-surface
+* Some kind of automation to cut out holes with tolerance through front panel for the widgets(Ideas are welcome!)
+* Example with c++ Application code (SSD1331 Oled display + Arduino Adafruit demo code + grpc-patched Adafruit driver)
+* Midi Sequencer/Midi-Controller Example (Controlling a HW-Synthesizer)
+* Map Keyboard keys to Button Widgets
+* Render QT-Framebuffer into display widgets
 
 # Problems/Workarounds:
 * Setting pixel 0,0 causes border of display to be set with the color of the pixel
