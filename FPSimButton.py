@@ -93,7 +93,6 @@ class FPSimButton(InitialPlacements):
         
     def getState(self, objName):
         FPSimServer.dataAquisitionCBHolder.clearButtonCB(objName)
-        obj = FreeCAD.ActiveDocument.getObject(objName)
         return buttonState[objName]
 
 

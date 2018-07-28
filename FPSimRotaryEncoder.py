@@ -2,18 +2,24 @@ import FreeCAD
 import FPEventDispatcher
 from FPInitialPlacement import InitialPlacements
 import FPSimServer
+import generated.FPSimulation_pb2 as Proto
 
-lastRotationIncrementsAtAquire = {}
 
+lastRotationIncrementsAtAquire = dict()
+buttonState = dict()
+CTRL_KEYCODE = 65507
 
 class FPSimRotaryEncoder(InitialPlacements):
     def __init__(self, obj):
         InitialPlacements.__init__(self, obj)
+        buttonState[obj.Name] = Proto.BUTTON_RELEASED
         obj.addProperty('App::PropertyPythonObject', 'PressEventLocationXY').PressEventLocationXY = []
         obj.addProperty('App::PropertyPythonObject', 'RotationAngleAtPress').RotationAngleAtPress = 0
         obj.addProperty('App::PropertyPythonObject', 'RotationAngle').RotationAngle = 0
         obj.addProperty('App::PropertyInteger', 'IncrementsPerRev').IncrementsPerRev = 64
         obj.addProperty('App::PropertyFloat', 'MouseSensitivity').MouseSensitivity = 1.0
+        obj.addProperty('App::PropertyBool', 'PushButton').PushButton = False
+        obj.addProperty('App::PropertyFloat', 'PushButtonDepth').PushButtonDepth = 1.0
 
         obj.addProperty('App::PropertyVector', 'RotationAxis').RotationAxis = (0,0,0)
         obj.addProperty('App::PropertyVector', 'RotationCenter').RotationCenter = (0,0,0)
@@ -58,7 +64,13 @@ class FPSimRotaryEncoder(InitialPlacements):
                 self.moveToInitialPlacement(obj)
             except KeyError:
                 self.saveInitialPlacements(obj)
-        #elif prop == a parameter of the object
+        elif prop == 'PushButton':
+            if obj.PushButton == True:
+                FPEventDispatcher.eventDispatcher.registerForHoverKeyPress(obj.Name, CTRL_KEYCODE,self.onKeyEvent)
+                FPSimServer.dataAquisitionCBHolder.setButtonCB(obj.Name, self.getButtonState)
+            else:
+                FPSimServer.dataAquisitionCBHolder.clearButtonCB(obj.Name)
+                FPEventDispatcher.eventDispatcher.unregisterHoverKeyPress(obj.Name, CTRL_KEYCODE)
             # Called on parameter change (followed by execute-cb when it gets applied)
 
     def execute(self, fp):
@@ -81,13 +93,34 @@ class FPSimRotaryEncoder(InitialPlacements):
         rot = FreeCAD.Rotation(obj.RotationAxis, obj.RotationAngle)
         for child in obj.Group:
             initPlc = self.getInitialPlacement(obj, child.Name)
-            rotPlacement = FreeCAD.Placement(initPlc.Base, rot, obj.RotationCenter - initPlc.Base)
+            initBase = initPlc.Base
+            if objName in buttonState:
+                if buttonState[objName] == Proto.BUTTON_PRESSED:
+                    deltaVec = FreeCAD.Vector(obj.RotationAxis[0], obj.RotationAxis[1], obj.RotationAxis[2]) * obj.PushButtonDepth
+                    initBase = initBase - deltaVec
+            rotPlacement = FreeCAD.Placement(initBase, rot, obj.RotationCenter - initBase)
             newRot = rotPlacement.Rotation.multiply( initPlc.Rotation )
             newBase = rotPlacement.Base
+            #FreeCAD.Console.PrintMessage("OrigBase: " + str(initPlc.Base) + "\n" +  "newBase:  " + str(newBase) + "\n")
             child.Placement.Base = newBase
             child.Placement.Rotation = newRot
         FPSimServer.dataAquisitionCBHolder.setEncoderCB(objName, self.getIncrements)
-        
+     
+    def onKeyEvent(self, objName, keyCode, state):
+        #FreeCAD.Console.PrintMessage("onKeyEvent " + str(objName) + " " + str(keyCode) + " " + str(state) + "\n")
+        obj = FreeCAD.ActiveDocument.getObject(objName)
+        deltaVec = FreeCAD.Vector(obj.RotationAxis[0], obj.RotationAxis[1], obj.RotationAxis[2]) * obj.PushButtonDepth
+        if state == FPEventDispatcher.FPEventDispatcher.PRESSED:
+            buttonState[objName] = Proto.BUTTON_PRESSED        
+            for child in obj.Group:
+                initPlc = self.getInitialPlacement(obj, child.Name)
+                base = child.Placement.Base - deltaVec
+                child.Placement.Base = base
+        else:
+            buttonState[objName] = Proto.BUTTON_RELEASED
+            for child in obj.Group:
+                base = child.Placement.Base + deltaVec
+                child.Placement.Base = base          
 
     def getIncrements(self, objName):
         FPSimServer.dataAquisitionCBHolder.clearEncoderCB(objName)
@@ -100,6 +133,8 @@ class FPSimRotaryEncoder(InitialPlacements):
         lastRotationIncrementsAtAquire[objName] = actRotIncr
         return ret
 
+    def getButtonState(self, objName):
+        return buttonState[objName]
 
 class FPSimRotaryEncoderViewProvider:
     def __init__(self, obj):

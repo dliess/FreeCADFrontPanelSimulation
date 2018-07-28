@@ -10,35 +10,49 @@ class FPEventDispatcher:
     HOVER_OUT = 1
 
     def __init__(self):
-        self._view         = None
-        self._eventHandle  = None
-        self._activeObj    = None
-        self._prevHOverObj = None
+        self._view              = None
+        self._eventHandle       = None
+        self._activeObj         = None
+        self._activeObjKeypress = None
+        self._prevHOverObj      = None
 
-        self._buttonEventSubscribers = dict()
-        self._hOverSubscribers       = dict()
-        self._locationSubscribers    = dict()
-        self._keyEvent               = dict()
+        self._buttonEventSubscribers   = dict()
+        self._hOverSubscribers         = dict()
+        self._locationSubscribers      = dict()
+        self._keyEventSubscribers      = dict()
+        self._hoverKeyEventSubscribers = dict()
 
         #self._lastPos = None
-
 
     def _handleEvent(self, eventObj):
         event = eventObj.getEvent()
         if event.getTypeId() == coin.SoKeyboardEvent.getClassTypeId():
             #FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in SoKeyboardEvent " + str(event.getKey()) + "\n" )
-            if event.getKey() in self._keyEvent:
-                tup = self._keyEvent[event.getKey()]
+            if event.getKey() in self._keyEventSubscribers:
+                for objName in self._keyEventSubscribers[event.getKey()]:
+                    state = FPEventDispatcher.PRESSED if event.getState() == event.DOWN else FPEventDispatcher.RELEASED
+                    self._keyEventSubscribers[event.getKey()][objName](objName, event.getKey(), state)
+
+            if event.getKey() in self._hoverKeyEventSubscribers:
+                pos = event.getPosition().getValue()
+                objDict = self._hoverKeyEventSubscribers[event.getKey()]
                 if event.getState() == event.DOWN:
-                    tup[1](tup[0], FPEventDispatcher.PRESSED)
+                    keyPressedObj = self._getObjAtPos(pos, objDict)
+                    self._activeObjKeypress = keyPressedObj
+                    if keyPressedObj:
+                        objDict[keyPressedObj](keyPressedObj, event.getKey(), FPEventDispatcher.PRESSED)
                 else:
-                    tup[1](tup[0], FPEventDispatcher.RELEASED)
+                    if self._activeObjKeypress in objDict:
+                        objDict[self._activeObjKeypress](self._activeObjKeypress, event.getKey(), FPEventDispatcher.RELEASED) 
+                    self._activeObjKeypress = None
 
         elif event.getTypeId() == coin.SoLocation2Event.getClassTypeId():
             #FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in SoLocation2Event\n")
             pos = event.getPosition().getValue()
             for objName in self._locationSubscribers:
                 self._locationSubscribers[objName](objName, pos)
+            ### This is some code to interpolate mouse pointer jumps, but it makes
+            ### user experience baaaad
             #if not self._lastPos:
             #    self._lastPos = pos
             #delta = [ pos[0] - self._lastPos[0], pos[1] - self._lastPos[1]]
@@ -143,13 +157,24 @@ class FPEventDispatcher:
             del self._hOverSubscribers[objName]
 
     def registerForKeyPress(self, objName, key, cb):
-        # pass objName, up/down
-        self._keyEvent[key] = (objName, cb)
+        if key not in self._keyEventSubscribers:
+            self._keyEventSubscribers[key] = dict()
+        self._keyEventSubscribers[key][objName] = cb
 
-    def unregisterKeyPress(self, key):
-        if key in self._keyEvent:
-            del self._keyEvent[key]
+    def unregisterKeyPress(self, objName, key):
+        if key in self._keyEventSubscribers:
+            if objName in self._keyEventSubscribers[key]:
+                del self._keyEventSubscribers[key][objName]
 
+    def registerForHoverKeyPress(self, objName, key, cb):
+        if key not in self._hoverKeyEventSubscribers:
+            self._hoverKeyEventSubscribers[key] = dict()
+        self._hoverKeyEventSubscribers[key][objName] = cb
+
+    def unregisterHoverKeyPress(self, objName, key):
+        if key in self._hoverKeyEventSubscribers:
+            if objName in self._hoverKeyEventSubscribers[key]:
+                del self._hoverKeyEventSubscribers[key][objName]
     
 eventDispatcher = FPEventDispatcher()
         
