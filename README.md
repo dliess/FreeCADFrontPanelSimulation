@@ -36,6 +36,9 @@ Featured widgets:
 * From a terminal:change to application directory, then do PYTHONPATH=/path/to/repo ./draw-toy-app.py
 * Start turning/pushing knobs and faders, change display resolution(needs app-restart)
 
+# Usage:
+see Wiki
+
 # Future Todos:
 * Implement rotary encoder with pushbutton functionality
 * Implement touch-surface 
