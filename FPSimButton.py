@@ -25,14 +25,37 @@ class FPSimButton(InitialPlacements):
         FPEventDispatcher.eventDispatcher.unregisterForButtonEvent(objName)
 
     def onChanged(self, obj, prop):
+        #FreeCAD.Console.PrintMessage("in onChanged obj.Name: " + str(obj.Name) + " obj.Label: " + str(obj.Label) + " prop: " + str(prop) + "\n")
         if prop == 'Proxy':
+            # Called at loading existing object on first place(Placement is not valid yet )
+            # Called at creation on first place(ToCheck: I think Placement is not valid here yet)
             self._registerEventCallbacks(obj.Name)
         elif prop == 'Group':
+            # Always called when the group changes(new group member inserted or removed) 
+            # or gets created :
+            #    - called after 'proxy'-cb
+            #    - Placement is valid
+            #    - strange thing is at this point there is no child object inside
             if not obj.Group:
+                # Called when Removing all objects from group or when group-obj gets deleted
+                #FreeCAD.Console.PrintMessage(str(obj.Label) + " Obj has no Group attribute\n")    
                 self._unregisterEventCallbacks(obj.Name)
             elif self.hasNoChilds(obj):
+                # Called at object creation
+                #FreeCAD.Console.PrintMessage(str(obj.Label) + " Obj has Group attribute but no childs\n")
                 self._registerEventCallbacks(obj.Name)
+            #FreeCAD.Console.PrintMessage("Group cb: Saving initial Placement\n")
             self.saveInitialPlacements(obj) # needed at creation
+        elif prop == 'ExpressionEngine':
+            #FreeCAD.Console.PrintMessage("ExpressionEngine\n")
+            # Called at loading existing object at last cb(Placement is valid now)
+            try:
+                #FreeCAD.Console.PrintMessage("Move to initial placement\n")
+                self.moveToInitialPlacement(obj)
+            except KeyError:
+                #FreeCAD.Console.PrintMessage("Key Error exception\n")
+                self.saveInitialPlacements(obj)
+
 
     def execute(self, fp):
         # moving objects in group result in calling this, so reset initial placements to new pos

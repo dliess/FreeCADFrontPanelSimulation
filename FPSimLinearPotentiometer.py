@@ -60,8 +60,12 @@ class FPSimLinearPotentiometer(InitialPlacements):
                 FPSimServer.dataAquisitionCBHolder.setPotentiometerCB(obj.Name, self.getValue)
             self.saveInitialPlacements(obj) 
         elif prop == 'ExpressionEngine':
-            obj.OffsetDistance = 0
-            self.moveToInitialPlacement(obj)
+            try:
+                obj.OffsetDistance = 0
+                self.moveToInitialPlacement(obj)
+            except KeyError:
+                self.saveInitialPlacements(obj)
+
 
     def execute(self, obj):
         pass

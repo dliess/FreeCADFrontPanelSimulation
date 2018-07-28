@@ -5,6 +5,7 @@ class InitialPlacements:
         obj.addProperty('App::PropertyPythonObject', 'InitialPlacements').InitialPlacements = {}
 
     def saveInitialPlacements(self, obj):
+        obj.InitialPlacements.clear()
         for child in obj.Group:
             plm = child.Placement
             base = (plm.Base[0], plm.Base[1], plm.Base[2])

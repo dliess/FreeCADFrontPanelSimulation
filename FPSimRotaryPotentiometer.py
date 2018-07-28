@@ -57,8 +57,12 @@ class FPSimRotaryPotentiometer(InitialPlacements):
             self.saveInitialPlacements(obj) 
         elif prop == 'ExpressionEngine':
             # Called at loading existing object at last cb(Placement is valid now)
-            obj.RotationAngleDeg = 0
-            self.moveToInitialPlacement(obj) 
+            try:
+                obj.RotationAngleDeg = 0
+                self.moveToInitialPlacement(obj)
+            except KeyError:
+                self.saveInitialPlacements(obj)
+
         #elif prop == a parameter of the object
             # Called on parameter change (followed by execute-cb when it gets applied)
 
