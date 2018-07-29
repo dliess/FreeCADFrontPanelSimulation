@@ -37,7 +37,7 @@ class FrontPanelSim (Workbench):
         "This function is executed when FreeCAD starts"
         # import MyModuleA, MyModuleB # import here all the needed files that create your FreeCAD commands
         import FPSimCommands
-        self.list = ["CreateDisplay", "CreateLinButton", "CreateRotButton", "CreateRotaryEncoder", "CreateRotaryPotentiometer" ,"CreateLinearPotentiometer", "StartSimulation", "StopSimulation"] # A list of command names created in the line above
+        self.list = ["CreateDisplay", "CreateTouchSurface", "CreateLinButton", "CreateRotButton", "CreateRotaryEncoder", "CreateRotaryPotentiometer" ,"CreateLinearPotentiometer", "StartSimulation", "StopSimulation"] # A list of command names created in the line above
         self.appendToolbar("FrontPanelSimToolbar",self.list) # creates a new toolbar with your commands
         self.appendMenu("FrontPanelSimMenu",self.list) # creates a new menu
         #self.appendMenu(["An existing Menu","My submenu"],self.list) # appends a submenu to an existing menu

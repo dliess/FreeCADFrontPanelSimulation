@@ -46,6 +46,21 @@ class CreateDisplay:
         import FPSimDisplay
         FPSimDisplay.createFPSimDisplay()
 
+class CreateTouchSurface:
+    def GetResources(self):
+        return {'Pixmap': FPSimDir.__dir__ + '/icons/TouchSurface.svg',
+                'MenuText': 'Create Touch Surface',
+                'ToolTip': ''}
+
+    def IsActive(self):
+        if FreeCADGui.ActiveDocument and not FPSimulation.simulationRunning:
+            return True
+        else:
+            return False
+
+    def Activated(self):
+        import FPSimTouchSurface
+        FPSimTouchSurface.createFPSimTouchSurface()
 
 class CreateLinButton:
     def GetResources(self):
@@ -163,6 +178,7 @@ class StopSimulation:
 
 
 FreeCAD.Gui.addCommand('CreateDisplay', CreateDisplay())
+FreeCAD.Gui.addCommand('CreateTouchSurface', CreateTouchSurface())
 FreeCAD.Gui.addCommand('CreateLinButton', CreateLinButton())
 FreeCAD.Gui.addCommand('CreateRotButton', CreateRotButton())
 FreeCAD.Gui.addCommand('CreateRotaryEncoder', CreateRotaryEncoder())
