@@ -3,29 +3,10 @@ import FreeCADGui
 import FPEventDispatcher
 from FPInitialPlacement import InitialPlacements
 import FPSimServer
+import FPUtils
 
 pressEventLocationXY = dict()
 offsetDistanceAtPress = dict()
-
-def getFramePlacement(obj):
-    placementList = []
-    objToInspect = obj
-    while True:
-        parentPart = None
-        for parent in objToInspect.InList:
-            if parent.TypeId == 'App::Part':
-                placementList.append(parent.Placement)
-                parentPart = parent
-        if parentPart:
-           objToInspect = parentPart
-        else:
-            break
-    ret = FreeCAD.Placement()
-    placementList.reverse()
-    for p in placementList:
-        ret = ret.multiply(p)
-    return ret
-
 
 class FPSimLinearPotentiometer(InitialPlacements):
     def __init__(self, obj):
@@ -83,7 +64,7 @@ class FPSimLinearPotentiometer(InitialPlacements):
         
     def onDragged(self, objName, pointerPos):
         obj = FreeCAD.ActiveDocument.getObject(objName)
-        objFrame = getFramePlacement(obj) 
+        objFrame = FPUtils.getFramePlacement(obj) 
         # p0->p1 is the vector movement on screen(camera plane) 
         p0 = FreeCAD.Vector(pressEventLocationXY[objName][0], pressEventLocationXY[objName][1], 0)
         p1 = FreeCAD.Vector(pointerPos[0], pointerPos[1], 0)
@@ -100,8 +81,7 @@ class FPSimLinearPotentiometer(InitialPlacements):
         cam2ObjDist = (objFrame.multVec(obj.Group[0].Placement.Base) - CamPos).Length
 
         obj.OffsetDistance = offsetDistanceAtPress[objName] + (v0.dot(pointerDeltaInK0) * cam2ObjDist / 1000)
-        clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
-        obj.OffsetDistance = clamp(obj.OffsetDistance, -obj.EndDistance, obj.StartDistance)            
+        obj.OffsetDistance = FPUtils.clamp(obj.OffsetDistance, -obj.EndDistance, obj.StartDistance)            
         for child in obj.Group:
             child.Placement.Base = self.getInitialPlacement(obj, child.Name).Base + objFrame.inverse().Rotation.multVec(v0 * obj.OffsetDistance)
 
