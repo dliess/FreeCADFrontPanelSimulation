@@ -12,6 +12,7 @@ Featured widgets:
 * Linear potentiometers
 * LEDs
 * Displays
+* Touch-surface
 
 # Prerequisites:
 
@@ -40,7 +41,6 @@ Featured widgets:
 see Wiki
 
 # Future Todos:
-* Implement touch-surface
 * Some kind of automation to cut out holes with tolerance through front panel for the widgets(Ideas are welcome!)
 * Example with c++ Application code (SSD1331 Oled display + Arduino Adafruit demo code + grpc-patched Adafruit driver)
 * Midi Sequencer/Midi-Controller Example (Controlling a HW-Synthesizer)
