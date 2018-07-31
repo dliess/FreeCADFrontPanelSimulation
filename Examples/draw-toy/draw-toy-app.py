@@ -138,6 +138,12 @@ def run():
                    pixPos2.y = resolution.y - 1
                 cursorChanged = True
 
+        for touchValueAnswer in stub.getTouchValue(Proto.Empty()):
+            if touchValueAnswer.objLabel == "TouchSurface":
+                pixPos1.x = touchValueAnswer.pos.x
+                pixPos1.y = touchValueAnswer.pos.y
+                cursorChanged = True
+
         if cursorChanged:
             cursorChanged = False
             pixColor = Proto.ColorRGB(red = colRed, green = colGreen, blue = colBlue)

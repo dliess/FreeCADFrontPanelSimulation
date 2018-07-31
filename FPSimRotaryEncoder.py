@@ -38,6 +38,7 @@ class FPSimRotaryEncoder(InitialPlacements):
             # Called at loading existing object on first place(Placement is not valid yet )
             # Called at creation on first place(ToCheck: I think Placement is not valid here yet)
             self._registerEventCallbacks(obj.Name)
+            buttonState[obj.Name] = Proto.BUTTON_RELEASED
         elif prop == 'Group':
             # Always called when the group changes(new group member inserted or removed) 
             # or gets created :

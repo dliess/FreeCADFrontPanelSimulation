@@ -2,6 +2,7 @@ import FreeCAD
 import FPEventDispatcher
 from FPInitialPlacement import InitialPlacements
 import FPSimServer
+import FPUtils
 
 pressEventLocationXY = dict()
 rotationAngleAtPress = dict()
@@ -83,8 +84,7 @@ class FPSimRotaryPotentiometer(InitialPlacements):
     def onDragged(self, objName, pointerPos):
         obj = FreeCAD.ActiveDocument.getObject(objName)
         obj.RotationAngleDeg = rotationAngleAtPress[objName] + (pointerPos[1] - pressEventLocationXY[objName][1]) * obj.MouseSensitivity
-        clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
-        obj.RotationAngleDeg = clamp(obj.RotationAngleDeg, -obj.PositiveRotLimitDeg, obj.NegativeRotLimitDeg)            
+        obj.RotationAngleDeg = FPUtils.clamp(obj.RotationAngleDeg, -obj.PositiveRotLimitDeg, obj.NegativeRotLimitDeg)            
         rot = FreeCAD.Rotation(obj.RotationAxis, obj.RotationAngleDeg)
         for child in obj.Group:
             initPlc = self.getInitialPlacement(obj, child.Name)

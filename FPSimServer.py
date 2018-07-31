@@ -197,7 +197,9 @@ class FPSimulationService(GRPC.FPSimulationServicer):
                 obj = FreeCAD.ActiveDocument.getObject(objName)
                 answ = Proto.GetTouchValueAnswer()
                 answ.objLabel = obj.Label
-                answ.pos = dataAquisitionCBHolder.touchSurfaceCB[objName](objName) 
+                tup = dataAquisitionCBHolder.touchSurfaceCB[objName](objName)
+                answ.pos.x = tup[0]
+                answ.pos.y = tup[1]                  
                 yield answ
 
 
