@@ -11,6 +11,7 @@ service FPSimulation {
   rpc getButtonStates(Empty) returns (stream GetButtonStateAnswer) {}
   rpc getEncoderIncrements(Empty) returns (stream GetEncoderIncrementsAnswer) {}
   rpc getPotentiometerValues(Empty) returns (stream GetPotentiometerValuesAnswer) {}
+  rpc movePotentiometerToValue(MovePotentiometerRequest) returns(Empty) {}
   rpc getTouchValue(Empty) returns (stream GetTouchValueAnswer) {}
 }
 
@@ -119,4 +120,9 @@ message GetPotentiometerValuesAnswer{
 message GetTouchValueAnswer{
   string objLabel = 1;
   PixelPos pos    = 2;
+}
+
+message MovePotentiometerRequest{
+  string objLabel = 1;
+  uint32 value    = 2;
 }

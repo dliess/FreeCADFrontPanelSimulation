@@ -14,10 +14,11 @@ class FPSimLinearPotentiometer(InitialPlacements):
         pressEventLocationXY[obj.Name] = []
         offsetDistanceAtPress[obj.Name] = 0
         obj.addProperty('App::PropertyPythonObject', 'OffsetDistance').OffsetDistance = 0
-        obj.addProperty('App::PropertyFloat', 'StartDistance').StartDistance = 25
-        obj.addProperty('App::PropertyFloat', 'EndDistance').EndDistance = 25
+        obj.addProperty('App::PropertyFloat', 'NegativeDistLimit').NegativeDistLimit = 25
+        obj.addProperty('App::PropertyFloat', 'PositiveDistLimit').PositiveDistLimit = 25
         obj.addProperty('App::PropertyVector', 'PositiveDirection').PositiveDirection = (0,0,1)
         obj.addProperty('App::PropertyInteger', 'Resolution').Resolution = 1024
+        obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0 #TODO: implement
 
         obj.Proxy = self
 
@@ -63,8 +64,11 @@ class FPSimLinearPotentiometer(InitialPlacements):
 
         
     def onDragged(self, objName, pointerPos):
+        # Used coordinate sytem names
+        # K0 -> Part1 -> ... -> PartN(parentPart) -> ObjPlacement -> OnObjectPlacement
+
         obj = FreeCAD.ActiveDocument.getObject(objName)
-        objFrame = FPUtils.getFramePlacement(obj) 
+        parentPartPlacement = FPUtils.getParentPartPlacement(obj) 
         # p0->p1 is the vector movement on screen(camera plane) 
         p0 = FreeCAD.Vector(pressEventLocationXY[objName][0], pressEventLocationXY[objName][1], 0)
         p1 = FreeCAD.Vector(pointerPos[0], pointerPos[1], 0)
@@ -72,25 +76,33 @@ class FPSimLinearPotentiometer(InitialPlacements):
         # transformed into Base coordinate system of the document
         camOrientation = FreeCADGui.activeDocument().activeView().getCameraOrientation()
         pointerDeltaInK0 = camOrientation.multVec(p1 - p0)
-        # normalized fader direction vector in Base coordinate system
-        v0 = objFrame.Rotation.multVec(obj.PositiveDirection.normalize())
+        # normalized fader direction vector in K0 coordinate system
+        v0 = parentPartPlacement.Rotation.multVec(obj.PositiveDirection.normalize())
 
         cam = FreeCADGui.ActiveDocument.ActiveView.getCameraNode()
         camPosValues = cam.position.getValue()
         CamPos = FreeCAD.Vector(camPosValues[0], camPosValues[1], camPosValues[2])
-        cam2ObjDist = (objFrame.multVec(obj.Group[0].Placement.Base) - CamPos).Length
+        cam2ObjDist = (parentPartPlacement.multVec(obj.Group[0].Placement.Base) - CamPos).Length
 
-        obj.OffsetDistance = offsetDistanceAtPress[objName] + (v0.dot(pointerDeltaInK0) * cam2ObjDist / 1000)
-        obj.OffsetDistance = FPUtils.clamp(obj.OffsetDistance, -obj.EndDistance, obj.StartDistance)            
-        for child in obj.Group:
-            child.Placement.Base = self.getInitialPlacement(obj, child.Name).Base + objFrame.inverse().Rotation.multVec(v0 * obj.OffsetDistance)
+        self.setDistance(obj, offsetDistanceAtPress[objName] + (v0.dot(pointerDeltaInK0) * cam2ObjDist / 1000))
 
     def getValue(self, objName):
         obj = FreeCAD.ActiveDocument.getObject(objName)
         aChild = obj.Group[0]
-        fullDist = obj.StartDistance + obj.EndDistance
-        ratio = (obj.StartDistance * obj.PositiveDirection  + (aChild.Placement.Base - self.getInitialPlacement(obj, aChild.Name).Base)).Length / float(fullDist)
+        fullDist = obj.NegativeDistLimit + obj.PositiveDistLimit
+        ratio = (obj.NegativeDistLimit * obj.PositiveDirection  + (aChild.Placement.Base - self.getInitialPlacement(obj, aChild.Name).Base)).Length / float(fullDist)
         return int(ratio * float(obj.Resolution))
+
+    def moveToValue(self, objName, value):
+        obj = FreeCAD.ActiveDocument.getObject(objName)
+        destDistance = ((value * float(obj.NegativeDistLimit + obj.PositiveDistLimit)) / float(obj.Resolution)) - obj.NegativeDistLimit
+        self.setDistance(obj, destDistance)
+
+    def setDistance(self, obj, destDistance):
+        obj.OffsetDistance = FPUtils.clamp( destDistance, -obj.NegativeDistLimit, obj.PositiveDistLimit )            
+        for child in obj.Group:
+            child.Placement.Base = self.getInitialPlacement(obj, child.Name).Base + (obj.PositiveDirection.normalize() * obj.OffsetDistance)
+
 
 class FPSimLinearPotentiometerViewProvider:
     def __init__(self, obj):

@@ -13,12 +13,11 @@ class FPSimRotaryPotentiometer(InitialPlacements):
         obj.addProperty('App::PropertyPythonObject', 'RotationAngleDeg').RotationAngleDeg = 0
         obj.addProperty('App::PropertyInteger', 'IncrementsOnWholeArc').IncrementsOnWholeArc = 64
         obj.addProperty('App::PropertyFloat', 'MouseSensitivity').MouseSensitivity = 1.0
-
         obj.addProperty('App::PropertyVector', 'RotationAxis').RotationAxis = (0,0,0)
         obj.addProperty('App::PropertyVector', 'RotationCenter').RotationCenter = (0,0,0)
-
         obj.addProperty('App::PropertyFloat', 'PositiveRotLimitDeg').PositiveRotLimitDeg = 10.0
         obj.addProperty('App::PropertyFloat', 'NegativeRotLimitDeg').NegativeRotLimitDeg = 10.0
+        obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0 #TODO: implement
 
         obj.Proxy = self
 
@@ -83,8 +82,22 @@ class FPSimRotaryPotentiometer(InitialPlacements):
 
     def onDragged(self, objName, pointerPos):
         obj = FreeCAD.ActiveDocument.getObject(objName)
-        obj.RotationAngleDeg = rotationAngleAtPress[objName] + (pointerPos[1] - pressEventLocationXY[objName][1]) * obj.MouseSensitivity
-        obj.RotationAngleDeg = FPUtils.clamp(obj.RotationAngleDeg, -obj.PositiveRotLimitDeg, obj.NegativeRotLimitDeg)            
+        self.setRotation(obj, rotationAngleAtPress[objName] + (pointerPos[1] - pressEventLocationXY[objName][1]) * obj.MouseSensitivity)
+
+    def getValue(self, objName):
+        obj = FreeCAD.ActiveDocument.getObject(objName)
+        wholeArcDeg = obj.NegativeRotLimitDeg + obj.PositiveRotLimitDeg
+        rotDeg = obj.RotationAngleDeg + obj.NegativeRotLimitDeg
+        return int( (rotDeg / wholeArcDeg) * float(obj.IncrementsOnWholeArc) )
+
+    def moveToValue(self, objName, value):
+        obj = FreeCAD.ActiveDocument.getObject(objName)
+        fullRangeDeg = obj.NegativeRotLimitDeg + obj.PositiveRotLimitDeg
+        destDeg = FPUtils.clamp(value, 0, obj.IncrementsOnWholeArc) * float(fullRangeDeg) / float(obj.IncrementsOnWholeArc) - obj.NegativeRotLimitDeg
+        self.setRotation(obj, destDeg)
+
+    def setRotation(self, obj, degree):
+        obj.RotationAngleDeg = FPUtils.clamp(degree, -obj.PositiveRotLimitDeg, obj.NegativeRotLimitDeg)            
         rot = FreeCAD.Rotation(obj.RotationAxis, obj.RotationAngleDeg)
         for child in obj.Group:
             initPlc = self.getInitialPlacement(obj, child.Name)
@@ -93,12 +106,7 @@ class FPSimRotaryPotentiometer(InitialPlacements):
             newBase = rotPlacement.Base
             child.Placement.Base = newBase
             child.Placement.Rotation = newRot
-
-    def getValue(self, objName):
-        obj = FreeCAD.ActiveDocument.getObject(objName)
-        wholeArcDeg = obj.NegativeRotLimitDeg + obj.PositiveRotLimitDeg
-        rotDeg = obj.RotationAngleDeg + obj.NegativeRotLimitDeg
-        return int( (rotDeg / wholeArcDeg) * float(obj.IncrementsOnWholeArc) )
+        
 
 
 class FPSimRotaryPotentiometerViewProvider:

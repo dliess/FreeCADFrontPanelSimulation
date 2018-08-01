@@ -20,9 +20,9 @@ class FPSimRotaryEncoder(InitialPlacements):
         obj.addProperty('App::PropertyFloat', 'MouseSensitivity').MouseSensitivity = 1.0
         obj.addProperty('App::PropertyBool', 'PushButton').PushButton = False
         obj.addProperty('App::PropertyFloat', 'PushButtonDepth').PushButtonDepth = 1.0
-
         obj.addProperty('App::PropertyVector', 'RotationAxis').RotationAxis = (0,0,0)
         obj.addProperty('App::PropertyVector', 'RotationCenter').RotationCenter = (0,0,0)
+        obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0 #TODO: implement
 
         obj.Proxy = self
 

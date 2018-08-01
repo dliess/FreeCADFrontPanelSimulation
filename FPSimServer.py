@@ -80,12 +80,12 @@ class DataAquisitionCBHolder:
         finally:
             self._mutex.release()
     
-dataAquisitionCBHolder = DataAquisitionCBHolder() 
+dataAquisitionCBHolder = DataAquisitionCBHolder()
+_commandedValues = dict()
 #_modifiedObjectsByServer = []
 
 
 class FPSimulationService(GRPC.FPSimulationServicer):
-
     def led_setColor(self, request, context):
         try:
             obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
@@ -191,6 +191,17 @@ class FPSimulationService(GRPC.FPSimulationServicer):
                 answ.value = dataAquisitionCBHolder.potentiometerCB[objName](objName) 
                 yield answ
 
+    def movePotentiometerToValue(self, request, context):
+        try:
+            obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
+            _commandedValues[obj.Name] = request.value
+        except IndexError:
+            FreeCAD.Console.PrintError(
+                "Object not found with label " + request.objLabel + "\n")
+            #TODO: return an error message
+        return Proto.Empty()
+        
+
     def getTouchValue(self, request, context):
         for objName in dataAquisitionCBHolder.touchSurfaceCB:
             if(dataAquisitionCBHolder.touchSurfaceCB[objName]):
@@ -202,7 +213,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
                 answ.pos.y = tup[1]                  
                 yield answ
 
-
+import math
 class Server:
     def __init__(self):
         self._server = None
@@ -224,6 +235,10 @@ class Server:
         self._timer.stop()
 
     def appRecompute(self):
+        for objName in _commandedValues.keys():
+            obj = FreeCAD.ActiveDocument.getObject(objName)
+            obj.Proxy.moveToValue(objName, _commandedValues[objName])
+            del  _commandedValues[objName]
         FreeCAD.ActiveDocument.recompute()
         # for objName in _modifiedObjectsByServer:
         #     obj = FreeCAD.ActiveDocument.getObjectsByLabel(objName)[0]
