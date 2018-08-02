@@ -206,12 +206,15 @@ def run():
                 ampBlueFactor = touchValueAnswer.pos.x  / 100.0
 
         if colorAutomationOn:
-            req = Proto.MovePotentiometerRequest(objLabel = "PotRed", value = int(((math.sin(t*freqRedHz) * ampRedFactor + 1.0)  / 2.0) * 255.0))
-            stub.movePotentiometerToValue(req)
-            req = Proto.MovePotentiometerRequest(objLabel = "PotGreen", value = int(((math.sin(t*freqGreenHz) * ampGreenFactor + 1.0)  / 2.0) * 255.0))
-            stub.movePotentiometerToValue(req)
-            req = Proto.MovePotentiometerRequest(objLabel = "PotBlue", value = int(((math.sin(t*freqBlueHz) * ampBlueFactor  + 1.0) / 2.0) * 255.0))
-            stub.movePotentiometerToValue(req)
+            if freqRedHz > 0.0 and ampRedFactor > 0.0:
+                req = Proto.MovePotentiometerRequest(objLabel = "PotRed", value = int(((math.sin(t*freqRedHz) * ampRedFactor + 1.0)  / 2.0) * 255.0))
+                stub.movePotentiometerToValue(req)
+            if freqGreenHz > 0.0 and ampGreenFactor > 0.0:
+                req = Proto.MovePotentiometerRequest(objLabel = "PotGreen", value = int(((math.sin(t*freqGreenHz) * ampGreenFactor + 1.0)  / 2.0) * 255.0))
+                stub.movePotentiometerToValue(req)
+            if freqBlueHz > 0.0 and ampBlueFactor > 0.0:
+                req = Proto.MovePotentiometerRequest(objLabel = "PotBlue", value = int(((math.sin(t*freqBlueHz) * ampBlueFactor  + 1.0) / 2.0) * 255.0))
+                stub.movePotentiometerToValue(req)
 
         if cursorChanged:
             cursorChanged = False
