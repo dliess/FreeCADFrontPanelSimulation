@@ -111,7 +111,7 @@ def run():
                     stub.led_setColor(req)
                     mode = Modes.DRAW_RECTANGLES
             elif button.objLabel == "Mode5Btn":
-                if mode != Modes.DRAW_RECTANGLES:
+                if mode != Modes.DRAW_RECTANGLES_FULL:
                     req = Proto.LedSetColorRequest(objLabel = "Mode1Led", color = LedOffColor)
                     stub.led_setColor(req)
                     req = Proto.LedSetColorRequest(objLabel = "Mode2Led", color = LedOffColor)
