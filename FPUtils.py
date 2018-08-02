@@ -1,6 +1,6 @@
 import FreeCAD
 
-def getFramePlacement(obj):
+def getParentPartPlacement(obj):
     placementList = []
     objToInspect = obj
     while True:

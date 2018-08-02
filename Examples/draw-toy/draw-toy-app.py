@@ -8,12 +8,14 @@ import generated.FPSimulation_pb2 as Proto
 import generated.FPSimulation_pb2_grpc as GRPC
 from time import sleep
 from copy import deepcopy
+import math
 
 class Modes:
     DRAW_POINTS           = 0
     DRAW_CONNECTOR_LINES  = 1
     DRAW_LINES            = 2
     DRAW_RECTANGLES       = 3
+    DRAW_RECTANGLES_FULL  = 4
 
 def run():
     channel = grpc.insecure_channel('localhost:50051')
@@ -28,6 +30,13 @@ def run():
     colRed = 0.0
     colGreen = 0.0
     colBlue = 0.0
+    FREQ_MAX_HZ = 30.0
+    freqRedHz = 0.0
+    freqGreenHz = 0.0
+    freqBlueHz = 0.0
+    ampRedFactor = 1.0
+    ampGreenFactor = 1.0
+    ampBlueFactor = 1.0
     lastEraserPotiVal = None
     mode = Modes.DRAW_POINTS
     LedOnColor = Proto.ColorRGB(red = 1.0, green = 0.0, blue = 0.0)
@@ -40,6 +49,13 @@ def run():
     stub.led_setColor(req)
     req = Proto.LedSetColorRequest(objLabel = "Mode4Led", color = LedOffColor)
     stub.led_setColor(req)
+    req = Proto.LedSetColorRequest(objLabel = "Mode5Led", color = LedOffColor)
+    stub.led_setColor(req)
+    req = Proto.LedSetColorRequest(objLabel = "ColorModLed", color = LedOffColor)
+    stub.led_setColor(req)
+
+    colorAutomationOn = False
+    t = 0.0
     while True:
         for button in stub.getButtonStates(Proto.Empty()):
             if button.objLabel == "Mode1Btn":
@@ -52,6 +68,8 @@ def run():
                     stub.led_setColor(req)
                     req = Proto.LedSetColorRequest(objLabel = "Mode4Led", color = LedOffColor)
                     stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode5Led", color = LedOffColor)
+                    stub.led_setColor(req)
                     mode = Modes.DRAW_POINTS
             elif button.objLabel == "Mode2Btn":
                 if mode != Modes.DRAW_CONNECTOR_LINES:
@@ -62,6 +80,8 @@ def run():
                     req = Proto.LedSetColorRequest(objLabel = "Mode3Led", color = LedOffColor)
                     stub.led_setColor(req)
                     req = Proto.LedSetColorRequest(objLabel = "Mode4Led", color = LedOffColor)
+                    stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode5Led", color = LedOffColor)
                     stub.led_setColor(req)
                     mode = Modes.DRAW_CONNECTOR_LINES
             elif button.objLabel == "Mode3Btn":
@@ -74,6 +94,8 @@ def run():
                     stub.led_setColor(req)
                     req = Proto.LedSetColorRequest(objLabel = "Mode4Led", color = LedOffColor)
                     stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode5Led", color = LedOffColor)
+                    stub.led_setColor(req)
                     mode = Modes.DRAW_LINES
             elif button.objLabel == "Mode4Btn":
                 if mode != Modes.DRAW_RECTANGLES:
@@ -85,7 +107,33 @@ def run():
                     stub.led_setColor(req)
                     req = Proto.LedSetColorRequest(objLabel = "Mode4Led", color = LedOnColor)
                     stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode5Led", color = LedOffColor)
+                    stub.led_setColor(req)
                     mode = Modes.DRAW_RECTANGLES
+            elif button.objLabel == "Mode5Btn":
+                if mode != Modes.DRAW_RECTANGLES:
+                    req = Proto.LedSetColorRequest(objLabel = "Mode1Led", color = LedOffColor)
+                    stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode2Led", color = LedOffColor)
+                    stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode3Led", color = LedOffColor)
+                    stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode4Led", color = LedOffColor)
+                    stub.led_setColor(req)
+                    req = Proto.LedSetColorRequest(objLabel = "Mode5Led", color = LedOnColor)
+                    stub.led_setColor(req)
+                    mode = Modes.DRAW_RECTANGLES_FULL
+
+            elif button.objLabel == "ColorAutomationBtn":
+                if button.state == Proto.BUTTON_PRESSED:
+                    if colorAutomationOn:
+                        colorAutomationOn = False
+                        req = Proto.LedSetColorRequest(objLabel = "ColorModLed", color = LedOffColor)
+                        stub.led_setColor(req)
+                    else:
+                        colorAutomationOn = True
+                        req = Proto.LedSetColorRequest(objLabel = "ColorModLed", color = LedOnColor)
+                        stub.led_setColor(req)
 
         for potentiometer in stub.getPotentiometerValues(Proto.Empty()):
             if potentiometer.objLabel == "PotRed":
@@ -107,6 +155,13 @@ def run():
                     req = Proto.DisplayDrawRectangleRequest(objLabel = "FPSimDisplay", data = rectData)
                     stub.display_drawRectangle(req)
                     lastEraserPotiVal = potentiometer.value
+            if potentiometer.objLabel == "PotFreqRed":
+                freqRedHz = (potentiometer.value * FREQ_MAX_HZ) / 64.0
+            if potentiometer.objLabel == "PotFreqGreen":
+                freqGreenHz = (potentiometer.value * FREQ_MAX_HZ) / 64.0
+            if potentiometer.objLabel == "PotFreqBlue":
+                freqBlueHz = (potentiometer.value * FREQ_MAX_HZ) / 64.0
+
 
         for encoderIncrementsAnswer in stub.getEncoderIncrements(Proto.Empty()):
             if encoderIncrementsAnswer.objLabel == "X_POS1":
@@ -143,6 +198,20 @@ def run():
                 pixPos1.x = touchValueAnswer.pos.x
                 pixPos1.y = touchValueAnswer.pos.y
                 cursorChanged = True
+            if touchValueAnswer.objLabel == "AmpRedTouch":
+                ampRedFactor = touchValueAnswer.pos.x  / 100.0
+            if touchValueAnswer.objLabel == "AmpGreenTouch":
+                ampGreenFactor = touchValueAnswer.pos.x  / 100.0
+            if touchValueAnswer.objLabel == "AmpBlueTouch":
+                ampBlueFactor = touchValueAnswer.pos.x  / 100.0
+
+        if colorAutomationOn:
+            req = Proto.MovePotentiometerRequest(objLabel = "PotRed", value = int(((math.sin(t*freqRedHz) * ampRedFactor + 1.0)  / 2.0) * 255.0))
+            stub.movePotentiometerToValue(req)
+            req = Proto.MovePotentiometerRequest(objLabel = "PotGreen", value = int(((math.sin(t*freqGreenHz) * ampGreenFactor + 1.0)  / 2.0) * 255.0))
+            stub.movePotentiometerToValue(req)
+            req = Proto.MovePotentiometerRequest(objLabel = "PotBlue", value = int(((math.sin(t*freqBlueHz) * ampBlueFactor  + 1.0) / 2.0) * 255.0))
+            stub.movePotentiometerToValue(req)
 
         if cursorChanged:
             cursorChanged = False
@@ -167,11 +236,17 @@ def run():
                 req = Proto.DisplayDrawLineRequest(objLabel = "FPSimDisplay", data = lineData)
                 stub.display_drawLine(req) 
             elif mode == Modes.DRAW_RECTANGLES:
+                rectData = Proto.RectangleData(p1 = pixPos1, p2 = pixPos2, pixelColor = pixColor, filled = False)
+                req = Proto.DisplayDrawRectangleRequest(objLabel = "FPSimDisplay", data = rectData)
+                stub.display_drawRectangle(req)
+            elif mode == Modes.DRAW_RECTANGLES_FULL:
                 rectData = Proto.RectangleData(p1 = pixPos1, p2 = pixPos2, pixelColor = pixColor, filled = True)
                 req = Proto.DisplayDrawRectangleRequest(objLabel = "FPSimDisplay", data = rectData)
                 stub.display_drawRectangle(req) 
             prevPixPos1 = deepcopy(pixPos1)
             prevPixPos2 = deepcopy(pixPos2)
+        if colorAutomationOn:
+            t = t + 0.01
         sleep(0.01)
 
 

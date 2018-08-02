@@ -73,7 +73,7 @@ class FPSimTouchSurface:
             if obj.Group[0]:
                 #FreeCAD.Console.PrintMessage(str(vec) + " xlen: " + str(obj.XLen) + " ylen: " + str(obj.YLen) +"\n")
                 childPlacement = obj.Group[0].Placement
-                frameToK0 = FPUtils.getFramePlacement(obj).multiply(childPlacement.multiply(FPUtils.propertyPythonObjectToFreeCADPlacement(obj.SurfacePlacement))).inverse()
+                frameToK0 = FPUtils.getParentPartPlacement(obj).multiply(childPlacement.multiply(FPUtils.propertyPythonObjectToFreeCADPlacement(obj.SurfacePlacement))).inverse()
                 vecInSurface = frameToK0.multVec(vec)
                 if vecInSurface.x >= 0.0 and vecInSurface.x < obj.XLen and vecInSurface.y >= 0.0 and vecInSurface.y < obj.YLen:
                     x = int( (vecInSurface.x * float(obj.ResolutionX)) / obj.XLen )
