@@ -17,7 +17,7 @@ class FPSimRotaryPotentiometer(InitialPlacements):
         obj.addProperty('App::PropertyVector', 'RotationCenter').RotationCenter = (0,0,0)
         obj.addProperty('App::PropertyFloat', 'PositiveRotLimitDeg').PositiveRotLimitDeg = 10.0
         obj.addProperty('App::PropertyFloat', 'NegativeRotLimitDeg').NegativeRotLimitDeg = 10.0
-        obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0 #TODO: implement
+        obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0
 
         obj.Proxy = self
 
@@ -107,8 +107,6 @@ class FPSimRotaryPotentiometer(InitialPlacements):
             obj.RotationAngleDeg = int((obj.NegativeRotLimitDeg + clampedDeg) / partDeg) * partDeg - obj.NegativeRotLimitDeg
         else:
             obj.RotationAngleDeg = clampedDeg
-        FreeCAD.Console.PrintMessage("RotationAngleDeg: " + str(obj.RotationAngleDeg) + "\n")
-        FreeCAD.Console.PrintMessage("Ret: " + str(self.getValue(obj.Name)) + "\n")
         rot = FreeCAD.Rotation(obj.RotationAxis, obj.RotationAngleDeg)
         for child in obj.Group:
             initPlc = self.getInitialPlacement(obj, child.Name)
