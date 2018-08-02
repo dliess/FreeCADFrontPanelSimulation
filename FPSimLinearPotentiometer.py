@@ -18,7 +18,7 @@ class FPSimLinearPotentiometer(InitialPlacements):
         obj.addProperty('App::PropertyFloat', 'PositiveDistLimit').PositiveDistLimit = 25
         obj.addProperty('App::PropertyVector', 'PositiveDirection').PositiveDirection = (0,0,1)
         obj.addProperty('App::PropertyInteger', 'Resolution').Resolution = 1024
-        obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0 #TODO: implement
+        obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0
 
         obj.Proxy = self
 
@@ -47,7 +47,11 @@ class FPSimLinearPotentiometer(InitialPlacements):
                 self.moveToInitialPlacement(obj)
             except KeyError:
                 self.saveInitialPlacements(obj)
-
+        elif prop == 'NumSnapInPositions':
+            if obj.NumSnapInPositions == 1:
+                obj.NumSnapInPositions = 2
+            if obj.NumSnapInPositions < 0:
+                obj.NumSnapInPositions = 0
 
     def execute(self, obj):
         pass
@@ -91,7 +95,7 @@ class FPSimLinearPotentiometer(InitialPlacements):
         aChild = obj.Group[0]
         fullDist = obj.NegativeDistLimit + obj.PositiveDistLimit
         ratio = (obj.NegativeDistLimit * obj.PositiveDirection  + (aChild.Placement.Base - self.getInitialPlacement(obj, aChild.Name).Base)).Length / float(fullDist)
-        return int(ratio * float(obj.Resolution))
+        return int(ratio * float(obj.Resolution - 1))
 
     def moveToValue(self, objName, value):
         obj = FreeCAD.ActiveDocument.getObject(objName)
@@ -99,7 +103,13 @@ class FPSimLinearPotentiometer(InitialPlacements):
         self.setDistance(obj, destDistance)
 
     def setDistance(self, obj, destDistance):
-        obj.OffsetDistance = FPUtils.clamp( destDistance, -obj.NegativeDistLimit, obj.PositiveDistLimit )            
+        clampedDist = FPUtils.clamp( destDistance, -obj.NegativeDistLimit, obj.PositiveDistLimit )
+        if obj.NumSnapInPositions:
+            partDist = float(obj.NegativeDistLimit + obj.PositiveDistLimit) / float(obj.NumSnapInPositions - 1)
+            obj.OffsetDistance = int((obj.NegativeDistLimit + clampedDist) / partDist) * partDist - obj.NegativeDistLimit
+        else:
+            obj.OffsetDistance = clampedDist
+         
         for child in obj.Group:
             child.Placement.Base = self.getInitialPlacement(obj, child.Name).Base + (obj.PositiveDirection.normalize() * obj.OffsetDistance)
 
