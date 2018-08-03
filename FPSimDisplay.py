@@ -70,7 +70,7 @@ class FPSimDisplay:
     def _updateObjectTexture(self, obj):
         pixelContainer = _pixelContainer[obj.Name]
         pixelStr = pixelContainer.toString()
-        resolution = coin.SbVec2s(pixelContainer.resolutionX, pixelContainer.resolutionY)
+        resolution = coin.SbVec2s(pixelContainer.image.width, pixelContainer.image.height)
         for child in obj.Group:
             rootNode = child.ViewObject.RootNode
             tex = _findNodeIn(coin.SoTexture2.getClassTypeId(), rootNode)
