@@ -22,8 +22,6 @@ class PixelContainer:
         (x,y) = self.image.size
         self.image.paste( (col[0], col[1], col[2], col[3]), [0, 0, x, y] )
 
-        self.draw.text((10,0), "Test", font = self.font, fill=(0,255,0,255))
-
     def setPixel(self, pixel):
         col = [int(pixel.color.red   * 255.0), int(pixel.color.green   * 255.0), int(pixel.color.blue   * 255.0), 255]
         self.image.putpixel((pixel.pos.x, pixel.pos.y), (col[0], col[1], col[2], col[3]))
@@ -62,9 +60,14 @@ class PixelContainer:
     def toString(self):
         return self.image.transpose(Image.FLIP_TOP_BOTTOM).tobytes()
 
-    def setFont(self, fontPath, fontsize):
-        self.font = ImageFont.truetype(fontPath, fontsize)
+    def setActiveFont(self, fontData):
+        try:
+            self.font = ImageFont.truetype(fontData.path, fontData.size)
+        except IOError:
+            FreeCAD.Console.PrintError("Could not open font file: " + fontData.path + "\n")
+            self.font = ImageFont.truetype("truetype/ttf-bitstream-vera/VeraIt.ttf", fontData.size)
 
-    def drawText(self, text, xy, col):
-        self.draw.text(xy, text, font = self.font, fill=col)
+    def drawText(self, textData):
+        col = self._colToTup(textData.color)
+        self.draw.text((textData.pos.x, textData.pos.y), textData.text, font = self.font, fill=col)
 

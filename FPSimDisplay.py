@@ -39,7 +39,7 @@ class FPSimDisplay:
             # find texture node
             tex = _findNodeIn(coin.SoTexture2.getClassTypeId(), rootNode)
             if not tex:
-                FreeCAD.Console.PrintMessage("inserting new texture\n")
+                #FreeCAD.Console.PrintMessage("inserting new texture\n")
                 tex =  coin.SoTexture2()
                 rootNode.insertChild(tex,1)
             tex.model = coin.SoTexture2.REPLACE
@@ -52,7 +52,7 @@ class FPSimDisplay:
             # find complexity node
             complexity = _findNodeIn(coin.SoComplexity.getClassTypeId(), rootNode)
             if not complexity:
-                FreeCAD.Console.PrintMessage("inserting new complexity\n")
+                #FreeCAD.Console.PrintMessage("inserting new complexity\n")
                 complexity = coin.SoComplexity()
                 rootNode.insertChild(complexity,1)
             complexity.textureQuality = 0.00001
@@ -127,7 +127,15 @@ class FPSimDisplay:
                                              y = obj.ResolutionY)
         return answ
 
-    
+    def setActiveFont(self, obj, fontData):
+        pixelContainer = _pixelContainer[obj.Name]
+        pixelContainer.setActiveFont(fontData)
+
+    def drawText(self, obj, textData):
+        pixelContainer = _pixelContainer[obj.Name]
+        pixelContainer.drawText(textData)
+        self._updateObjectTexture(obj)
+   
 
 class FPSimDisplayViewProvider:
     def __init__(self, obj):
