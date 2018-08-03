@@ -1,22 +1,22 @@
 import FreeCAD
-from array import array
+import numpy as np
 import generated.FPSimulation_pb2 as Proto
 
 class PixelContainer:
     NUM_COLOR_COMPONENTS = 4
 
     def __init__(self, resolutionX, resolutionY):
-        self.pixelArray = array('B', [0] * PixelContainer.NUM_COLOR_COMPONENTS *
-                                      resolutionX * resolutionY)
+        self.pixelArray = np.zeros((resolutionY, resolutionX, PixelContainer.NUM_COLOR_COMPONENTS), dtype=np.uint8)
         self.resolutionX = resolutionX
         self.resolutionY = resolutionY
 
     def clear(self, color):
-        for i in range(self.resolutionX * self.resolutionY):
-            self.pixelArray[i+0] = int(color.red   * 255.0)
-            self.pixelArray[i+1] = int(color.green * 255.0)
-            self.pixelArray[i+2] = int(color.blue  * 255.0)
-            self.pixelArray[i+3] =  255
+        for x in range(self.resolutionX):
+            for y in range(self.resolutionY):
+                self.pixelArray[y,x,0] = int(color.red   * 255.0)
+                self.pixelArray[y,x,1] = int(color.green * 255.0)
+                self.pixelArray[y,x,2] = int(color.blue  * 255.0)
+                self.pixelArray[y,x,3] =  255
 
     def setPixel(self, pixel):
         if pixel.pos.x >= self.resolutionX:
@@ -24,13 +24,10 @@ class PixelContainer:
         if pixel.pos.y >= self.resolutionY:
             return
         
-        i = pixel.pos.y * self.resolutionX * PixelContainer.NUM_COLOR_COMPONENTS \
-          + pixel.pos.x * PixelContainer.NUM_COLOR_COMPONENTS
-
-        self.pixelArray[i + 0] = int(pixel.color.red * 255.0)
-        self.pixelArray[i + 1] = int(pixel.color.green * 255.0)
-        self.pixelArray[i + 2] = int(pixel.color.blue * 255.0)
-        self.pixelArray[i + 3] = 255
+        self.pixelArray[pixel.pos.y, pixel.pos.x, 0] = int(pixel.color.red * 255.0)
+        self.pixelArray[pixel.pos.y, pixel.pos.x, 1] = int(pixel.color.green * 255.0)
+        self.pixelArray[pixel.pos.y, pixel.pos.x, 2] = int(pixel.color.blue * 255.0)
+        self.pixelArray[pixel.pos.y, pixel.pos.x, 3] = 255
 
     def limitPixelCoord(self, pixelCoord):
         pixelCoord.x = max(pixelCoord.x, 0)
