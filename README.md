@@ -38,7 +38,7 @@ Featured widgets:
 * Start turning/pushing knobs and faders, change display resolution(needs app-restart)
 
 # Usage:
-see Wiki
+[Wiki](https://github.com/dliess/FreeCADFrontPanelSimulation/wiki)
 
 # Future Todos:
 * Some kind of automation to cut out holes with tolerance through front panel for the widgets(Ideas are welcome!)
