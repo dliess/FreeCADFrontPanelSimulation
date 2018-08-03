@@ -1,3 +1,4 @@
+![Overview](/icons/overview.png?raw=true)
 ![Screenshot1](/Examples/draw-toy/screenshots/draw-toy1.png?raw=true)
 ![Screenshot2](/Examples/draw-toy/screenshots/draw-toy2.png?raw=true)
 ![Screenshot3](/Examples/draw-toy/screenshots/draw-toy3.png?raw=true)
