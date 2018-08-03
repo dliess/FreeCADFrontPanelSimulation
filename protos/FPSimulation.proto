@@ -6,6 +6,8 @@ service FPSimulation {
   rpc display_setSubWindowPixels (DisplaySubWindowPixelsRequest) returns (Empty) {}
   rpc display_drawRectangle (DisplayDrawRectangleRequest) returns (Empty) {}
   rpc display_drawLine (DisplayDrawLineRequest) returns (Empty) {}
+  rpc display_setActiveFont (DisplaySetActiveFontRequest) returns (Empty) {}
+  rpc display_drawText (DisplayDrawTextRequest) returns (Empty) {}
   rpc display_getResolution (DisplayResolutionRequest) returns (DisplayResolutionAnswer) {}
   rpc display_clearDisplay(DisplayClearDisplayRequest) returns (Empty) {}
   rpc getButtonStates(Empty) returns (stream GetButtonStateAnswer) {}
@@ -82,6 +84,26 @@ message DisplayDrawLineRequest{
   LineData data   = 2;          
 }
 
+message FontData{
+  string path = 1;
+  uint32 size = 2;
+}
+
+message DisplaySetActiveFontRequest{
+  string objLabel   = 1;
+  FontData data     = 2;
+}
+
+message TextData{
+  PixelPos pos   = 1;
+  ColorRGB color = 2;
+  string   text  = 3;
+}
+
+message DisplayDrawTextRequest{
+  string objLabel   = 1;
+  TextData data     = 2;
+} 
 
 message DisplayResolutionRequest{
    string objLabel = 1;

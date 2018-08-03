@@ -53,6 +53,12 @@ def run():
     stub.led_setColor(req)
     req = Proto.LedSetColorRequest(objLabel = "ColorModLed", color = LedOffColor)
     stub.led_setColor(req)
+    font = Proto.FontData(path="truetype/ttf-bitstream-vera/VeraIt.ttf", size=40)
+    req = Proto.DisplaySetActiveFontRequest(objLabel = "FPSimDisplay", data = font)
+    stub.display_setActiveFont(req)
+    txt = Proto.TextData(pos=Proto.PixelPos(x=10,y=10), color=Proto.ColorRGB(red=0.0, green=1.0, blue=0.0), text="Im a draw-toy")
+    req = Proto.DisplayDrawTextRequest(objLabel = "FPSimDisplay", data = txt)
+    stub.display_drawText(req)
 
     colorAutomationOn = False
     t = 0.0

@@ -143,6 +143,25 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             #TODO: return an error message
         return Proto.Empty()
 
+    def display_setActiveFont(self, request, context):
+        try:
+            obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
+            obj.Proxy.setActiveFont(obj, request.data)
+        except IndexError:
+            FreeCAD.Console.PrintError(
+                "Object not found with label " + request.objLabel + "\n")
+            #TODO: return an error message
+        return Proto.Empty()
+
+    def display_drawText(self, request, context):
+        try:
+            obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
+            obj.Proxy.drawText(obj, request.data)
+        except IndexError:
+            FreeCAD.Console.PrintError(
+                "Object not found with label " + request.objLabel + "\n")
+            #TODO: return an error message
+        return Proto.Empty()
 
     def display_getResolution(self, request, context):
         try:
@@ -162,7 +181,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
-        return Proto.Empty()        
+        return Proto.Empty()    
 
     def getButtonStates(self, request, context):
         for objName in dataAquisitionCBHolder.buttonCB:
