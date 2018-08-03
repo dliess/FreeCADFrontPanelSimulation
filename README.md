@@ -2,6 +2,7 @@
 ![Screenshot1](/Examples/draw-toy/screenshots/draw-toy1.png?raw=true)
 ![Screenshot2](/Examples/draw-toy/screenshots/draw-toy2.png?raw=true)
 ![Screenshot3](/Examples/draw-toy/screenshots/draw-toy3.png?raw=true)
+![Screenshot4](/Examples/draw-toy/screenshots/draw-toy4.png?raw=true)
 
 # Basic description
 With this FreeCAD plugin, you can turn your FreeCAD objects into knobs, faders, displays, etc. that you can push/move/turn by your mouse and that provides/receives data to an external application via grpc. 
@@ -12,7 +13,7 @@ Featured widgets:
 * Pushbuttons(also in switch mode)
 * Linear potentiometers (also motorized, optional snap-in divisions)
 * LEDs
-* Displays
+* Displays(Points, Lines, Rectangles, Bitmaps, Text)
 * Touch-surface
 
 # Prerequisites:
