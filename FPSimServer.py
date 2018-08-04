@@ -176,7 +176,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
     def display_clearDisplay(self, request, context):
         try:
             obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
-            obj.Proxy.clearDisplay(obj, request.color)
+            obj.Proxy.clearDisplay(obj, color = None)
         except IndexError:
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")

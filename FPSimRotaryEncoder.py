@@ -109,6 +109,7 @@ class FPSimRotaryEncoder(InitialPlacements):
      
     def onKeyEvent(self, objName, keyCode, state):
         #FreeCAD.Console.PrintMessage("onKeyEvent " + str(objName) + " " + str(keyCode) + " " + str(state) + "\n")
+        FPSimServer.dataAquisitionCBHolder.setButtonCB(objName, self.getButtonState)
         obj = FreeCAD.ActiveDocument.getObject(objName)
         deltaVec = FreeCAD.Vector(obj.RotationAxis[0], obj.RotationAxis[1], obj.RotationAxis[2]) * obj.PushButtonDepth
         if state == FPEventDispatcher.FPEventDispatcher.PRESSED:
@@ -135,6 +136,7 @@ class FPSimRotaryEncoder(InitialPlacements):
         return ret
 
     def getButtonState(self, objName):
+        FPSimServer.dataAquisitionCBHolder.clearButtonCB(objName)
         return buttonState[objName]
 
 class FPSimRotaryEncoderViewProvider:

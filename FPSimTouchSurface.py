@@ -61,6 +61,7 @@ class FPSimTouchSurface:
             self.pointerPosToTouchSurfaceCoord(objName, pos)
         else:
             FPEventDispatcher.eventDispatcher.unregisterForLocation(objName, self.onLocationEvent)
+            FPSimServer.dataAquisitionCBHolder.clearTouchSurfaceCB(objName)
 
     def onLocationEvent(self, objName, pos):
         self.pointerPosToTouchSurfaceCoord(objName, pos)
@@ -83,7 +84,6 @@ class FPSimTouchSurface:
                     FPSimServer.dataAquisitionCBHolder.setTouchSurfaceCB(objName, self.getPointedPosition)
 
     def getPointedPosition(self, objName):
-        FPSimServer.dataAquisitionCBHolder.clearTouchSurfaceCB(objName)
         return pressedPosition[objName]
 
 class FPSimTouchSurfaceViewProvider:

@@ -18,7 +18,10 @@ class PixelContainer:
         return (int(color.red * 255.0), int(color.green * 255.0), int(color.blue * 255.0), 255)
 
     def clear(self, color):
-        col = self._colToTup(color)
+        if not color:
+            col = (0, 0, 0, 255)
+        else:
+            col = self._colToTup(color)
         (x,y) = self.image.size
         self.image.paste( (col[0], col[1], col[2], col[3]), [0, 0, x, y] )
 
