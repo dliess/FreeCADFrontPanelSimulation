@@ -46,6 +46,22 @@ class CreateDisplay:
         import FPSimDisplay
         FPSimDisplay.createFPSimDisplay()
 
+class CreateLED:
+    def GetResources(self):
+        return {'Pixmap': FPSimDir.__dir__ + '/icons/LED.svg',
+                'MenuText': 'Create LED',
+                'ToolTip': ''}
+
+    def IsActive(self):
+        if FreeCADGui.ActiveDocument and not FPSimulation.simulationRunning:
+            return True
+        else:
+            return False
+
+    def Activated(self):
+        import FPSimLED
+        FPSimLED.createFPSimLED()
+
 class CreateTouchSurface:
     def GetResources(self):
         return {'Pixmap': FPSimDir.__dir__ + '/icons/TouchSurface.svg',
@@ -194,6 +210,7 @@ class ExportTopology:
 
 
 FreeCAD.Gui.addCommand('CreateDisplay', CreateDisplay())
+FreeCAD.Gui.addCommand('CreateLED', CreateLED())
 FreeCAD.Gui.addCommand('CreateTouchSurface', CreateTouchSurface())
 FreeCAD.Gui.addCommand('CreateLinButton', CreateLinButton())
 FreeCAD.Gui.addCommand('CreateRotButton', CreateRotButton())

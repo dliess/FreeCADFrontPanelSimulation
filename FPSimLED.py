@@ -1,12 +1,5 @@
 import FreeCAD
 
-def setLEDColor(obj, colorRGB):
-            obj = FreeCAD.ActiveDocument.getObjectsByLabel(obj.Name)[0]
-            obj.ViewObject.ShapeColor = (colorRGB.red,
-                                         colorRGB.green,
-                                         colorRGB.blue,
-                                         0.0)
-            
             #from pivy import coin
             #FreeCAD.ActiveDocument.recompute()
             # rn = obj.ViewObject.RootNode
@@ -31,4 +24,32 @@ def setLEDColor(obj, colorRGB):
 
                 # else:
                 #     FreeCAD.Console.PrintError("No material found for: " + obj.Name + "\n")
+class FPSimLED:
+    def __init__(self, obj):
+        obj.Proxy = self
 
+    def setColor(self, obj, colorRGB):
+        for child in obj.Group:
+            child.ViewObject.ShapeColor = (colorRGB.red,
+                                           colorRGB.green,
+                                           colorRGB.blue, 
+                                           0.0)
+            child.touch()
+
+class FPSimLEDViewProvider:
+    def __init__(self, obj):
+        obj.Proxy = self
+
+    def getIcon(self):
+        import FPSimDir
+        return FPSimDir.__dir__ + '/icons/LED.svg'
+
+
+def createFPSimLED():
+    obj = FreeCAD.ActiveDocument.addObject('App::DocumentObjectGroupPython', 'FPSimLED')
+    FPSimLED(obj)
+    FPSimLEDViewProvider(obj.ViewObject)
+
+    selection = FreeCAD.Gui.Selection.getSelection()
+    for selObj in selection:
+        obj.addObject(selObj)
