@@ -1,13 +1,12 @@
 import FreeCAD
 from PySide import QtGui
+from FPWidgetActionCategory import FPWidgetActionCategory
 import re
 import json
 
-
 def exportTopology():
-    dimension = dict()
+    wData = dict()
     for obj in FreeCAD.ActiveDocument.Objects:
-        # "FPSimLinearPotentiometer", "FPSimButton", "FPSimDisplay", "FPSimRotaryEncoder", "FPSimRotaryPotentiometer", "FPSimLED"
         label = obj.Label
         dim = None
         if obj.Name.find("FPSim") == 0:
@@ -21,16 +20,31 @@ def exportTopology():
                     label = match.group(1)
                     dim = (int(match.group(2)) + 1, 1)
 
-            if(dim and label in dimension):
-                maxDim = (max(dim[0], dimension[label][0]), max(dim[1], dimension[label][1]))
+            if not label in wData:
+                wData[label] = { 'Dimension' : None, 'ActionCat' : None }
+            if(dim and wData[label]['Dimension']):
+                maxDim = (max(dim[0], wData[label]['Dimension'][0]), max(dim[1], wData[label]['Dimension'][1]))
             else:
                 maxDim = dim
-            dimension[label] = maxDim
+            wData[label]['Dimension'] = maxDim
+            if not wData[label]['ActionCat']:
+                if obj.Name.find("FPSimLinearPotentiometer") == 0:
+                    wData[label]['ActionCat'] = [FPWidgetActionCategory.POTENTIOMETER, FPWidgetActionCategory.POT_MOVE]
+                elif obj.Name.find("FPSimButton") == 0:
+                    wData[label]['ActionCat'] = [FPWidgetActionCategory.BUTTON]
+                elif obj.Name.find("FPSimDisplay") == 0:
+                    wData[label]['ActionCat'] = [FPWidgetActionCategory.DISPLAY]
+                elif obj.Name.find("FPSimRotaryEncoder") == 0:
+                    wData[label]['ActionCat'] = [FPWidgetActionCategory.ENCODER, FPWidgetActionCategory.BUTTON]
+                elif obj.Name.find("FPSimRotaryPotentiometer") == 0:
+                    wData[label]['ActionCat'] = [FPWidgetActionCategory.POTENTIOMETER, FPWidgetActionCategory.POT_MOVE]
+                elif obj.Name.find("FPSimLED") == 0:
+                    wData[label]['ActionCat'] = [FPWidgetActionCategory.LED]
 
     topology = []
     id = 0
-    for label in dimension:
-        widget = {'Id' : id, 'Label' : label, 'Dimension' : dimension[label]}
+    for label in wData:
+        widget = {'Id' : id, 'Label' : label, 'Dimension' : wData[label]['Dimension'], 'ActionCategory' : wData[label]['ActionCat']}
         topology.append(widget)
         id = id + 1
 
