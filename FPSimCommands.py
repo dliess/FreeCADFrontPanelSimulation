@@ -176,6 +176,22 @@ class StopSimulation:
     def Activated(self):
         FPSimulation.stopSimulation()
 
+class ExportTopology:
+    def GetResources(self):
+        return {'Pixmap': FPSimDir.__dir__ + '/icons/ExportTopology.svg',
+                'MenuText': 'Export Topology',
+                'ToolTip': ''}
+
+    def IsActive(self):
+        if FreeCADGui.ActiveDocument and not FPSimulation.simulationRunning:
+            return True
+        else:
+            return False
+
+    def Activated(self):
+        import FPTopologyExporter
+        FPTopologyExporter.exportTopology()
+
 
 FreeCAD.Gui.addCommand('CreateDisplay', CreateDisplay())
 FreeCAD.Gui.addCommand('CreateTouchSurface', CreateTouchSurface())
@@ -186,3 +202,5 @@ FreeCAD.Gui.addCommand('CreateRotaryPotentiometer', CreateRotaryPotentiometer())
 FreeCAD.Gui.addCommand('CreateLinearPotentiometer', CreateLinearPotentiometer())
 FreeCAD.Gui.addCommand('StartSimulation', StartSimulation())
 FreeCAD.Gui.addCommand('StopSimulation', StopSimulation())
+FreeCAD.Gui.addCommand('ExportTopology', ExportTopology())
+
