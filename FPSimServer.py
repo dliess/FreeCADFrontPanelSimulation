@@ -89,11 +89,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
     def led_setColor(self, request, context):
         try:
             obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
-            obj.ViewObject.ShapeColor = (request.color.red,
-                                         request.color.green,
-                                         request.color.blue, 
-                                         0.0)
-            obj.touch()
+            obj.Proxy.setColor(obj, request.color)
             #_modifiedObjectsByServer.append(obj.Name)
         except IndexError:
             FreeCAD.Console.PrintError(
