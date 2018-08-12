@@ -25,21 +25,22 @@ message PixelPos{
   int32 y = 2;
 }
 
-message ColorRGB{
-  float red   = 1;
-  float green = 2;
-  float blue  = 3;
+message Color{
+  uint32 r = 1;
+  uint32 g = 2;
+  uint32 b = 3;
+  uint32 a = 4;
 }
 
 message PixelData{
   PixelPos pos   = 1;
-  ColorRGB color = 2;
+  Color color = 2;
 }
 
 message DisplaySubWindowData{
   PixelPos p1                  = 1;
   PixelPos p2                  = 2;
-  repeated ColorRGB pixelColor = 3;
+  repeated Color pixelColor = 3;
 }
 
 message PixelDataList{
@@ -48,7 +49,7 @@ message PixelDataList{
 
 message LedSetColorRequest {
   string objLabel = 1;
-  ColorRGB color  = 2;
+  Color color  = 2;
 }
 
 message DisplaySetPixelsRequest {
@@ -64,7 +65,7 @@ message DisplaySubWindowPixelsRequest{
 message RectangleData{
   PixelPos p1          = 1;
   PixelPos p2          = 2;
-  ColorRGB pixelColor  = 3;
+  Color pixelColor  = 3;
   bool filled          = 4;
 }
 
@@ -76,7 +77,7 @@ message DisplayDrawRectangleRequest{
 message LineData{
   PixelPos p1          = 1;
   PixelPos p2          = 2;
-  ColorRGB pixelColor  = 3;
+  Color pixelColor  = 3;
 }
 
 message DisplayDrawLineRequest{
@@ -96,7 +97,7 @@ message DisplaySetActiveFontRequest{
 
 message TextData{
   PixelPos pos   = 1;
-  ColorRGB color = 2;
+  Color color = 2;
   string   text  = 3;
 }
 

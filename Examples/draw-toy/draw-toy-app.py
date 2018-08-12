@@ -27,9 +27,9 @@ def run():
     pixPos2 = Proto.PixelPos(x = resolution.x / 2, y = resolution.y / 2)
     prevPixPos1 = deepcopy(pixPos1)
     prevPixPos2 = deepcopy(pixPos2)
-    colRed = 0.0
-    colGreen = 0.0
-    colBlue = 0.0
+    colRed = 0
+    colGreen = 0
+    colBlue = 0
     FREQ_MAX_HZ = 30.0
     freqRedHz = 0.0
     freqGreenHz = 0.0
@@ -39,8 +39,8 @@ def run():
     ampBlueFactor = 1.0
     lastEraserPotiVal = None
     mode = Modes.DRAW_POINTS
-    LedOnColor = Proto.ColorRGB(red = 1.0, green = 0.0, blue = 0.0)
-    LedOffColor = Proto.ColorRGB(red = 0.0, green = 0.0, blue = 0.0)
+    LedOnColor = Proto.Color(r = 255, g = 0, b = 0, a = 255)
+    LedOffColor = Proto.Color(r = 0, g = 0, b = 0, a = 255)
     req = Proto.LedSetColorRequest(objLabel = "Mode1Led", color = LedOnColor)
     stub.led_setColor(req)
     req = Proto.LedSetColorRequest(objLabel = "Mode2Led", color = LedOffColor)
@@ -56,7 +56,7 @@ def run():
     font = Proto.FontData(path="truetype/ttf-bitstream-vera/VeraIt.ttf", size=40)
     req = Proto.DisplaySetActiveFontRequest(objLabel = "FPSimDisplay", data = font)
     stub.display_setActiveFont(req)
-    txt = Proto.TextData(pos=Proto.PixelPos(x=10,y=10), color=Proto.ColorRGB(red=0.0, green=1.0, blue=0.0), text="Im a draw-toy")
+    txt = Proto.TextData(pos=Proto.PixelPos(x=10,y=10), color=Proto.Color(r=0, g=255, b=0, a=255), text="Im a draw-toy")
     req = Proto.DisplayDrawTextRequest(objLabel = "FPSimDisplay", data = txt)
     stub.display_drawText(req)
 
@@ -143,16 +143,16 @@ def run():
 
         for potentiometer in stub.getPotentiometerValues(Proto.Empty()):
             if potentiometer.objLabel == "PotRed":
-                colRed = potentiometer.value / 255.0
+                colRed = potentiometer.value
             if potentiometer.objLabel == "PotGreen":
-                colGreen = potentiometer.value / 255.0
+                colGreen = potentiometer.value
             if potentiometer.objLabel == "PotBlue":
-                colBlue = potentiometer.value / 255.0
+                colBlue = potentiometer.value
             if potentiometer.objLabel == "PotEraser":
                 if not lastEraserPotiVal:
                     lastEraserPotiVal = potentiometer.value
                 if lastEraserPotiVal != potentiometer.value:
-                    pixColor = Proto.ColorRGB(red = 0.0, green = 0.0, blue = 0.0)
+                    pixColor = Proto.Color(r = 0, g = 0, b = 0, a=255)
                     X1 = int(float(lastEraserPotiVal * resolution.x) / 1024.0)
                     X2 = int(float(potentiometer.value * resolution.x) / 1024.0)
                     P1 = Proto.PixelPos( x = X1, y = 0 )
@@ -224,7 +224,7 @@ def run():
 
         if cursorChanged:
             cursorChanged = False
-            pixColor = Proto.ColorRGB(red = colRed, green = colGreen, blue = colBlue)
+            pixColor = Proto.Color(r = colRed, g = colGreen, b = colBlue, a = 255)
             if mode == Modes.DRAW_POINTS:
                 pix1 = Proto.PixelData(pos = pixPos1, color = pixColor)
                 pix2 = Proto.PixelData(pos = pixPos2, color = pixColor)

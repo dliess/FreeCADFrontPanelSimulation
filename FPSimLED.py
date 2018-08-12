@@ -28,12 +28,12 @@ class FPSimLED:
     def __init__(self, obj):
         obj.Proxy = self
 
-    def setColor(self, obj, colorRGB):
+    def setColor(self, obj, color):
         for child in obj.Group:
-            child.ViewObject.ShapeColor = (colorRGB.red,
-                                           colorRGB.green,
-                                           colorRGB.blue, 
-                                           0.0)
+            child.ViewObject.ShapeColor = (float(color.r) / 255.0,
+                                           float(color.g) / 255.0,
+                                           float(color.b) / 255.0, 
+                                           float(color.a) / 255.0)
             child.touch()
 
 class FPSimLEDViewProvider:

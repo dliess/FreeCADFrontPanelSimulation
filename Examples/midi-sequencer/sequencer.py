@@ -21,7 +21,7 @@ def run():
     started = False
     i = 0
     for y in range(16):
-        color = Proto.ColorRGB(red = 0.0, green = 0.0, blue = 0.0)
+        color = Proto.Color(r = 0, g = 0, b = 0, a = 255)
         req = Proto.LedSetColorRequest(objLabel = "DigitastLed00"+str(y), color = color)
         stub.led_setColor(req)
 
@@ -34,7 +34,7 @@ def run():
                 started = False
 
         if started:
-            color = Proto.ColorRGB(red = 1.0, green = 0.0, blue = 0.0)
+            color = Proto.Color(r = 255, g = 0, b = 0, a = 255)
             req = Proto.LedSetColorRequest(objLabel = "DigitastLed00"+str(i), color = color)
             stub.led_setColor(req)
             i = i + 1

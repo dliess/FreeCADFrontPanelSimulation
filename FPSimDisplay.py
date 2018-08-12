@@ -29,7 +29,7 @@ class FPSimDisplay:
         if _pixelContainer.get(obj.Name):
             del _pixelContainer[obj.Name]
         _pixelContainer[obj.Name] = FPPixelContainer.PixelContainer(obj.ResolutionX, obj.ResolutionY)
-        _pixelContainer[obj.Name].clear(Proto.ColorRGB(red = 0, green = 0, blue = 0))
+        _pixelContainer[obj.Name].clear(Proto.Color(r = 0, g = 0, b = 0, a=255))
         pixelStr = _pixelContainer[obj.Name].toString()
         resolution = coin.SbVec2s(obj.ResolutionX, obj.ResolutionY)
 

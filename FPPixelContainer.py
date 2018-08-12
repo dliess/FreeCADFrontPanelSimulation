@@ -1,5 +1,4 @@
 import FreeCAD
-import numpy as np
 import generated.FPSimulation_pb2 as Proto
 
 from PIL import Image
@@ -15,7 +14,7 @@ class PixelContainer:
         self.font = ImageFont.truetype("truetype/ttf-bitstream-vera/VeraIt.ttf", 32)
 
     def _colToTup(self, color):
-        return (int(color.red * 255.0), int(color.green * 255.0), int(color.blue * 255.0), 255)
+        return (color.r, color.g, color.b, color.a)
 
     def clear(self, color):
         if not color:
@@ -26,7 +25,7 @@ class PixelContainer:
         self.image.paste( (col[0], col[1], col[2], col[3]), [0, 0, x, y] )
 
     def setPixel(self, pixel):
-        col = [int(pixel.color.red   * 255.0), int(pixel.color.green   * 255.0), int(pixel.color.blue   * 255.0), 255]
+        col = [pixel.color.r, pixel.color.g, pixel.color.b, pixel.color.a]
         self.image.putpixel((pixel.pos.x, pixel.pos.y), (col[0], col[1], col[2], col[3]))
 
     # interprete subwindow as closed interval on both sides
