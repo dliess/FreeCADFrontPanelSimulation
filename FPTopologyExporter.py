@@ -1,6 +1,6 @@
 import FreeCAD
 from PySide import QtGui
-from FPWidgetActionCategory import FPWidgetActionCategory
+from FPWidgetFunction import FPWidgetFunction
 import re
 import json
 
@@ -18,36 +18,36 @@ def exportTopology():
                 match = re.match("(.*)\[(\d+)\]", obj.Label)
                 if match:
                     label = match.group(1)
-                    dim = (int(match.group(2)) + 1, 1)
+                    dim = (int(match.group(2)) + 1,)
 
             if not label in wData:
-                wData[label] = { 'Dimension' : None, 'ActionCat' : None }
+                wData[label] = { 'Dimension' : None, 'Function' : None }
             if(dim and wData[label]['Dimension']):
-                maxDim = (max(dim[0], wData[label]['Dimension'][0]), max(dim[1], wData[label]['Dimension'][1]))
+                if len(dim) == 1:
+                    maxDim = (max(dim[0], wData[label]['Dimension'][0]),)
+                elif len(dim) == 2:
+                    maxDim = (max(dim[0], wData[label]['Dimension'][0]), max(dim[1], wData[label]['Dimension'][1]))
             else:
                 maxDim = dim
             wData[label]['Dimension'] = maxDim
-            if not wData[label]['ActionCat']:
+            if not wData[label]['Function']:
                 if obj.Name.find("FPSimLinearPotentiometer") == 0:
-                    wData[label]['ActionCat'] = [FPWidgetActionCategory.POTENTIOMETER, FPWidgetActionCategory.POT_MOVE]
+                    wData[label]['Function'] = [FPWidgetFunction.POTENTIOMETER, FPWidgetFunction.POT_MOVE]
                 elif obj.Name.find("FPSimButton") == 0:
-                    wData[label]['ActionCat'] = [FPWidgetActionCategory.BUTTON]
+                    wData[label]['Function'] = [FPWidgetFunction.BUTTON]
                 elif obj.Name.find("FPSimDisplay") == 0:
-                    wData[label]['ActionCat'] = [FPWidgetActionCategory.DISPLAY]
+                    wData[label]['Function'] = [FPWidgetFunction.DISPLAY]
                 elif obj.Name.find("FPSimRotaryEncoder") == 0:
-                    wData[label]['ActionCat'] = [FPWidgetActionCategory.ENCODER, FPWidgetActionCategory.BUTTON]
+                    wData[label]['Function'] = [FPWidgetFunction.ENCODER, FPWidgetFunction.BUTTON]
                 elif obj.Name.find("FPSimRotaryPotentiometer") == 0:
-                    wData[label]['ActionCat'] = [FPWidgetActionCategory.POTENTIOMETER, FPWidgetActionCategory.POT_MOVE]
+                    wData[label]['Function'] = [FPWidgetFunction.POTENTIOMETER, FPWidgetFunction.POT_MOVE]
                 elif obj.Name.find("FPSimLED") == 0:
-                    wData[label]['ActionCat'] = [FPWidgetActionCategory.LED]
+                    wData[label]['Function'] = [FPWidgetFunction.LED]
 
     topology = []
-    id = 0
     for label in wData:
-        widget = {'Id' : id, 'Label' : label, 'Dimension' : wData[label]['Dimension'], 'ActionCategory' : wData[label]['ActionCat']}
+        widget = {'Label' : label, 'Dimension' : wData[label]['Dimension'], 'WidgetFunction' : wData[label]['Function']}
         topology.append(widget)
-        id = id + 1
-
 
     fileName = QtGui.QFileDialog.getSaveFileName( filter="Json file (*.json)" )[0]
     if len(fileName) > 0:
