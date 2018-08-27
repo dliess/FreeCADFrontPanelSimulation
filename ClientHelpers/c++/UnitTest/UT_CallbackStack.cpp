@@ -109,7 +109,7 @@ TEST(CallbackStackTest, ClearFromTop) {
     cbStack3.remove(&fun4);
     ASSERT_EQ(&fun3, cbStack3.getActual());
     cbStack3.remove(&fun3);
-    ASSERT_EQ(&fun3, cbStack3.getActual());
+    ASSERT_EQ(&fun2, cbStack3.getActual());
     cbStack3.remove(&fun2);
     ASSERT_EQ(nullptr, cbStack3.getActual());
 }

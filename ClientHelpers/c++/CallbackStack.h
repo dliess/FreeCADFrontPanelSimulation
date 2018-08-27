@@ -11,7 +11,7 @@ public:
     {}
     void pushBack(CallbackIf* pCbIf)
     {
-        if(!m_cb[m_topIndex])
+        if(m_cb[m_topIndex])
         {
             incTopIndex();
         }
@@ -23,18 +23,22 @@ public:
     }
     void remove(const CallbackIf* pCbIf)
     {
-        m_cb[m_topIndex] == pCbIf;
-        m_cb[m_topIndex] = nullptr;
-        for(uint8_t i = decIndex(m_topIndex); i != m_topIndex; i = decIndex(i))
+        uint8_t const tmpTopIndex = m_topIndex;
+        if(m_cb[m_topIndex] == pCbIf)
+        {
+            m_cb[m_topIndex] = nullptr;
+            decTopIndex();
+        }
+        for(uint8_t i = decIndex(tmpTopIndex); i != decIndex(m_botIndex); i = decIndex(i))
         {
             if(m_cb[i] == pCbIf)
             {
-                for(uint8_t j = i; j != m_topIndex; j = incIndex(j))
+                for(uint8_t j = i; j != tmpTopIndex; j = incIndex(j))
                 {
                     m_cb[j] = m_cb[incIndex(j)];
                     m_cb[incIndex(j)] = nullptr;
                 }
-                break;
+                decTopIndex();
             }
         }
     }
@@ -48,6 +52,13 @@ private:
         if(m_topIndex == m_botIndex)
         { 
             m_botIndex = incIndex(m_botIndex);
+        }
+    }
+    void decTopIndex()
+    {
+        if(m_topIndex != m_botIndex)
+        {
+            m_topIndex = decIndex(m_topIndex);
         }
     }
     uint8_t incIndex(uint8_t index)
