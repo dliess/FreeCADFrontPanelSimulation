@@ -41,7 +41,7 @@ class WidgetCodeGenerator:
             if lastLabel:
                 ret += "      Last = " + lastLabel + "\n"
             else:
-                ret += "      Last = 0\n"
+                ret += "      Last = -1\n"
             ret += "   };\n"
             ret += "   static const TopologyDim& getDim(WidgetId widgetId)\n"
             ret += "   {\n"
@@ -65,7 +65,7 @@ class WidgetCodeGenerator:
                 ret += "      static const TopologyDim dim[WidgetId::Last + 1] = { " + dimStr + "} ;\n"
                 ret += "      return dim[widgetId];\n"
             else:
-                ret += "      static const TopologyDim dim;\n"
+                ret += "      static const TopologyDim dim = {0,0};\n"
                 ret += "      return dim;\n"
             ret += "   }\n"
             ret += "};\n\n"
