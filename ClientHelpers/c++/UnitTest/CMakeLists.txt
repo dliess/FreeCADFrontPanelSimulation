@@ -5,8 +5,9 @@ find_package(GTest REQUIRED)
 
 set (CMAKE_CXX_STANDARD 11)
 
-set(SOURCES "UT_CallbackStack.cpp"
-            "UT_main.cpp")
+set(SOURCES "UT_main.cpp"
+            "UT_CallbackStack.cpp"
+            "UT_WidgetTopologyContainer.cpp")
 set(INCLUDE_DIRS
     "${PROJECT_SOURCE_DIR}/.."
     "${GTEST_INCLUDE_DIRS}")
