@@ -1,33 +1,62 @@
-#include <cstdint>
+#ifndef WIDGET_TOPOLOGY_CONTAINER_H
+#define WIDGET_TOPOLOGY_CONTAINER_H
 
-template <class DataType, class WidgetFunction>
+#include <cstdint>
+#include "Widget.h"
+
+
+template <class DataType, class WidgetTopology>
 class WidgetTopologyContainer
 {
 public:
     WidgetTopologyContainer()
     {
-        for(int i = 0; i <=  static_cast<int>(WidgetFunction::WidgetId::Last); ++i)
+        for(int i = 0; i <=  static_cast<int>(WidgetTopology::WidgetId::Last); ++i)
         {
-            const typename WidgetFunction::WidgetId wId = static_cast<typename WidgetFunction::WidgetId>(i);
-            m_holder[i] = new DataType[WidgetFunction::getDim(wId).x * WidgetFunction::getDim(wId).y];
+            const typename WidgetTopology::WidgetId wId = static_cast<typename WidgetTopology::WidgetId>(i);
+            m_holder[i] = new DataType[WidgetTopology::getDim(wId).x * WidgetTopology::getDim(wId).y];
         }
     }
     ~WidgetTopologyContainer()
     {
-        for(int i = 0; i <=  WidgetFunction::WidgetId::Last; ++i)
+        for(int i = 0; i <=  WidgetTopology::WidgetId::Last; ++i)
         {
             delete m_holder[i];
         }
     }
 
-    DataType *get(const typename WidgetFunction::WidgetId &widgetId, uint8_t x, uint8_t y)
+    DataType *get(const Widget<WidgetTopology> &widgetPos)
     {
-        if(x >= WidgetFunction::getDim(widgetId).x || y >= WidgetFunction::getDim(widgetId).y)
+        if(widgetPos.coord.x >= WidgetTopology::getDim(widgetPos.id).x || widgetPos.coord.y >= WidgetTopology::getDim(widgetPos.id).y)
         {
             return nullptr;
         }
-        return &(m_holder[widgetId][x * WidgetFunction::getDim(widgetId).y + y]);
+        return &(m_holder[widgetPos.id][widgetPos.coord.x * WidgetTopology::getDim(widgetPos.id).y + widgetPos.coord.y]);
+    }
+
+    template<class Visitor>
+    void forEach(Visitor&& visitor)
+    {
+        for(int i = 0; i <=  static_cast<int>(WidgetTopology::WidgetId::Last); ++i)
+        {
+            const typename WidgetTopology::WidgetId wId = static_cast<typename WidgetTopology::WidgetId>(i);
+            const auto DIM = WidgetTopology::getDim(wId);
+            for(uint8_t x = 0; x < DIM.x; ++x)
+            {
+                for(uint8_t y = 0; y < DIM.y; ++y)
+                {
+                    Widget<WidgetTopology> widget(wId, Vec2D(x, y));
+                    DataType* data = get(widget);
+                    if(data)
+                    {
+                        visitor(*data, widget);
+                    }
+                }
+            }
+        }
     }
 private:
-    DataType* m_holder[WidgetFunction::WidgetId::Last+1];
+    DataType* m_holder[WidgetTopology::WidgetId::Last+1];
 };
+
+#endif

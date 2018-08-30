@@ -1,3 +1,6 @@
+#ifndef CALLBACK_STACK_H
+#define CALLBACK_STACK_H
+
 #include <cstdint> // uint8_t
 
 template <class CallbackIf, unsigned int Size>
@@ -164,3 +167,5 @@ public:
 private:
     CallbackIf* m_cb[2];
 };
+
+#endif
