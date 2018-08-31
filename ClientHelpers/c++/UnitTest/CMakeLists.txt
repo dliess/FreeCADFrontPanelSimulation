@@ -7,7 +7,12 @@ set (CMAKE_CXX_STANDARD 11)
 
 set(SOURCES "UT_main.cpp"
             "UT_CallbackStack.cpp"
-            "UT_WidgetTopologyContainer.cpp")
+            "UT_WidgetTopologyContainer.cpp"
+            "UT_IncrementHolder.cpp"
+            "UT_ValueHolder.cpp"
+            "UT_ValueChangeHandler.cpp"
+            "UT_FpInputHandler.cpp"
+            )
 set(INCLUDE_DIRS
     "${PROJECT_SOURCE_DIR}/.."
     "${GTEST_INCLUDE_DIRS}")

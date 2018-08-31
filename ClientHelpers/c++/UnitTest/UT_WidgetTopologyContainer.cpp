@@ -48,7 +48,6 @@ TEST(WidgetTopologyContainerTest, GetTest) {
     ASSERT_EQ(nullptr, container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 2))));
     ASSERT_EQ(nullptr, container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(2, 0))));
 
-    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))));
     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))) = 10;
     ASSERT_EQ(10, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))));
 }

@@ -7,7 +7,7 @@ class ValueHolder
 public:
     ValueHolder() : 
         m_value(),
-        m_hasChanged(true)
+        m_hasChanged(false)
     {}
 
     void set(const T& newVal)

@@ -7,10 +7,10 @@
 class FpHal
 {
 public:
-    void actualize(ValueContainer<WidgetTypes::Potentiometer>& container);
-    void actualize(ValueContainer<WidgetTypes::Encoder>& container);
-    void actualize(ValueContainer<WidgetTypes::Button>& container);
-    void actualize(ValueContainer<WidgetTypes::TouchSurface>& container);
+    void update(ValueContainer<WidgetTypes::Potentiometer>& container);
+    void update(ValueContainer<WidgetTypes::Encoder>& container);
+    void update(ValueContainer<WidgetTypes::Button>& container);
+    void update(ValueContainer<WidgetTypes::TouchSurface>& container);
 };
 
 #endif

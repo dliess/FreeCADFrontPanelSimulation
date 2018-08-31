@@ -6,6 +6,10 @@
 template<typename T>
 struct Vector2D
 {
+    Vector2D() :
+        x(0),
+        y(0)
+    {}
     Vector2D(const T& _x, const T& _y) :
         x(_x),
         y(_y)
