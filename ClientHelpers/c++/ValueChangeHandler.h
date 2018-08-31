@@ -1,20 +1,16 @@
 #ifndef VALUE_CHANGE_HANDLER_H
 #define VALUE_CHANGE_HANDLER_H
 
-#include "CallbackContainer.h"
-#include "CallbackIf.h"
-#include "WidgetTopology.h"
-#include "Widget.h"
-
-template<class WidgetType>
+template<class CallbackContainer>
 class ValueChangeHandler
 {
 public:
-    ValueChangeHandler(CallbackContainer<WidgetType>& callbacks) :
+    ValueChangeHandler(CallbackContainer& callbacks) :
         m_rCallbacks(callbacks)
     {}
-    void operator()(typename WidgetType::ValueHolder&           valHolder,
-                    const Widget< WidgetTopology<WidgetType> >& widget)
+    template<class ValueHolder, class Widget>
+    void operator()(ValueHolder&  valHolder,
+                    const Widget& widget)
     {
         if(valHolder.hasChanged())
         {
@@ -27,7 +23,8 @@ public:
         }
     }
 private:
-    CallbackContainer<WidgetType>& m_rCallbacks;
+    CallbackContainer& m_rCallbacks;
 };
+
 
 #endif

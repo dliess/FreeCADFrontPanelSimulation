@@ -12,34 +12,34 @@ namespace WidgetTypes
 class Button
 {
 public:
-    enum State
+    enum class State : uint8_t
     {
         Released = 0,
         Pressed  = 1
     };
     using ValueType      = State;
-    using ValueHolder    = ValueHolder<ValueType>;
+    using ValueHandler   = ValueHolder<ValueType>;
 };
 
 class Potentiometer
 {
 public:
     using ValueType      = uint32_t;
-    using ValueHolder    = ValueHolder<ValueType>;
+    using ValueHandler   = ValueHolder<ValueType>;
 };
 
 class Encoder
 {
 public:
     using ValueType      = int32_t;
-    using ValueHolder    = IncrementHolder<ValueType>;
+    using ValueHandler   = IncrementHolder<ValueType>;
 };
 
 class TouchSurface
 {
 public:
     using ValueType      = Vector2D<uint32_t>;
-    using ValueHolder    = ValueHolder<ValueType>;
+    using ValueHandler   = ValueHolder<ValueType>;
 };
 
 

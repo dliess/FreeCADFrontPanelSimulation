@@ -8,7 +8,7 @@ template<class WidgetType>
 class CallbackIf
 {
 public:
-    void valueChangedCb(const typename WidgetType::ValueType& value, const Widget< WidgetTopology<WidgetType> >& widget) = 0;
+    virtual void valueChangedCb(const typename WidgetType::ValueType& value, const Widget< WidgetTopology<WidgetType> >& widget) = 0;
 };
 
 #endif
