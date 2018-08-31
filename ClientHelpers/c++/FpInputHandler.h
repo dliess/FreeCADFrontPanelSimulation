@@ -10,6 +10,16 @@ template<class FpHal>
 class FpInputHandler
 {
 public:
+    using PotWidget   = Widget< WidgetTopology<WidgetTypes::Potentiometer> >;
+    using EncWidget   = Widget< WidgetTopology<WidgetTypes::Encoder> >;
+    using BtnWidget   = Widget< WidgetTopology<WidgetTypes::Button> >;
+    using TouchWidget = Widget< WidgetTopology<WidgetTypes::TouchSurface> >;
+
+    using PotCallback   = CallbackIf<WidgetTypes::Potentiometer>;
+    using EncCallback   = CallbackIf<WidgetTypes::Encoder>;
+    using BtnCallback   = CallbackIf<WidgetTypes::Button>;
+    using TouchCallback = CallbackIf<WidgetTypes::TouchSurface>;
+
     FpInputHandler(FpHal& rFpHal) :
         m_rFpHal(rFpHal)
         {}
@@ -21,12 +31,80 @@ public:
         m_rFpHal.update(m_touchValues);
 
         m_potValues.forEach(ValueChangeHandler<PotCbContainer>(m_potCallbacks));
-        m_rotEncValues.forEach(ValueChangeHandler<EncCbContainer>(m_rotEncCallbacks));
+        m_rotEncValues.forEach(ValueChangeHandler<EncCbContainer>(m_encCallbacks));
         m_btnValues.forEach(ValueChangeHandler<BtnCbContainer>(m_btnCallbacks));
         m_touchValues.forEach(ValueChangeHandler<TouchCbContainer>(m_touchCallbacks));
     }
 
+
+    WidgetTypes::Potentiometer::ValueType potValue(const PotWidget& widget)
+    {
+        auto valHolder = m_potValues.get(widget);
+        if(valHolder)
+        {
+            return valHolder->value();
+        }
+        return 0;
+    }
+    WidgetTypes::Button::ValueType btnValue(const BtnWidget& widget)
+    {
+        auto valHolder = m_btnValues.get(widget);
+        if(valHolder)
+        {
+            return valHolder->value();
+        }
+        return WidgetTypes::Button::State::Released;
+    }
+    WidgetTypes::TouchSurface::ValueType touchValue(const TouchWidget& widget)
+    {
+        auto valHolder = m_touchValues.get(widget);
+        if(valHolder)
+        {
+            return valHolder->value();
+        }
+        return {0,0};
+    }
+
+    void registerPotCb(PotCallback& cbIf, const PotWidget& widget)
+    {
+        m_potCallbacks.forWidget(widget, CbSetter<PotCallback>(cbIf));
+    }
+    void unregisterPotCb(PotCallback& cbIf, const PotWidget& widget)
+    {
+        m_potCallbacks.forWidget(widget, CbEraser<PotCallback>(cbIf));
+    }
+    void registerEncCb(EncCallback& cbIf, const EncWidget& widget)
+    {
+        m_encCallbacks.forWidget(widget, CbSetter<EncCallback>(cbIf));
+    }
+    void unregisterEncCb(EncCallback& cbIf, const EncWidget& widget)
+    {
+        m_encCallbacks.forWidget(widget, CbEraser<EncCallback>(cbIf));
+    }
+    void registerBtnCb(BtnCallback& cbIf, const BtnWidget& widget)
+    {
+        m_btnCallbacks.forWidget(widget, CbSetter<BtnCallback>(cbIf));
+    }
+    void unregisterBtnCb(BtnCallback& cbIf, const BtnWidget& widget)
+    {
+        m_btnCallbacks.forWidget(widget, CbEraser<BtnCallback>(cbIf));
+    }
+    void registerTouchCb(TouchCallback& cbIf, const TouchWidget& widget)
+    {
+        m_touchCallbacks.forWidget(widget, CbSetter<TouchCallback>(cbIf));
+    }
+    void unregisterTouchCb(TouchCallback& cbIf, const TouchWidget& widget)
+    {
+        m_touchCallbacks.forWidget(widget, CbEraser<TouchCallback>(cbIf));
+    }
+
 private:
+
+    using PotCbContainer   = CallbackContainer<WidgetTypes::Potentiometer>;
+    using EncCbContainer  = CallbackContainer<WidgetTypes::Encoder>;
+    using BtnCbContainer   = CallbackContainer<WidgetTypes::Button>;
+    using TouchCbContainer = CallbackContainer<WidgetTypes::TouchSurface>;
+
     FpHal& m_rFpHal;
 
     PotValContainer   m_potValues;
@@ -35,9 +113,43 @@ private:
     TouchValContainer m_touchValues;
 
     PotCbContainer   m_potCallbacks;
-    EncCbContainer   m_rotEncCallbacks;
+    EncCbContainer   m_encCallbacks;
     BtnCbContainer   m_btnCallbacks;
     TouchCbContainer m_touchCallbacks;
+
+    template<class CallbackIf>
+    class CbSetter
+    {
+    public:
+        CbSetter(CallbackIf& cbIf) :
+           m_rCbIf(cbIf)
+           {}
+        template<class CbStack, class Widget>
+        void operator()(CbStack&      cbStack,
+                        const Widget& widget)
+        {
+            cbStack.pushBack(&m_rCbIf);
+        }
+    private:
+        CallbackIf& m_rCbIf;
+    };
+
+    template<class CallbackIf>
+    class CbEraser
+    {
+    public:
+        CbEraser(CallbackIf& cbIf) :
+           m_rCbIf(cbIf)
+           {}
+        template<class CbStack, class Widget>
+        void operator()(CbStack&      cbStack,
+                        const Widget& widget)
+        {
+            cbStack.remove(&m_rCbIf);
+        }
+    private:
+        CallbackIf& m_rCbIf;
+    };
 };
 
 #endif

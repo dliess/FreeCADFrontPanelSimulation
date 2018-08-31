@@ -42,6 +42,16 @@ public:
     using ValueHandler   = ValueHolder<ValueType>;
 };
 
-
 } //namespace WidgetTypes
+
+template<typename T>
+void reset(T& val) {val = 0;}
+
+template<>
+void reset<WidgetTypes::Button::ValueType>(WidgetTypes::Button::ValueType& val)
+{
+    val = WidgetTypes::Button::State::Released;
+}
+
+
 #endif

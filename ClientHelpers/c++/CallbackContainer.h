@@ -10,10 +10,4 @@
 template <class WidgetType>
 using CallbackContainer = WidgetTopologyContainer<CallbackStack<CallbackIf<WidgetType>, 3>, WidgetTopology<WidgetType> >;
 
-using PotCbContainer   = CallbackContainer<WidgetTypes::Potentiometer>;
-using EncCbContainer  = CallbackContainer<WidgetTypes::Encoder>;
-using BtnCbContainer   = CallbackContainer<WidgetTypes::Button>;
-using TouchCbContainer = CallbackContainer<WidgetTypes::TouchSurface>;
-
-
 #endif
