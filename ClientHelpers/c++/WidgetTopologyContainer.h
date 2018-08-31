@@ -21,7 +21,7 @@ public:
     {
         for(int i = 0; i <=  WidgetTopology::WidgetId::Last; ++i)
         {
-            delete m_holder[i];
+            delete[] m_holder[i];
         }
     }
 
@@ -51,6 +51,35 @@ public:
                     {
                         visitor(*data, widget);
                     }
+                }
+            }
+        }
+    }
+    template<class Visitor>
+    void forWidget(const Widget<WidgetTopology> &widget, Visitor&& visitor)
+    {
+        const auto DIM = WidgetTopology::getDim(widget.id);
+        Vec2D start(widget.coord);
+        Vec2D end(widget.coord.inc());
+        if(widget.coord.x == Vec2D::ALL)
+        {
+            start.x = 0;
+            end.x = DIM.x;
+        }
+        if(widget.coord.y == Vec2D::ALL)
+        {
+            start.y = 0;
+            end.y = DIM.y;                
+        }
+        for(auto x = start.x; x < end.x; ++x)
+        {
+            for(auto y = start.y; y < end.y; ++y)
+            {
+                Widget<WidgetTopology> widget(widget.id, Vec2D(x, y));
+                DataType* data = get(widget);
+                if(data)
+                {
+                    visitor(*data, widget);
                 }
             }
         }

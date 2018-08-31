@@ -13,5 +13,4 @@ using EncIncrContainer  = ValueContainer<WidgetTypes::Encoder>;
 using BtnValContainer   = ValueContainer<WidgetTypes::Button>;
 using TouchValContainer = ValueContainer<WidgetTypes::TouchSurface>;
 
-
 #endif
