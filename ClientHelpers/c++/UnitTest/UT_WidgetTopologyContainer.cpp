@@ -61,22 +61,90 @@ TEST(WidgetTopologyContainerTest, EmptyTest) {
 class Visitor
 {
 public:
+    Visitor(int val) : m_val(val) {}
     void operator()(int& val, const Widget<TestWidgetTopology>& widget)
     {
-        val = widget.coord.x * 10 + widget.coord.y;
+        val = m_val;
     }
+private:
+    int m_val;
 };
 
 TEST(WidgetTopologyContainerTest, ForEachTest) {
     WidgetTopologyContainer<int, TestWidgetTopology> container;
-    container.forEach(Visitor());
+    static const int VALUE = 1234;
+    container.forEach(Visitor(VALUE));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))));
+
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 1))));
+
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 1))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 1))));
+}
+
+TEST(WidgetTopologyContainerTest, ForWidgetTest) {
+    WidgetTopologyContainer<int, TestWidgetTopology> container;
+    Widget<TestWidgetTopology> widget(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 1));
+
+    container.forEach(Visitor(0));
+    static const int VALUE = 1234;
+    container.forWidget(widget, Visitor(VALUE));
+
     ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))));
 
     ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 0))));
-    ASSERT_EQ(1, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 1))));
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 1))));
 
-    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 0))));
-    ASSERT_EQ(10, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 0))));
-    ASSERT_EQ(1, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 1))));
-    ASSERT_EQ(11, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 1))));
+    ASSERT_EQ(0,     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 0))));
+    ASSERT_EQ(0,     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 1))));
+    ASSERT_EQ(0,     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 1))));
+
+    container.forEach(Visitor(0));
+    widget.coord.x = widget.coord.ALL;
+    widget.coord.y = 1;
+    container.forWidget(widget, Visitor(VALUE));
+
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))));
+
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 0))));
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 1))));
+
+    ASSERT_EQ(0,     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 0))));
+    ASSERT_EQ(0,     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 1))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 1))));
+
+    container.forEach(Visitor(0));
+    widget.coord.x = 0;
+    widget.coord.y = widget.coord.ALL;
+    container.forWidget(widget, Visitor(VALUE));
+
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))));
+
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 0))));
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 1))));
+
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 0))));
+    ASSERT_EQ(0,     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 1))));
+    ASSERT_EQ(0,     *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 1))));
+
+    container.forEach(Visitor(0));
+    widget.coord.x = widget.coord.ALL;
+    widget.coord.y = widget.coord.ALL;
+    container.forWidget(widget, Visitor(VALUE));
+
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget1, Vec2D(0, 0))));
+
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 0))));
+    ASSERT_EQ(0, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget2, Vec2D(0, 1))));
+
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 0))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(0, 1))));
+    ASSERT_EQ(VALUE, *container.get(Widget<TestWidgetTopology>(TestWidgetTopology::WidgetId::Widget3, Vec2D(1, 1))));
 }
