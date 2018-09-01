@@ -2,19 +2,11 @@
 #define FP_INPUT_HANDLER_H
 
 #include "WidgetTypes.h"
-#include "ValueContainer.h"
-#include "CallbackContainer.h"
+#include "ValueContainer_Spec.h"
+#include "CallbackContainer_Spec.h"
 #include "ValueChangeHandler.h"
-
-using PotWidget   = Widget< WidgetTopology<WidgetTypes::Potentiometer> >;
-using EncWidget   = Widget< WidgetTopology<WidgetTypes::Encoder> >;
-using BtnWidget   = Widget< WidgetTopology<WidgetTypes::Button> >;
-using TouchWidget = Widget< WidgetTopology<WidgetTypes::TouchSurface> >;
-
-using PotCallback   = CallbackIf<WidgetTypes::Potentiometer>;
-using EncCallback   = CallbackIf<WidgetTypes::Encoder>;
-using BtnCallback   = CallbackIf<WidgetTypes::Button>;
-using TouchCallback = CallbackIf<WidgetTypes::TouchSurface>;
+#include "Widget_Spec.h"
+#include "CallbackIf_Spec.h"
 
 template<class FpHal>
 class FpInputHandler
@@ -100,12 +92,6 @@ public:
     }
 
 private:
-
-    using PotCbContainer   = CallbackContainer<WidgetTypes::Potentiometer>;
-    using EncCbContainer  = CallbackContainer<WidgetTypes::Encoder>;
-    using BtnCbContainer   = CallbackContainer<WidgetTypes::Button>;
-    using TouchCbContainer = CallbackContainer<WidgetTypes::TouchSurface>;
-
     FpHal& m_rFpHal;
 
     PotValContainer   m_potValues;

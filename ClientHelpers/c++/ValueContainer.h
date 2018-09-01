@@ -8,9 +8,4 @@
 template <class WidgetType>
 using ValueContainer = WidgetTopologyContainer<typename WidgetType::ValueHandler, WidgetTopology<WidgetType> >;
 
-using PotValContainer   = ValueContainer<WidgetTypes::Potentiometer>;
-using EncIncrContainer  = ValueContainer<WidgetTypes::Encoder>;
-using BtnValContainer   = ValueContainer<WidgetTypes::Button>;
-using TouchValContainer = ValueContainer<WidgetTypes::TouchSurface>;
-
 #endif
