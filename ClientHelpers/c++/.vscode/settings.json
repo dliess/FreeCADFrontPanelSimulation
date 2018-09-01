@@ -4,7 +4,12 @@
         "*.tcc": "cpp",
         "istream": "cpp",
         "tuple": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "limits": "cpp",
+        "optional": "cpp",
+        "ostream": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp"
     },
     "cmake.configureOnOpen": false
 }

@@ -14,7 +14,7 @@ public:
         for(int i = 0; i <=  static_cast<int>(WidgetTopology::WidgetId::Last); ++i)
         {
             const typename WidgetTopology::WidgetId wId = static_cast<typename WidgetTopology::WidgetId>(i);
-            m_holder[i] = new DataType[WidgetTopology::getDim(wId).x * WidgetTopology::getDim(wId).y];
+            m_holder[i] = new DataType[WidgetTopology::getDim(wId).x * WidgetTopology::getDim(wId).y](); //the () at the end is for zero initialization
         }
     }
     ~WidgetTopologyContainer()
@@ -75,11 +75,11 @@ public:
         {
             for(auto y = start.y; y < end.y; ++y)
             {
-                Widget<WidgetTopology> widget(widget.id, Vec2D(x, y));
-                DataType* data = get(widget);
+                Widget<WidgetTopology> actWidget(widget.id, Vec2D(x, y));
+                DataType* data = get(actWidget);
                 if(data)
                 {
-                    visitor(*data, widget);
+                    visitor(*data, actWidget);
                 }
             }
         }

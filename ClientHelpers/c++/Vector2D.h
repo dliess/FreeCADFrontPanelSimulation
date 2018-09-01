@@ -35,9 +35,14 @@ struct Vector2D
     }
     T x;
     T y;
-    static const T ALL = std::numeric_limits<T>::max();
+    static const T ALL;
 };
 
-typedef Vector2D<uint8_t> Vec2D;
+// This makes linker happy
+template<typename T>
+const T Vector2D<T>::ALL = std::numeric_limits<T>::max();
+
+
+using Vec2D = Vector2D<uint8_t>;
 
 #endif

@@ -6,19 +6,20 @@
 #include "CallbackContainer.h"
 #include "ValueChangeHandler.h"
 
+using PotWidget   = Widget< WidgetTopology<WidgetTypes::Potentiometer> >;
+using EncWidget   = Widget< WidgetTopology<WidgetTypes::Encoder> >;
+using BtnWidget   = Widget< WidgetTopology<WidgetTypes::Button> >;
+using TouchWidget = Widget< WidgetTopology<WidgetTypes::TouchSurface> >;
+
+using PotCallback   = CallbackIf<WidgetTypes::Potentiometer>;
+using EncCallback   = CallbackIf<WidgetTypes::Encoder>;
+using BtnCallback   = CallbackIf<WidgetTypes::Button>;
+using TouchCallback = CallbackIf<WidgetTypes::TouchSurface>;
+
 template<class FpHal>
 class FpInputHandler
 {
 public:
-    using PotWidget   = Widget< WidgetTopology<WidgetTypes::Potentiometer> >;
-    using EncWidget   = Widget< WidgetTopology<WidgetTypes::Encoder> >;
-    using BtnWidget   = Widget< WidgetTopology<WidgetTypes::Button> >;
-    using TouchWidget = Widget< WidgetTopology<WidgetTypes::TouchSurface> >;
-
-    using PotCallback   = CallbackIf<WidgetTypes::Potentiometer>;
-    using EncCallback   = CallbackIf<WidgetTypes::Encoder>;
-    using BtnCallback   = CallbackIf<WidgetTypes::Button>;
-    using TouchCallback = CallbackIf<WidgetTypes::TouchSurface>;
 
     FpInputHandler(FpHal& rFpHal) :
         m_rFpHal(rFpHal)
