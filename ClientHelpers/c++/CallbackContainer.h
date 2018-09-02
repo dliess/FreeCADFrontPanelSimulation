@@ -5,7 +5,6 @@
 #include "WidgetTopology.h"
 #include "CallbackStack.h"
 #include "CallbackIf.h"
-#include "WidgetTypes.h"
 
 template <class WidgetType>
 using CallbackContainer = WidgetTopologyContainer<CallbackStack<CallbackIf<WidgetType>, 3>, WidgetTopology<WidgetType> >;

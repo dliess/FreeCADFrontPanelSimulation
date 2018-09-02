@@ -5,25 +5,12 @@
 #include <gtest/gtest.h>
 #include "FpInputHandler.h" //important to include it after topology classes
 #include "TestFpHal.h"
+#include "TestCallbacks.h"
 
-class BtnCB : public BtnCallback
-{
-public:
-    BtnCB() : m_callCount(0){};
-    void valueChangedCb(const BtnValue& value, const BtnWidget& widget) override
-    {
-        ++m_callCount;
-    }
-    uint32_t getCallCount() const {return m_callCount;}
-    void clearCallCount() {m_callCount = 0;}
-public:
-    uint32_t m_callCount;
-};
-
-TEST(FpInputHandlerTest, ButtonTest) {
+TEST(FpInputHandlerTest, ButtonCbTest) {
     TestFpHal hal;
     FpInputHandler<TestFpHal> fpInputHandler(hal);
-    BtnCB btnCb;
+    TestBtnCB btnCb;
     fpInputHandler.registerBtnCb(btnCb, BtnWidget(BtnId::Menu, Vec2D(Vec2D::ALL, Vec2D::ALL)));
     fpInputHandler.registerBtnCb(btnCb, BtnWidget(BtnId::Notes, Vec2D(Vec2D::ALL, Vec2D::ALL)));
 
@@ -42,25 +29,11 @@ TEST(FpInputHandlerTest, ButtonTest) {
     ASSERT_EQ(25, btnCb.getCallCount());
 }
 
-class PotCB : public PotCallback
-{
-public:
-    PotCB() : m_sumValue(0){};
-    void valueChangedCb(const PotValue& value, const PotWidget& widget) override
-    {
-        m_sumValue += value;
-    }
-    PotValue getSumValue() const {return m_sumValue;}
-    void clearSumValue() {m_sumValue = 0;}
-public:
-    PotValue m_sumValue;
-};
-
-TEST(FpInputHandlerTest, PotentiometerTest) {
+TEST(FpInputHandlerTest, PotentiometerCbTest) {
     TestFpHal hal;
     FpInputHandler<TestFpHal> fpInputHandler(hal);
-    PotCB potCb1;
-    PotCB potCb2;
+    TestPotCB potCb1;
+    TestPotCB potCb2;
     fpInputHandler.registerPotCb(potCb1, PotWidget(PotId::Pot1, Vec2D(Vec2D::ALL, Vec2D::ALL)));
     fpInputHandler.registerPotCb(potCb1, PotWidget(PotId::PotMatrix, Vec2D(Vec2D::ALL, Vec2D::ALL)));
     fpInputHandler.registerPotCb(potCb2, PotWidget(PotId::PotMatrix, Vec2D(1,1)));
@@ -87,4 +60,88 @@ TEST(FpInputHandlerTest, PotentiometerTest) {
     fpInputHandler.poll();
     ASSERT_EQ(120, potCb1.getSumValue());
     ASSERT_EQ(0,  potCb2.getSumValue());
+}
+
+TEST(FpInputHandlerTest, EncoderCbTest) {
+    TestFpHal hal;
+    FpInputHandler<TestFpHal> fpInputHandler(hal);
+    TestEncCB encCb1;
+    TestEncCB encCb2;
+    fpInputHandler.registerEncCb(encCb1, EncWidget(EncId::EncMatrix, Vec2D(Vec2D::ALL, Vec2D::ALL)));
+    fpInputHandler.registerEncCb(encCb2, EncWidget(EncId::EncMatrix, Vec2D(1,1)));
+
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,4))) = 10;
+    fpInputHandler.poll();
+    ASSERT_EQ(10, encCb1.getSumValue());
+
+    encCb1.clearSumValue();
+    encCb2.clearSumValue();
+    fpInputHandler.poll();
+    ASSERT_EQ(10, encCb1.getSumValue());
+
+    encCb1.clearSumValue();
+    encCb2.clearSumValue();
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,4))) = 0;
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,0))) = 10;
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,1))) = 20;
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,6))) = 30;
+    fpInputHandler.poll();
+    ASSERT_EQ(40, encCb1.getSumValue());
+    ASSERT_EQ(20, encCb2.getSumValue());
+
+    fpInputHandler.unregisterEncCb(encCb2, EncWidget(EncId::EncMatrix, Vec2D(1,1)));
+    encCb1.clearSumValue();
+    encCb2.clearSumValue();
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,0))) = 30;
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,1))) = 40;
+    *hal.encIncrements.get(EncWidget(EncId::EncMatrix, Vec2D(1,6))) = 50;
+    fpInputHandler.poll();
+    ASSERT_EQ(120, encCb1.getSumValue());
+    ASSERT_EQ(0,  encCb2.getSumValue());
+}
+
+TEST(FpInputHandlerTest, TouchCbTest) {
+    TestFpHal hal;
+    FpInputHandler<TestFpHal> fpInputHandler(hal);
+    TestTouchCB touchCb;
+    fpInputHandler.registerTouchCb(touchCb, TouchWidget(TouchId::Touch1, Vec2D(Vec2D::ALL, Vec2D::ALL)));
+    fpInputHandler.registerTouchCb(touchCb, TouchWidget(TouchId::Touch2, Vec2D(Vec2D::ALL, Vec2D::ALL)));
+    fpInputHandler.registerTouchCb(touchCb, TouchWidget(TouchId::Touch3, Vec2D(Vec2D::ALL, Vec2D::ALL)));
+
+    *hal.touchValues.get(TouchWidget(TouchId::Touch1, Vec2D(0,0))) = {10 ,5};
+    *hal.touchValues.get(TouchWidget(TouchId::Touch3, Vec2D(0,0))) = {10, 5};
+    fpInputHandler.poll();
+    ASSERT_EQ(TouchValue(20, 10), touchCb.getSumValue());
+
+    touchCb.clearSumValue();
+    fpInputHandler.poll();
+    ASSERT_EQ(TouchValue(0, 0), touchCb.getSumValue());
+}
+
+TEST(FpInputHandlerTest, PotentiometerValGetTest) {
+    TestFpHal hal;
+    FpInputHandler<TestFpHal> fpInputHandler(hal);
+    hal.potValues.forEach([](PotValue &data, const PotWidget &widget){data = 11;});
+    ASSERT_EQ(0, fpInputHandler.potValue(PotWidget(PotId::PotMatrix, Vec2D(0,0))));
+    fpInputHandler.poll();
+    ASSERT_EQ(11, fpInputHandler.potValue(PotWidget(PotId::PotMatrix, Vec2D(0,0))));
+    ASSERT_EQ(0, fpInputHandler.potValue(PotWidget(PotId::PotMatrix, Vec2D(100,100))));
+}
+TEST(FpInputHandlerTest, ButtonStateGetTest) {
+    TestFpHal hal;
+    FpInputHandler<TestFpHal> fpInputHandler(hal);
+    hal.btnValues.forEach([](BtnValue &data, const BtnWidget &widget){data = WidgetTypes::Button::State::Pressed;});
+    ASSERT_EQ(WidgetTypes::Button::State::Released, fpInputHandler.btnValue(BtnWidget(BtnId::Menu, Vec2D(0,0))));
+    fpInputHandler.poll();
+    ASSERT_EQ(WidgetTypes::Button::State::Pressed, fpInputHandler.btnValue(BtnWidget(BtnId::Menu, Vec2D(0,0))));
+    ASSERT_EQ(WidgetTypes::Button::State::Released, fpInputHandler.btnValue(BtnWidget(BtnId::Menu, Vec2D(100,100))));
+}
+TEST(FpInputHandlerTest, TouchValueGetTest) {
+    TestFpHal hal;
+    FpInputHandler<TestFpHal> fpInputHandler(hal);
+    hal.touchValues.forEach([](TouchValue &data, const TouchWidget &widget){data = TouchValue(11,22);});
+    ASSERT_EQ(TouchValue(0,0), fpInputHandler.touchValue(TouchWidget(TouchId::Touch1, Vec2D(0,0))));
+    fpInputHandler.poll();
+    ASSERT_EQ(TouchValue(11,22), fpInputHandler.touchValue(TouchWidget(TouchId::Touch1, Vec2D(0,0))));
+    ASSERT_EQ(TouchValue(0,0), fpInputHandler.touchValue(TouchWidget(TouchId::Touch1, Vec2D(100,100))));
 }
