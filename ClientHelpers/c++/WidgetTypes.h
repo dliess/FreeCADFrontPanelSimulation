@@ -44,15 +44,6 @@ public:
 
 } //namespace WidgetTypes
 
-template<typename T>
-void reset(T& val) {val = 0;}
-
-template<>
-void reset<WidgetTypes::Button::ValueType>(WidgetTypes::Button::ValueType& val)
-{
-    val = WidgetTypes::Button::State::Released;
-}
-
 using PotValue   = WidgetTypes::Potentiometer::ValueType;
 using EncValue   = WidgetTypes::Encoder::ValueType;
 using BtnValue   = WidgetTypes::Button::ValueType;

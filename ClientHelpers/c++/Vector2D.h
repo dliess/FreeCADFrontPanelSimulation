@@ -21,6 +21,10 @@ struct Vector2D
     {}
     bool operator!=(const Vector2D<T>& rhs) const
     {
+        return (x != rhs.x) || (y != rhs.y);
+    }
+    bool operator==(const Vector2D<T>& rhs) const
+    {
         return (x == rhs.x) && (y == rhs.y);
     }
     Vector2D& operator=(const T& val)
@@ -28,6 +32,10 @@ struct Vector2D
         x = val;
         y = val;
         return *this;
+    }
+    Vector2D operator+(const Vector2D<T>& rhs) const
+    {
+        return Vector2D(x + rhs.x, y + rhs.y);
     }
     Vector2D inc() const
     {
