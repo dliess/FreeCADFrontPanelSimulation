@@ -27,7 +27,7 @@ Featured widgets:
 * Minimum FreeCAD version: 0.18 (maybe 0.17 also, did not test it with that, 0.16 did not work)
 * For the [c++ GRPC installation](https://github.com/grpc/grpc/blob/v1.14.1/src/cpp/README.md) used by the c++ ClientHelper, there is currently only a manual build
   - Prerequisites:
-    - sudo apt-get install build-essential autoconf libtool pkg-config curl
+    - sudo apt-get install build-essential autoconf libtool pkg-config curl golang
   - Clone Repository:
     - git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
     - cd grpc
