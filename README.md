@@ -35,8 +35,13 @@ Featured widgets:
   - Build grpc and install:
     - make
     - sudo make install (or sudo checkinstall)
-  - Install Protoc:
-    - cd grpc/third_party/protobuf
+  - [Install Protoc](https://github.com/protocolbuffers/protobuf/blob/master/cmake/README.md):
+    - cd grpc/third_party/protobuf/cmake
+    - mkdir build
+    - mkdir release
+    - cd build/release
+    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF ../..
+    - make
     - sudo make install
 
 # Installation:
