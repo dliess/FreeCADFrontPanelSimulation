@@ -25,6 +25,7 @@ Featured widgets:
 * sudo python -m pip install grpcio
 * python -m pip install --user grpcio-tools
 * Minimum FreeCAD version: 0.18 (maybe 0.17 also, did not test it with that, 0.16 did not work)
+* For the [c++ GRPC installation](https://github.com/grpc/grpc/blob/v1.14.1/src/cpp/README.md) used by the c++ ClientHelper, there is currently only a manual build
 
 # Installation:
 * Clone repo to .FreeCAD/Mod/ Folder
