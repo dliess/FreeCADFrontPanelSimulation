@@ -33,8 +33,13 @@ Featured widgets:
     - cd grpc
     - git submodule update --init
   - Build grpc and install:
+    - mkdir build
+    - mkdir release
+    - cd build/release
+    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../..
     - make
-    - sudo make install (or sudo checkinstall)
+    - sudo make install
+    
   - [Install Protoc](https://github.com/protocolbuffers/protobuf/blob/master/cmake/README.md):
     - cd grpc/third_party/protobuf/cmake
     - mkdir build
