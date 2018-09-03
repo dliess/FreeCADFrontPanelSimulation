@@ -2,6 +2,7 @@
 #define WIDGET_TOPOLOGY_H
 
 #include "WidgetTypes.h"
+#include "Vector2D.h"
 
 template<class WidgetType>
 class WidgetTopology

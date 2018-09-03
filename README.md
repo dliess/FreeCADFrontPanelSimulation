@@ -29,6 +29,7 @@ Featured widgets:
   - Prerequisites:
     - sudo apt-get install build-essential autoconf libtool pkg-config curl golang
   - Clone Repository:
+    - cd ClientHelpers/c++/HAL
     - git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
     - cd grpc
     - git submodule update --init

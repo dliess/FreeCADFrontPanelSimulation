@@ -42,6 +42,15 @@ public:
     using ValueHandler   = ValueHolder<ValueType>;
 };
 
+class Display
+{};
+
+class Led
+{};
+
+class PotentiometerMove
+{};
+
 } //namespace WidgetTypes
 
 using PotValue   = WidgetTypes::Potentiometer::ValueType;

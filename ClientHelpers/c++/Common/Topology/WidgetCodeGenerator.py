@@ -6,28 +6,22 @@ class WidgetCodeGenerator:
         with open(filename) as f:
             self.topology = json.load(f)
 
-    def createPythonHeader(self, fileName):
-        with open(fileName, "w") as outFile:
-            outFile.write(self.createPythonCode())
-
     def createCppHeader(self, fileName):
         with open(fileName, "w") as outFile:
             outFile.write(self.createCppHeaderCode())
 
-
-    def createPythonCode(self):
-        ret = "class FpWidgets:\n"
-        return ret
-
     def createCppHeaderCode(self):
         ret = ""
-        ret += "#ifndef FP_WIDGETS_H\n"
-        ret += "#define FP_WIDGETS_H\n\n"
-        ret += "#include <cstdint> // uint8_t\n\n"
-        ret += "namespace FPWidgets\n{\n\n"
-        ret += "struct TopologyDim{uint8_t x; uint8_t y;};\n\n"
+        ret += "#ifndef WIDGET_TOPOLOGY_H\n"
+        ret += "#define WIDGET_TOPOLOGY_H\n\n"
+        ret += "#include \"WidgetTypes.h\"\n"
+        ret += "#include \"Vector2D.h\"\n\n"
+        ret += "template<class WidgetType>\n"
+        ret += "class WidgetTopology\n"
+        ret += "{};\n\n"
         for fpFunction in FPWidgetFunction.all:
-            ret += "class " + FPWidgetFunction.toString(fpFunction) + "\n{\n"
+            ret += "template<>\n"
+            ret += "class WidgetTopology<WidgetTypes::" + FPWidgetFunction.toString(fpFunction) + ">\n{\n"
             ret += "public:\n"
             ret += "   enum WidgetId\n"
             ret += "   {\n"
@@ -43,7 +37,7 @@ class WidgetCodeGenerator:
             else:
                 ret += "      Last = -1\n"
             ret += "   };\n"
-            ret += "   static const TopologyDim& getDim(WidgetId widgetId)\n"
+            ret += "   static const Vec2D& getDim(WidgetId widgetId)\n"
             ret += "   {\n"
             dimStr = ""
             for widget in self.topology:
@@ -62,22 +56,24 @@ class WidgetCodeGenerator:
                         dimStr += ", "
                     dimStr += "{" + str(dimX) + ", " + str(dimY) + "}"
             if dimStr:
-                ret += "      static const TopologyDim dim[WidgetId::Last + 1] = { " + dimStr + "} ;\n"
+                ret += "      static const Vec2D dim[WidgetId::Last + 1] = { " + dimStr + "} ;\n"
                 ret += "      return dim[widgetId];\n"
             else:
-                ret += "      static const TopologyDim dim = {0,0};\n"
+                ret += "      static const Vec2D dim = {0,0};\n"
                 ret += "      return dim;\n"
             ret += "   }\n"
             ret += "};\n\n"
-        ret += "} // namespace\n\n"
         ret += "#endif"
         return ret
 
 if __name__ == "__main__":
     import sys
+    import os.path
     if len(sys.argv) < 2:
         print("Filename needed as argument\n")
         exit(1)
-    topology = WidgetCodeGenerator(sys.argv[1])
-    topology.createPythonHeader("FpWidgets.py")
-    topology.createCppHeader("FpWidgets.h")
+    jsonName = sys.argv[1]
+    topology = WidgetCodeGenerator(str(jsonName))
+    baseName = os.path.basename(jsonName)
+    woExt = os.path.splitext(baseName)[0]
+    topology.createCppHeader(str(woExt) + ".h")

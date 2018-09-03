@@ -1,9 +1,16 @@
-int fun(int a, int b)
-{
-    return a+b; 
-}
+#ifndef FP_HAL_SIM_H
+#define FP_HAL_SIM_H
 
-int main()
+#include "WidgetTypes.h"
+#include "ValueContainer.h"
+
+class FpHalSim
 {
-    return 0;
-}
+public:
+    void update(ValueContainer<WidgetTypes::Potentiometer>& container);
+    void update(ValueContainer<WidgetTypes::Encoder>& container);
+    void update(ValueContainer<WidgetTypes::Button>& container);
+    void update(ValueContainer<WidgetTypes::TouchSurface>& container);
+};
+
+#endif
