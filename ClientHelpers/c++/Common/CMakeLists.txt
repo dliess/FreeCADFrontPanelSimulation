@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
- 
+
+add_subdirectory(UnitTest EXCLUDE_FROM_ALL)
+
 set (CMAKE_CXX_STANDARD 11)
 
 set(TOPOLOGY_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/WidgetTopology.h")
@@ -17,6 +19,6 @@ set(INCLUDE_DIRS
     "${CMAKE_CURRENT_SOURCE_DIR}/Topology"
     )
 
-add_library(clientHelperCommon INTERFACE)
-target_include_directories(clientHelperCommon INTERFACE ${INCLUDE_DIRS})
-add_dependencies(clientHelperCommon generateTopologyHeader)
+add_library(common INTERFACE)
+target_include_directories(common INTERFACE ${INCLUDE_DIRS})
+add_dependencies(common generateTopologyHeader)

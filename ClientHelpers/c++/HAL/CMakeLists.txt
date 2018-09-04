@@ -93,7 +93,7 @@ ${hw_grpc_srcs}
 #include_directories(HALFpSim "${CMAKE_CURRENT_BINARY_DIR}")
 
 target_link_libraries(HALFpSim
-   PUBLIC ${_GRPC_GRPCPP_UNSECURE}
-   PUBLIC ${_PROTOBUF_LIBPROTOBUF}
-   PUBLIC clientHelperCommon)
+  ${_GRPC_GRPCPP_UNSECURE}
+  ${_PROTOBUF_LIBPROTOBUF}
+  common)
 

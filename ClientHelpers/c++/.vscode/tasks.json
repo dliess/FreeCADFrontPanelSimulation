@@ -47,10 +47,11 @@
             "type": "shell",
             "command": "make",
             "args": [
-                "-j8"
+                "-j8",
+                "runTests"
             ],
             "options": {
-                "cwd": "${workspaceRoot}/UnitTest/build"
+                "cwd": "${workspaceRoot}/build"
             },
             "group": {
                 "kind": "build",
@@ -58,28 +59,5 @@
             },
             "problemMatcher": []
         },
-        {
-            "label": "cmake UnitTest",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "${workspaceRoot}/UnitTest",
-                "-G",
-                "\"Unix Makefiles\"",
-                "-DCMAKE_BUILD_TYPE=Debug"
-            ],
-            "options": {
-                "cwd": "${workspaceRoot}/UnitTest/build"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "problemMatcher": []
-        }
     ]
 }

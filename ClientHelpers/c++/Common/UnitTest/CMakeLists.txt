@@ -11,11 +11,11 @@ set(SOURCES "UT_main.cpp"
             "UT_ValueHolder.cpp"
             )
 set(INCLUDE_DIRS
-    "${PROJECT_SOURCE_DIR}/.."
+    "${CMAKE_CURRENT_SOURCE_DIR}/.."
     "${GTEST_INCLUDE_DIRS}")
  
 # Link runTests with what we want to test and the GTest and pthread library
-add_executable(runTests ${SOURCES})
-target_include_directories(runTests PRIVATE ${INCLUDE_DIRS})
-target_link_libraries(runTests ${GTEST_LIBRARIES} pthread)
+add_executable(runTestsCommon ${SOURCES})
+target_include_directories(runTestsCommon PRIVATE ${INCLUDE_DIRS})
+target_link_libraries(runTestsCommon ${GTEST_LIBRARIES} pthread)
 
