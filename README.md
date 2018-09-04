@@ -33,6 +33,9 @@ Featured widgets:
     - git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
     - cd grpc
     - git submodule update --init
+    
+    - If you build grpc as submodule (using add_subdirectory() in cmake) you are done here, otherwise
+      build and install the grpc components (Note: does not work yet because find_package(grpc) has a bug, maybe usable in a later grpc version)
   - Build grpc and install:
     - mkdir build
     - mkdir release
