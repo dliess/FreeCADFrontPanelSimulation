@@ -29,7 +29,7 @@ Featured widgets:
   - Prerequisites:
     - sudo apt-get install build-essential autoconf libtool pkg-config curl golang
   - Clone Repository:
-    - cd ClientHelpers/c++/HAL
+    - cd grpc/c++
     - git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
     - cd grpc
     - git submodule update --init
@@ -54,9 +54,10 @@ Featured widgets:
     - sudo make install
 
 # Installation:
-* Clone repo to .FreeCAD/Mod/ Folder
-* Change directory to repo-dir/proto
-* Execute make (this generates grpc-files for clients and server)
+* cd ~/.FreeCAD/Mod/
+* clone https://github.com/dliess/FreeCADFrontPanelSimulation
+* cd ~/.FreeCAD/Mod/FreeCADFrontPanelSimulation/grpc/python
+* make (this generates grpc-files for clients and server)
 
 # Start Examples(draw-toy):
 * Start freecad-daily

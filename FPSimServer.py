@@ -4,8 +4,8 @@ from PySide import QtCore
 
 import grpc
 
-import generated.FPSimulation_pb2 as Proto
-import generated.FPSimulation_pb2_grpc as GRPC
+import generated.python.FPSimulation_pb2 as Proto
+import generated.python.FPSimulation_pb2_grpc as GRPC
 
 from threading import Lock
 

@@ -2,7 +2,7 @@ import FreeCAD
 import FPEventDispatcher
 from FPInitialPlacement import InitialPlacements
 import FPSimServer
-import generated.FPSimulation_pb2 as Proto
+import generated.python.FPSimulation_pb2 as Proto
 
 buttonState = dict()
 

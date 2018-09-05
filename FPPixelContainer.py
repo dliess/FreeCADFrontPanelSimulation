@@ -1,5 +1,5 @@
 import FreeCAD
-import generated.FPSimulation_pb2 as Proto
+import generated.python.FPSimulation_pb2 as Proto
 
 from PIL import Image
 from PIL import ImageDraw

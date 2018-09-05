@@ -4,7 +4,7 @@ from GrpcClient.GrpcClientChannel import GrpcClientChannel
 from GrpcClient.FpInputs import FpInputs
 from GrpcClient.FpOutputs import FpOutputs
 
-import generated.FPSimulation_pb2 as Proto
+import generated.python.FPSimulation_pb2 as Proto
 
 from time import sleep
 from copy import deepcopy

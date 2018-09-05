@@ -4,8 +4,8 @@ from __future__ import print_function
 
 import grpc
 
-import generated.FPSimulation_pb2 as Proto
-import generated.FPSimulation_pb2_grpc as GRPC
+import generated.python.FPSimulation_pb2 as Proto
+import generated.python.FPSimulation_pb2_grpc as GRPC
 from time import sleep
 from copy import deepcopy
 
