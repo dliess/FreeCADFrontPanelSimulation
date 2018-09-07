@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "~/.FreeCAD/Mod/FreeCADFrontPanelSimulation/grpc/c++/grpc/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

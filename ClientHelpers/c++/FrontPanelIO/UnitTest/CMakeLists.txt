@@ -18,5 +18,5 @@ set(INCLUDE_DIRS
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(runTestsFpIO ${SOURCES})
 target_include_directories(runTestsFpIO PRIVATE ${INCLUDE_DIRS})
-target_link_libraries(runTestsFpIO common ${GTEST_LIBRARIES} pthread)
+target_link_libraries(runTestsFpIO topology ${GTEST_LIBRARIES} pthread)
 

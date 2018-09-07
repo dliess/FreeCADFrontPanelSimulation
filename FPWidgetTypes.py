@@ -1,4 +1,4 @@
-class FPWidgetFunction:
+class FPWidgetTypes:
     POTENTIOMETER       = 0
     BUTTON              = 1
     ENCODER             = 2
@@ -18,18 +18,18 @@ class FPWidgetFunction:
 
     @staticmethod
     def toString(widgetCat):
-        if widgetCat == FPWidgetFunction.POTENTIOMETER:
+        if widgetCat == FPWidgetTypes.POTENTIOMETER:
             return "Potentiometer"
-        elif widgetCat == FPWidgetFunction.BUTTON:
+        elif widgetCat == FPWidgetTypes.BUTTON:
             return "Button"
-        elif widgetCat == FPWidgetFunction.ENCODER:
+        elif widgetCat == FPWidgetTypes.ENCODER:
             return "Encoder"
-        elif widgetCat == FPWidgetFunction.TOUCH:
+        elif widgetCat == FPWidgetTypes.TOUCH:
             return "TouchSurface"
-        elif widgetCat == FPWidgetFunction.DISPLAY:
+        elif widgetCat == FPWidgetTypes.DISPLAY:
             return "Display"
-        elif widgetCat == FPWidgetFunction.LED:
+        elif widgetCat == FPWidgetTypes.LED:
             return "Led"
-        elif widgetCat == FPWidgetFunction.POT_MOVE:
+        elif widgetCat == FPWidgetTypes.POT_MOVE:
             return "PotentiometerMove"
 

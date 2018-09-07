@@ -1,6 +1,6 @@
 import FreeCAD
 from PySide import QtGui
-from FPWidgetFunction import FPWidgetFunction
+from FPWidgetTypes import FPWidgetTypes
 import re
 import json
 
@@ -32,17 +32,17 @@ def exportTopology():
             wData[label]['Dimension'] = maxDim
             if not wData[label]['Function']:
                 if obj.Name.find("FPSimLinearPotentiometer") == 0:
-                    wData[label]['Function'] = [FPWidgetFunction.POTENTIOMETER, FPWidgetFunction.POT_MOVE]
+                    wData[label]['Function'] = [FPWidgetTypes.POTENTIOMETER, FPWidgetTypes.POT_MOVE]
                 elif obj.Name.find("FPSimButton") == 0:
-                    wData[label]['Function'] = [FPWidgetFunction.BUTTON]
+                    wData[label]['Function'] = [FPWidgetTypes.BUTTON]
                 elif obj.Name.find("FPSimDisplay") == 0:
-                    wData[label]['Function'] = [FPWidgetFunction.DISPLAY]
+                    wData[label]['Function'] = [FPWidgetTypes.DISPLAY]
                 elif obj.Name.find("FPSimRotaryEncoder") == 0:
-                    wData[label]['Function'] = [FPWidgetFunction.ENCODER, FPWidgetFunction.BUTTON]
+                    wData[label]['Function'] = [FPWidgetTypes.ENCODER, FPWidgetTypes.BUTTON]
                 elif obj.Name.find("FPSimRotaryPotentiometer") == 0:
-                    wData[label]['Function'] = [FPWidgetFunction.POTENTIOMETER, FPWidgetFunction.POT_MOVE]
+                    wData[label]['Function'] = [FPWidgetTypes.POTENTIOMETER, FPWidgetTypes.POT_MOVE]
                 elif obj.Name.find("FPSimLED") == 0:
-                    wData[label]['Function'] = [FPWidgetFunction.LED]
+                    wData[label]['Function'] = [FPWidgetTypes.LED]
 
     topology = []
     for label in wData:

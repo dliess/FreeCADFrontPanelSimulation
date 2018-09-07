@@ -9,4 +9,4 @@ set(INCLUDE_DIRS
  
 add_library(FPIOHandler INTERFACE)
 target_include_directories(FPIOHandler INTERFACE ${INCLUDE_DIRS})
-target_link_libraries(FPIOHandler INTERFACE common)
+target_link_libraries(FPIOHandler INTERFACE topology)

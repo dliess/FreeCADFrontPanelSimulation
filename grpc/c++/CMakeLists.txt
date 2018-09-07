@@ -79,12 +79,15 @@ add_custom_command(
         "${hw_proto}"
       DEPENDS "${hw_proto}")
 
-# Include generated *.pb.h files
-include_directories("${CMAKE_CURRENT_BINARY_DIR}")
-
 add_library(FpSimGrpc STATIC
 ${hw_proto_srcs}
 ${hw_grpc_srcs}
+GrpcClient.cpp
+)
+
+target_include_directories(FpSimGrpc 
+   PUBLIC "${CMAKE_CURRENT_LIST_DIR}"
+   PUBLIC "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
 target_link_libraries(FpSimGrpc

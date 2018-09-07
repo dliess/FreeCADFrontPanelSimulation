@@ -1,5 +1,5 @@
 import json
-from FPWidgetFunction import FPWidgetFunction
+from FPWidgetTypes import FPWidgetTypes
 
 class WidgetCodeGenerator:
     def __init__(self, filename):
@@ -19,9 +19,9 @@ class WidgetCodeGenerator:
         ret += "template<class WidgetType>\n"
         ret += "class WidgetTopology\n"
         ret += "{};\n\n"
-        for fpFunction in FPWidgetFunction.all:
+        for fpFunction in FPWidgetTypes.all:
             ret += "template<>\n"
-            ret += "class WidgetTopology<WidgetTypes::" + FPWidgetFunction.toString(fpFunction) + ">\n{\n"
+            ret += "class WidgetTopology<WidgetTypes::" + FPWidgetTypes.toString(fpFunction) + ">\n{\n"
             ret += "public:\n"
             ret += "   enum WidgetId\n"
             ret += "   {\n"
