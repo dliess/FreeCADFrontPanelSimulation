@@ -80,9 +80,9 @@ add_custom_command(
       DEPENDS "${hw_proto}")
 
 add_library(FpSimGrpc STATIC
-${hw_proto_srcs}
-${hw_grpc_srcs}
-GrpcClient.cpp
+  ${hw_proto_srcs}
+  ${hw_grpc_srcs}
+  GrpcClient.cpp
 )
 
 target_include_directories(FpSimGrpc 
