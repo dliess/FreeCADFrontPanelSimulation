@@ -25,22 +25,15 @@ Featured widgets:
 * sudo python -m pip install grpcio
 * python -m pip install --user grpcio-tools
 * Minimum FreeCAD version: 0.18 (maybe 0.17 also, did not test it with that, 0.16 did not work)
-* For the [c++ GRPC installation](https://github.com/grpc/grpc/blob/v1.14.1/src/cpp/README.md) used by the c++ ClientHelper, there is currently only a manual build
+* For the [c++ GRPC installation](https://github.com/grpc/grpc/blob/v1.14.1/src/cpp/README.md) 
   - Prerequisites:
-    - sudo apt-get install build-essential autoconf libtool pkg-config curl golang
-  - Clone Repository:
-    - cd grpc/c++
-    - git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
-    - cd grpc
-    - git submodule update --init
-    
-    - If you build grpc as submodule (using add_subdirectory() in cmake) you are done here, otherwise
-      build and install the grpc components (Note: does not work yet because find_package(grpc) has a bug, maybe usable in a later grpc version)
+    - sudo apt-get install build-essential autoconf libtool pkg-config curl golang libssl-dev
+      build and install the grpc components 
   - Build grpc and install:
     - mkdir build
-    - mkdir release
+    - mkdir build/release
     - cd build/release
-    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../..
+    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_SSL_PROVIDER=package ../..
     - make
     - sudo make install
     

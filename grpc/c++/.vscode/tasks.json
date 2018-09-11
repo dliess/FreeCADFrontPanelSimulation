@@ -28,7 +28,7 @@
                 "-G",
                 "\"Unix Makefiles\"",
                 "-DCMAKE_BUILD_TYPE=Debug",
-                "-DGRPC_AS_SUBMODULE=ON"
+                "-DGRPC_AS_SUBMODULE=OFF"
             ],
             "options": {
                 "cwd": "${workspaceRoot}/build"
