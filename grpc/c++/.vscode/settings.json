@@ -79,5 +79,14 @@
         "__config": "cpp",
         "__nullptr": "cpp",
         "dynarray": "cpp"
+    },
+    "editor.detectIndentation": false,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/grpc":true
     }
 }

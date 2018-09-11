@@ -16,7 +16,7 @@ public:
     bool display_drawLine(const DisplayDrawLineRequest &request);
     bool display_setActiveFont(const DisplaySetActiveFontRequest &request);
     bool display_drawText(const DisplayDrawTextRequest &request);
-    bool display_getResolution(const DisplayResolutionRequest, DisplayResolutionAnswer& answer);
+    bool display_getResolution(const DisplayResolutionRequest& request, DisplayResolutionAnswer& answer);
     bool display_clearDisplay(const DisplayClearDisplayRequest &request);
     bool getButtonStates(std::vector<GetButtonStateAnswer>& answer);
     bool getEncoderIncrements(std::vector<GetEncoderIncrementsAnswer>& answer);

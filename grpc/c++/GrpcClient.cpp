@@ -38,6 +38,7 @@ bool GrpcClient::display_setPixels(const DisplaySetPixelsRequest &request)
       return false;
     }
 }
+
 bool GrpcClient::display_setSubWindowPixels(const DisplaySubWindowPixelsRequest &request)
 {
     Empty reply;
@@ -51,6 +52,7 @@ bool GrpcClient::display_setSubWindowPixels(const DisplaySubWindowPixelsRequest 
       return false;
     }
 }
+
 bool GrpcClient::display_drawRectangle(const DisplayDrawRectangleRequest &request)
 {
     Empty reply;
@@ -64,6 +66,7 @@ bool GrpcClient::display_drawRectangle(const DisplayDrawRectangleRequest &reques
       return false;
     }
 }
+
 bool GrpcClient::display_drawLine(const DisplayDrawLineRequest &request)
 {
     Empty reply;
@@ -77,6 +80,7 @@ bool GrpcClient::display_drawLine(const DisplayDrawLineRequest &request)
       return false;
     }
 }
+
 bool GrpcClient::display_setActiveFont(const DisplaySetActiveFontRequest &request)
 {
     Empty reply;
@@ -90,6 +94,7 @@ bool GrpcClient::display_setActiveFont(const DisplaySetActiveFontRequest &reques
       return false;
     }
 }
+
 bool GrpcClient::display_drawText(const DisplayDrawTextRequest &request)
 {
     Empty reply;
@@ -103,10 +108,21 @@ bool GrpcClient::display_drawText(const DisplayDrawTextRequest &request)
       return false;
     }
 }
-bool GrpcClient::display_getResolution(const DisplayResolutionRequest, DisplayResolutionAnswer& answer)
+
+bool GrpcClient::display_getResolution( const DisplayResolutionRequest& request,
+                                        DisplayResolutionAnswer& answer )
 {
-    return true;
+    ClientContext context;
+    Status status = m_stub->display_getResolution(&context, request, &answer);
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
 }
+
 bool GrpcClient::display_clearDisplay(const DisplayClearDisplayRequest &request)
 {
     Empty reply;
