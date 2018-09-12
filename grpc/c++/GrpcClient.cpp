@@ -138,15 +138,61 @@ bool GrpcClient::display_clearDisplay(const DisplayClearDisplayRequest &request)
 }
 bool GrpcClient::getButtonStates(std::vector<GetButtonStateAnswer>& answer)
 {
-    return true;
+    Empty request;
+    ClientContext context;
+    auto reader = m_stub->getButtonStates(&context, request);
+    GetButtonStateAnswer oneAnswer;
+    while(reader->Read(&oneAnswer))
+    {
+        answer.push_back(oneAnswer);
+    }
+    Status status = reader->Finish();
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
 }
+
 bool GrpcClient::getEncoderIncrements(std::vector<GetEncoderIncrementsAnswer>& answer)
 {
-    return true;
+    Empty request;
+    ClientContext context;
+    auto reader = m_stub->getEncoderIncrements(&context, request);
+    GetEncoderIncrementsAnswer oneAnswer;
+    while(reader->Read(&oneAnswer))
+    {
+        answer.push_back(oneAnswer);
+    }
+    Status status = reader->Finish();
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
 }
 bool GrpcClient::getPotentiometerValues(std::vector<GetPotentiometerValuesAnswer>& answer)
 {
-    return true;
+    Empty request;
+    ClientContext context;
+    auto reader = m_stub->getPotentiometerValues(&context, request);
+    GetPotentiometerValuesAnswer oneAnswer;
+    while(reader->Read(&oneAnswer))
+    {
+        answer.push_back(oneAnswer);
+    }
+    Status status = reader->Finish();
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
 }
 bool GrpcClient::movePotentiometerToValue(const MovePotentiometerRequest &request)
 {
@@ -163,6 +209,21 @@ bool GrpcClient::movePotentiometerToValue(const MovePotentiometerRequest &reques
 }
 bool GrpcClient::getTouchValue(std::vector<GetTouchValueAnswer>& answer)
 {
-    return true;
+    Empty request;
+    ClientContext context;
+    auto reader = m_stub->getTouchValue(&context, request);
+    GetTouchValueAnswer oneAnswer;
+    while(reader->Read(&oneAnswer))
+    {
+        answer.push_back(oneAnswer);
+    }
+    Status status = reader->Finish();
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
 }
 
