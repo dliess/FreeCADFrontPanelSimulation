@@ -85,9 +85,10 @@ add_library(FpSimGrpc STATIC
   GrpcClient.cpp
 )
 
-target_include_directories(FpSimGrpc 
-   PUBLIC "${CMAKE_CURRENT_LIST_DIR}"
-   PUBLIC "${CMAKE_CURRENT_BINARY_DIR}"
+target_include_directories(FpSimGrpc
+    PUBLIC
+        $<INSTALL_INTERFACE:include>    
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
 )
 
 target_link_libraries(FpSimGrpc
@@ -95,8 +96,22 @@ target_link_libraries(FpSimGrpc
   ${_PROTOBUF_LIBPROTOBUF}
 )
 
-set(install_dir "${CMAKE_CURRENT_LIST_DIR}/../../generated/c++")
+set_target_properties(FpSimGrpc PROPERTIES PUBLIC_HEADER "GrpcClient.h;${hw_grpc_hdrs}")
 
-install(FILES "${hw_proto_hdrs}" "${hw_grpc_hdrs}" DESTINATION ${install_dir})
-install(TARGETS FpSimGrpc DESTINATION ${install_dir})
-#install(FILES FpSimGrpcConfig.cmake DESTINATION lib/cmake/FpSim)
+include(GNUInstallDirs)
+install(TARGETS FpSimGrpc
+    EXPORT FpSimGrpc-targets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+install(FILES FpSimGrpcConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/FpSimGrpc)
+
+install(EXPORT FpSimGrpc-targets
+  FILE
+    FpSimGrpcTargets.cmake
+  NAMESPACE
+    FpSimGrpc::
+  DESTINATION
+    ${CMAKE_INSTALL_LIBDIR}/cmake/FpSimGrpc
+)

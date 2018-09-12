@@ -1,3 +1,9 @@
-add_library(FpSimGrpc STATIC IMPORTED)
-find_library(FPSIMGRPC_LIBRARY_PATH  FpSimGrpc HINTS "$ENV{HOME}/.FreeCAD/Mod/FreeCADFrontPanelSimulation/generated/c++")
-set_target_properties(FpSimGrpc PROPERTIES IMPORTED_LOCATION "${FPSIMGRPC_LIBRARY_PATH}")
+get_filename_component(FpSimGrpc_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+find_dependency(Boost 1.55 REQUIRED COMPONENTS regex)
+find_dependency(RapidJSON 1.0 REQUIRED MODULE)
+
+if(NOT TARGET FpSimGrpc::FpSimGrpc)
+    include("${FpSimGrpc_CMAKE_DIR}/FpSimGrpcTargets.cmake")
+endif()
