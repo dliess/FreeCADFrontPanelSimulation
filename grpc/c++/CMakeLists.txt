@@ -96,7 +96,7 @@ target_link_libraries(FpSimGrpc
   ${_PROTOBUF_LIBPROTOBUF}
 )
 
-set_target_properties(FpSimGrpc PROPERTIES PUBLIC_HEADER "GrpcClient.h;${hw_grpc_hdrs}")
+set_target_properties(FpSimGrpc PROPERTIES PUBLIC_HEADER "GrpcClient.h;${hw_grpc_hdrs};${hw_proto_hdrs}")
 
 include(GNUInstallDirs)
 install(TARGETS FpSimGrpc

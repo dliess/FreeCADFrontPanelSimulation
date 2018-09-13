@@ -2,6 +2,8 @@
 #define GRPC_CLIENT_H
 
 #include <memory> // shared_ptr
+#include <vector>
+#include "FPSimulation.pb.h"
 #include "FPSimulation.grpc.pb.h"
  
 
