@@ -49,7 +49,7 @@ def exportTopology():
         widget = {'Label' : label, 'Dimension' : wData[label]['Dimension'], 'WidgetFunction' : wData[label]['Function']}
         topology.append(widget)
 
-    fileName = QtGui.QFileDialog.getSaveFileName( filter="Json file (*.json)" )[0]
+    fileName = QtGui.QFileDialog.getSaveFileName(dir = "WidgetTopology.json", filter="WidgetTopology file (WidgetTopology.json)")[0]
     if len(fileName) > 0:
         with open(fileName, 'w') as outfile:
             json.dump(topology, outfile)
