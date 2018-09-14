@@ -37,3 +37,15 @@ def isClose(a, b, rel_tol=1e-09, abs_tol=0.0):
 
 def clamp(n, minn, maxn):
     return max(min(maxn, n), minn)
+
+def getChildsWithPlacementRecursive(obj, placementObjects):
+    if hasattr(obj, "Placement"):
+        placementObjects.append(obj)
+    if hasattr(obj, "Group"):
+        for child in obj.Group:
+            getChildsWithPlacementRecursive(child, placementObjects)
+
+def getChildsWithPlacement(obj):
+    ret = []
+    getChildsWithPlacementRecursive(obj, ret)
+    return ret

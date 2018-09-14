@@ -1,5 +1,6 @@
 import FreeCAD
 import FPEventDispatcher
+import FPUtils
 from FPInitialPlacement import InitialPlacements
 import FPSimServer
 import generated.python.FPSimulation_pb2 as Proto
@@ -79,7 +80,7 @@ class FPSimButton(InitialPlacements):
                 buttonState[objName] = Proto.BUTTON_RELEASED
             else:
                 return
-        for child in obj.Group:
+        for child in FPUtils.getChildsWithPlacement(obj):
             if buttonState[objName] == Proto.BUTTON_PRESSED:
                 pos = child.Placement.Base + obj.Translation
                 rotPlacement = FreeCAD.Placement(pos, rot, obj.RotationCenter - child.Placement.Base)
@@ -128,7 +129,12 @@ def createFPSimLinButton():
     try:
         buttonObj.Translation = selection[-1].SubObjects[-1].normalAt(0, 0).negative()
         for sel_obj in selection:
-            buttonObj.addObject(sel_obj.Object)
+            theObj = sel_obj.Object
+            if theObj.InList:
+                for parent in theObj.InList:
+                    buttonObj.addObject(parent)
+            else:
+                buttonObj.addObject(theObj)
     except IndexError:
         FreeCAD.Console.PrintError("Usage Error, select objects and a surface\n")
 
