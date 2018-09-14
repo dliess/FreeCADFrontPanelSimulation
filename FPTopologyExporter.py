@@ -1,6 +1,6 @@
 import FreeCAD
 from PySide import QtGui
-from FPWidgetTypes import FPWidgetTypes
+
 import re
 import json
 
@@ -32,17 +32,25 @@ def exportTopology():
             wData[label]['Dimension'] = maxDim
             if not wData[label]['wType']:
                 if obj.Name.find("FPSimLinearPotentiometer") == 0:
-                    wData[label]['wType'] = [FPWidgetTypes.POTENTIOMETER, FPWidgetTypes.POT_MOVE]
+                    wData[label]['wType'] = ["Potentiometer"]
+                    if obj.Motorized:
+                        wData[label]['wType'].append("PotentiometerMove")
                 elif obj.Name.find("FPSimButton") == 0:
-                    wData[label]['wType'] = [FPWidgetTypes.BUTTON]
+                    wData[label]['wType'] = ["Button"]
                 elif obj.Name.find("FPSimDisplay") == 0:
-                    wData[label]['wType'] = [FPWidgetTypes.DISPLAY]
+                    wData[label]['wType'] = ["Display"]
                 elif obj.Name.find("FPSimRotaryEncoder") == 0:
-                    wData[label]['wType'] = [FPWidgetTypes.ENCODER, FPWidgetTypes.BUTTON]
+                    wData[label]['wType'] = ["Encoder"]
+                    if obj.PushButton:
+                        wData[label]['wType'].append("Button")
                 elif obj.Name.find("FPSimRotaryPotentiometer") == 0:
-                    wData[label]['wType'] = [FPWidgetTypes.POTENTIOMETER, FPWidgetTypes.POT_MOVE]
+                    wData[label]['wType'] = ["Potentiometer"]
+                    if obj.Motorized:
+                        wData[label]['wType'].append("PotentiometerMove")
                 elif obj.Name.find("FPSimLED") == 0:
-                    wData[label]['wType'] = [FPWidgetTypes.LED]
+                    wData[label]['wType'] = ["Led"]
+                elif obj.Name.find("FPSimTouchSurface") == 0:
+                    wData[label]['wType'] = ["TouchSurface"]
 
     topology = []
     for label in wData:
