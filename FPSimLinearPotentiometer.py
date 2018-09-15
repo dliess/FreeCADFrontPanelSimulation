@@ -19,6 +19,7 @@ class FPSimLinearPotentiometer(InitialPlacements):
         obj.addProperty('App::PropertyVector', 'PositiveDirection').PositiveDirection = (0,0,1)
         obj.addProperty('App::PropertyInteger', 'Resolution').Resolution = 1024
         obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0
+        obj.addProperty('App::PropertyBool', 'Motorized').Motorized = False
 
         obj.Proxy = self
 

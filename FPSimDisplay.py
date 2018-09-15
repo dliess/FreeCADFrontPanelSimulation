@@ -3,7 +3,7 @@ import FreeCADGui
 #from PySide import QtGui
 from pivy import coin
 from random import randint
-import generated.FPSimulation_pb2 as Proto
+import generated.python.FPSimulation_pb2 as Proto
 import FPPixelContainer
 
 

@@ -25,24 +25,32 @@ Featured widgets:
 * sudo python -m pip install grpcio
 * python -m pip install --user grpcio-tools
 * Minimum FreeCAD version: 0.18 (maybe 0.17 also, did not test it with that, 0.16 did not work)
-* For the [c++ GRPC installation](https://github.com/grpc/grpc/blob/v1.14.1/src/cpp/README.md) used by the c++ ClientHelper, there is currently only a manual build
+* For the [c++ GRPC installation](https://github.com/grpc/grpc/blob/v1.14.1/src/cpp/README.md) 
   - Prerequisites:
-    - sudo apt-get install build-essential autoconf libtool pkg-config curl
-  - Clone Repository:
-    - git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
-    - cd grpc
-    - git submodule update --init
+    - sudo apt-get install build-essential autoconf libtool pkg-config curl golang libssl-dev
+      build and install the grpc components 
   - Build grpc and install:
+    - mkdir build
+    - mkdir build/release
+    - cd build/release
+    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_SSL_PROVIDER=package ../..
     - make
-    - sudo make install (or sudo checkinstall)
-  - Install Protoc:
-    - cd grpc/third_party/protobuf
+    - sudo make install
+    
+  - [Install Protoc](https://github.com/protocolbuffers/protobuf/blob/master/cmake/README.md):
+    - cd grpc/third_party/protobuf/cmake
+    - mkdir build
+    - mkdir release
+    - cd build/release
+    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF ../..
+    - make
     - sudo make install
 
 # Installation:
-* Clone repo to .FreeCAD/Mod/ Folder
-* Change directory to repo-dir/proto
-* Execute make (this generates grpc-files for clients and server)
+* cd ~/.FreeCAD/Mod/
+* clone https://github.com/dliess/FreeCADFrontPanelSimulation
+* cd ~/.FreeCAD/Mod/FreeCADFrontPanelSimulation/grpc/python
+* make (this generates grpc-files for clients and server)
 
 # Start Examples(draw-toy):
 * Start freecad-daily

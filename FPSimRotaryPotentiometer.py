@@ -18,6 +18,7 @@ class FPSimRotaryPotentiometer(InitialPlacements):
         obj.addProperty('App::PropertyFloat', 'PositiveRotLimitDeg').PositiveRotLimitDeg = 10.0
         obj.addProperty('App::PropertyFloat', 'NegativeRotLimitDeg').NegativeRotLimitDeg = 10.0
         obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0
+        obj.addProperty('App::PropertyBool', 'Motorized').Motorized = False
 
         obj.Proxy = self
 

@@ -7,7 +7,7 @@ class InitialPlacements:
 
     def saveInitialPlacements(self, obj):
         obj.InitialPlacements.clear()
-        for child in obj.Group:
+        for child in FPUtils.getChildsWithPlacement(obj):
             placement = FPUtils.freeCADPlacementToPropertyPythonObject(child.Placement)
             obj.InitialPlacements[child.Name] = placement
 
@@ -18,7 +18,7 @@ class InitialPlacements:
         return len( obj.InitialPlacements ) == 0
 
     def moveToInitialPlacement(self, obj):
-        for child in obj.Group:
+        for child in FPUtils.getChildsWithPlacement(obj):
             child.Placement = self.getInitialPlacement(obj, child.Name)
         
 

@@ -2,5 +2,3 @@
 generated/
 #vim 
 *.swp
-#visual studio code files
-.vscode/
