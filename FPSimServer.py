@@ -1,15 +1,12 @@
 
 from concurrent import futures
 from PySide import QtCore
-
 import grpc
-
 import generated.python.FPSimulation_pb2 as Proto
 import generated.python.FPSimulation_pb2_grpc as GRPC
-
 from threading import Lock
-
 import FreeCAD
+import FPSimDisplay
 
 #import threading
 
@@ -240,7 +237,7 @@ class Server:
         GRPC.add_FPSimulationServicer_to_server(FPSimulationService(), self._server)
         self._server.add_insecure_port('[::]:' + str(port))
         self._server.start()
-        self._timer.start(50)
+        self._timer.start(10)
 
 
 
@@ -254,7 +251,9 @@ class Server:
             obj = FreeCAD.ActiveDocument.getObject(objName)
             obj.Proxy.moveToValue(objName, _commandedValues[objName])
             del  _commandedValues[objName]
-        FreeCAD.ActiveDocument.recompute()
+        FPSimDisplay.updateObjectTexture()
+        #FreeCAD.ActiveDocument.recompute()
+
         # for objName in _modifiedObjectsByServer:
         #     obj = FreeCAD.ActiveDocument.getObjectsByLabel(objName)[0]
         #     obj.recompute()

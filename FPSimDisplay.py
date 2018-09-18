@@ -19,6 +19,22 @@ def _findNodeIn(classTypeId, rootNode):
 
 _pixelContainer = dict()
 
+def _updateObjectTexture(obj):
+    pixelContainer = _pixelContainer[obj.Name]
+    pixelStr = pixelContainer.toString()
+    resolution = coin.SbVec2s(pixelContainer.image.width, pixelContainer.image.height)
+    for child in obj.Group:
+        rootNode = child.ViewObject.RootNode
+        tex = _findNodeIn(coin.SoTexture2.getClassTypeId(), rootNode)
+        image = tex.image 
+        image.setValue(resolution, FPPixelContainer.PixelContainer.NUM_COLOR_COMPONENTS, pixelStr)
+
+def updateObjectTexture():
+    for objName in _pixelContainer:
+        if _pixelContainer[objName].dirty():
+            _updateObjectTexture(FreeCAD.ActiveDocument.getObject(objName))
+
+
 class FPSimDisplay:
     def __init__(self, obj):
         obj.addProperty('App::PropertyInteger', 'ResolutionX').ResolutionX = 10
@@ -67,16 +83,6 @@ class FPSimDisplay:
             if complexity:
                 rootNode.removeChild(complexity)
     
-    def _updateObjectTexture(self, obj):
-        pixelContainer = _pixelContainer[obj.Name]
-        pixelStr = pixelContainer.toString()
-        resolution = coin.SbVec2s(pixelContainer.image.width, pixelContainer.image.height)
-        for child in obj.Group:
-            rootNode = child.ViewObject.RootNode
-            tex = _findNodeIn(coin.SoTexture2.getClassTypeId(), rootNode)
-            image = tex.image 
-            image.setValue(resolution, FPPixelContainer.PixelContainer.NUM_COLOR_COMPONENTS, pixelStr)
-
     def onChanged(self, obj, prop):
         if prop == 'Proxy':
             #newly created
@@ -98,28 +104,23 @@ class FPSimDisplay:
         pixelContainer = _pixelContainer[obj.Name]
         for pixel in pixelDataList.pixelData:
             pixelContainer.setPixel(pixel)
-        self._updateObjectTexture(obj)
 
     def setSubWindowPixels(self, obj, subWindowData):
         pixelContainer = _pixelContainer[obj.Name]
         pixelContainer.setSubWindowPixels(subWindowData)
-        self._updateObjectTexture(obj)
 
     def drawRectangle(self, obj, rectData):
         pixelContainer = _pixelContainer[obj.Name]
         pixelContainer.drawRectangle(rectData)
-        self._updateObjectTexture(obj)
 
 
     def drawLine(self, obj, lineData):
         pixelContainer = _pixelContainer[obj.Name]
         pixelContainer.drawLine(lineData)
-        self._updateObjectTexture(obj)
 
 
     def clearDisplay(self, obj, color):
         _pixelContainer[obj.Name].clear(color)
-        self._updateObjectTexture(obj)
 
 
     def getResolution(self, obj):
@@ -134,7 +135,6 @@ class FPSimDisplay:
     def drawText(self, obj, textData):
         pixelContainer = _pixelContainer[obj.Name]
         pixelContainer.drawText(textData)
-        self._updateObjectTexture(obj)
    
 
 class FPSimDisplayViewProvider:
