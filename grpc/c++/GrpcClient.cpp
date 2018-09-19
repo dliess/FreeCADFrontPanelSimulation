@@ -136,6 +136,21 @@ bool GrpcClient::display_clearDisplay(const DisplayClearDisplayRequest &request)
       return false;
     }
 }
+
+bool GrpcClient::display_getTextSize( const DisplayGetTextSizeRequest &request,
+                                      DisplayGetTextSizeAnswer& answer)
+{
+    ClientContext context;
+    Status status = m_stub->display_getTextSize(&context, request, &answer);
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
+}
+
 bool GrpcClient::getButtonStates(std::vector<GetButtonStateAnswer>& answer)
 {
     Empty request;

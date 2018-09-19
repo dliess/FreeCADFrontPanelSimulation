@@ -10,6 +10,7 @@ service FPSimulation {
   rpc display_drawText (DisplayDrawTextRequest) returns (Empty) {}
   rpc display_getResolution (DisplayResolutionRequest) returns (DisplayResolutionAnswer) {}
   rpc display_clearDisplay(DisplayClearDisplayRequest) returns (Empty) {}
+  rpc display_getTextSize(DisplayGetTextSizeRequest) returns (DisplayGetTextSizeAnswer) {}
   rpc getButtonStates(Empty) returns (stream GetButtonStateAnswer) {}
   rpc getEncoderIncrements(Empty) returns (stream GetEncoderIncrementsAnswer) {}
   rpc getPotentiometerValues(Empty) returns (stream GetPotentiometerValuesAnswer) {}
@@ -112,6 +113,17 @@ message DisplayResolutionRequest{
 
 message DisplayClearDisplayRequest{
   string objLabel    = 1;
+}
+
+message DisplayGetTextSizeRequest{
+  string   objLabel  = 1;
+  string   text      = 2;
+  FontData fontData  = 3;
+}
+
+message DisplayGetTextSizeAnswer{
+  uint32 w = 1;
+  uint32 h = 2;
 }
 
 message DisplayResolutionAnswer{

@@ -20,6 +20,7 @@ public:
     bool display_drawText(const DisplayDrawTextRequest &request);
     bool display_getResolution(const DisplayResolutionRequest& request, DisplayResolutionAnswer& answer);
     bool display_clearDisplay(const DisplayClearDisplayRequest &request);
+    bool display_getTextSize(const DisplayGetTextSizeRequest &request, DisplayGetTextSizeAnswer& answer);
     bool getButtonStates(std::vector<GetButtonStateAnswer>& answer);
     bool getEncoderIncrements(std::vector<GetEncoderIncrementsAnswer>& answer);
     bool getPotentiometerValues(std::vector<GetPotentiometerValuesAnswer>& answer);

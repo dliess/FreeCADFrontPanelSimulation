@@ -7,5 +7,3 @@ find_dependency(gRPC  REQUIRED CONFIG)
 if(NOT TARGET FpSimGrpc::FpSimGrpc)
     include("${FpSimGrpc_CMAKE_DIR}/FpSimGrpcTargets.cmake")
 endif()
-
-set_target_properties(FpSimGrpc::FpSimGrpc PROPERTIES IMPORTED_LINK_INTERFACE_LIBRARIES gRpc Protobuf)

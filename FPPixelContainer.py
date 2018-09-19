@@ -80,6 +80,13 @@ class PixelContainer:
         col = self._colToTup(textData.color)
         self.draw.text((textData.pos.x, textData.pos.y), textData.text, font = self.font, fill=col)
 
+    def getTextSize(self, txt, fontData):
+        if fontData.path:
+            font = ImageFont.truetype(fontData.path, fontData.size)
+            return self.draw.textsize(text = txt, font = font)
+        else:
+            return self.draw.textsize(text = txt, font = self.font)
+
     def dirty(self):
         if self.modified:
             self.modified = False

@@ -135,6 +135,14 @@ class FPSimDisplay:
     def drawText(self, obj, textData):
         pixelContainer = _pixelContainer[obj.Name]
         pixelContainer.drawText(textData)
+
+    def getTextSize(self, obj, txt, fontData):
+        pixelContainer = _pixelContainer[obj.Name]
+        size = pixelContainer.getTextSize(txt, fontData)
+        answ = Proto.DisplayGetTextSizeAnswer(w = size[0],
+                                              h = size[1])
+        return answ
+
    
 
 class FPSimDisplayViewProvider:

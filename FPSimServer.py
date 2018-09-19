@@ -174,8 +174,18 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
-        return Proto.Empty()    
+        return Proto.Empty()   
 
+    def display_getTextSize(self, request, context):
+        try:
+            obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
+            return obj.Proxy.getTextSize(obj, request.text, request.fontData )
+        except IndexError:
+            FreeCAD.Console.PrintError(
+                "Object not found with label " + request.objLabel + "\n")
+            answ = Proto.DisplayGetTextSizeAnswer(w = 0, h = 0)
+            return answ
+   
     def getButtonStates(self, request, context):
         for objName in dataAquisitionCBHolder.buttonCB:
             if(dataAquisitionCBHolder.buttonCB[objName]):
