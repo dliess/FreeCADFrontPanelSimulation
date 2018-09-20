@@ -192,9 +192,9 @@ class StopSimulation:
     def Activated(self):
         FPSimulation.stopSimulation()
 
-class ExportTopology:
+class ExportWidgetInfo:
     def GetResources(self):
-        return {'Pixmap': FPSimDir.__dir__ + '/icons/ExportTopology.svg',
+        return {'Pixmap': FPSimDir.__dir__ + '/icons/ExportWidgetInfo.svg',
                 'MenuText': 'Export Topology',
                 'ToolTip': ''}
 
@@ -205,8 +205,8 @@ class ExportTopology:
             return False
 
     def Activated(self):
-        import FPTopologyExporter
-        FPTopologyExporter.exportTopology()
+        import FPWidgetInfoExporter
+        FPWidgetInfoExporter.exportWidgetInfo()
 
 
 FreeCAD.Gui.addCommand('CreateDisplay', CreateDisplay())
@@ -219,5 +219,5 @@ FreeCAD.Gui.addCommand('CreateRotaryPotentiometer', CreateRotaryPotentiometer())
 FreeCAD.Gui.addCommand('CreateLinearPotentiometer', CreateLinearPotentiometer())
 FreeCAD.Gui.addCommand('StartSimulation', StartSimulation())
 FreeCAD.Gui.addCommand('StopSimulation', StopSimulation())
-FreeCAD.Gui.addCommand('ExportTopology', ExportTopology())
+FreeCAD.Gui.addCommand('ExportWidgetInfo', ExportWidgetInfo())
 

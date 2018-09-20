@@ -37,8 +37,8 @@ def updateObjectTexture():
 
 class FPSimDisplay:
     def __init__(self, obj):
-        obj.addProperty('App::PropertyInteger', 'ResolutionX').ResolutionX = 10
-        obj.addProperty('App::PropertyInteger', 'ResolutionY').ResolutionY = 10
+        obj.addProperty('App::PropertyInteger', 'ResolutionX').ResolutionX = 96
+        obj.addProperty('App::PropertyInteger', 'ResolutionY').ResolutionY = 64
         obj.Proxy = self
 
     def _reinitTexture(self, obj):
