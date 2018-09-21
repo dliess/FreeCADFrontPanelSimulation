@@ -38,7 +38,7 @@ def _getWidgetTopology():
                 if obj.Name.find("FPSimLinearPotentiometer") == 0:
                     wData[label]['wType'] = ["Potentiometer"]
                     if obj.Motorized:
-                        wData[label]['wType'].append("PotentiometerMove")
+                        wData[label]['wType'].append("Motor")
                 elif obj.Name.find("FPSimButton") == 0:
                     wData[label]['wType'] = ["Button"]
                 elif obj.Name.find("FPSimDisplay") == 0:
@@ -50,7 +50,7 @@ def _getWidgetTopology():
                 elif obj.Name.find("FPSimRotaryPotentiometer") == 0:
                     wData[label]['wType'] = ["Potentiometer"]
                     if obj.Motorized:
-                        wData[label]['wType'].append("PotentiometerMove")
+                        wData[label]['wType'].append("Motor")
                 elif obj.Name.find("FPSimLED") == 0:
                     wData[label]['wType'] = ["Led"]
                 elif obj.Name.find("FPSimTouchSurface") == 0:
