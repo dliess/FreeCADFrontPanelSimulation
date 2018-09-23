@@ -39,10 +39,14 @@ def _getWidgetTopology():
                     wData[label]['wType'] = ["Potentiometer"]
                     if obj.Motorized:
                         wData[label]['wType'].append("Motor")
+                    if not 'PotentiometerResolution' in wData[label]:
+                        wData[label]['PotentiometerResolution'] = obj.Resolution
                 elif obj.Name.find("FPSimButton") == 0:
                     wData[label]['wType'] = ["Button"]
                 elif obj.Name.find("FPSimDisplay") == 0:
                     wData[label]['wType'] = ["Display"]
+                    if not 'DisplayResolution' in wData[label]:
+                        wData[label]['DisplayResolution'] = {'ResolutionX' : obj.ResolutionX, 'ResolutionY' : obj.ResolutionY}
                 elif obj.Name.find("FPSimRotaryEncoder") == 0:
                     wData[label]['wType'] = ["Encoder"]
                     if obj.PushButton:
@@ -51,14 +55,24 @@ def _getWidgetTopology():
                     wData[label]['wType'] = ["Potentiometer"]
                     if obj.Motorized:
                         wData[label]['wType'].append("Motor")
+                    if not 'PotentiometerResolution' in wData[label]:
+                        wData[label]['PotentiometerResolution'] = obj.IncrementsOnWholeArc
                 elif obj.Name.find("FPSimLED") == 0:
                     wData[label]['wType'] = ["Led"]
                 elif obj.Name.find("FPSimTouchSurface") == 0:
                     wData[label]['wType'] = ["TouchSurface"]
+                    if not 'TouchSurfeceResolution' in wData[label]:
+                        wData[label]['TouchSurfeceResolution'] = {'ResolutionX' : obj.ResolutionX, 'ResolutionY' : obj.ResolutionY}
 
     topology = []
     for label in wData:
         widget = {'Label' : label, 'Dimension' : wData[label]['Dimension'], 'WidgetType' : wData[label]['wType']}
+        if wData[label]['wType'] == "Potentiometer":
+            widget['PotentiometerResolution'] = wData[label]['PotentiometerResolution']
+        if wData[label]['wType'] == "Display":
+            widget['DisplayResolution'] = wData[label]['DisplayResolution']
+        if wData[label]['wType'] == "TouchSurface":
+            widget['TouchSurfeceResolution'] = wData[label]['TouchSurfeceResolution']
         topology.append(widget)
     
     return topology
