@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-from GrpcClient.GrpcClientChannel import GrpcClientChannel
-from GrpcClient.FpInputs import FpInputs
-from GrpcClient.FpOutputs import FpOutputs
+from __future__ import print_function
+
+import grpc
 
 import generated.python.FPSimulation_pb2 as Proto
-
+import generated.python.FPSimulation_pb2_grpc as GRPC
 from time import sleep
 from copy import deepcopy
 import math
@@ -18,21 +18,19 @@ class Modes:
     DRAW_RECTANGLES_FULL  = 4
 
 def run():
-    idLabelMap = WidgetIdLabelMap('widget-topology.json')
-    grpcChannel = GrpcClientChannel('localhost:50051')
-    fpInputs = FpInputs(grpcChannel, topology)
-    fpOutputs = FpOutputs(grpcChannel, topology)
-
+    channel = grpc.insecure_channel('localhost:50051')
+    stub = GRPC.FPSimulationStub(channel)
     cursorChanged = False
-
-    resolution = fpOutputs.getDisplayResolution(FPWidgets.FPSimDisplay)
+    resReq = Proto.DisplayResolutionRequest(objLabel = "FPSimDisplay")
+    resolution = stub.display_getResolution(resReq)
     pixPos1 = Proto.PixelPos(x = resolution.x / 2, y = resolution.y / 2)
     pixPos2 = Proto.PixelPos(x = resolution.x / 2, y = resolution.y / 2)
     prevPixPos1 = deepcopy(pixPos1)
     prevPixPos2 = deepcopy(pixPos2)
-
-    color = Proto.Color(r = 0, g = 0, b = 0, a = 255)
-    FREQ_MAX_HZ = 15.0
+    colRed = 0
+    colGreen = 0
+    colBlue = 0
+    FREQ_MAX_HZ = 30.0
     freqRedHz = 0.0
     freqGreenHz = 0.0
     freqBlueHz = 0.0
@@ -43,13 +41,24 @@ def run():
     mode = Modes.DRAW_POINTS
     LedOnColor = Proto.Color(r = 255, g = 0, b = 0, a = 255)
     LedOffColor = Proto.Color(r = 0, g = 0, b = 0, a = 255)
-
-    fpOutputs.setLedColor([FpWidget.ModeLed, [ALL]], LedOffColor)
-    fpOutputs.setLedColor([FpWidget.ModeLed, [0]], LedOnColor)
+    req = Proto.LedSetColorRequest(objLabel = "Mode1Led", color = LedOnColor)
+    stub.led_setColor(req)
+    req = Proto.LedSetColorRequest(objLabel = "Mode2Led", color = LedOffColor)
+    stub.led_setColor(req)
+    req = Proto.LedSetColorRequest(objLabel = "Mode3Led", color = LedOffColor)
+    stub.led_setColor(req)
+    req = Proto.LedSetColorRequest(objLabel = "Mode4Led", color = LedOffColor)
+    stub.led_setColor(req)
+    req = Proto.LedSetColorRequest(objLabel = "Mode5Led", color = LedOffColor)
+    stub.led_setColor(req)
+    req = Proto.LedSetColorRequest(objLabel = "ColorModLed", color = LedOffColor)
+    stub.led_setColor(req)
     font = Proto.FontData(path="truetype/ttf-bitstream-vera/VeraIt.ttf", size=40)
-    fpOutputs.setActiveFont(FPWidgets.FPSimDisplay, font)
+    req = Proto.DisplaySetActiveFontRequest(objLabel = "FPSimDisplay", data = font)
+    stub.display_setActiveFont(req)
     txt = Proto.TextData(pos=Proto.PixelPos(x=10,y=10), color=Proto.Color(r=0, g=255, b=0, a=255), text="Im a draw-toy")
-    fpOutputs.drawText(FPWidgets.FPSimDisplay, txt)
+    req = Proto.DisplayDrawTextRequest(objLabel = "FPSimDisplay", data = txt)
+    stub.display_drawText(req)
 
     colorAutomationOn = False
     t = 0.0
@@ -192,15 +201,19 @@ def run():
 
         for touchValueAnswer in stub.getTouchValue(Proto.Empty()):
             if touchValueAnswer.objLabel == "TouchSurface":
-                pixPos1.x = touchValueAnswer.pos.x
-                pixPos1.y = touchValueAnswer.pos.y
-                cursorChanged = True
+                if touchValueAnswer.pos.x != -1:
+                    pixPos1.x = touchValueAnswer.pos.x
+                    pixPos1.y = touchValueAnswer.pos.y
+                    cursorChanged = True
             if touchValueAnswer.objLabel == "AmpRedTouch":
-                ampRedFactor = touchValueAnswer.pos.x  / 100.0
+                if touchValueAnswer.pos.x != -1:
+                    ampRedFactor = touchValueAnswer.pos.x  / 100.0
             if touchValueAnswer.objLabel == "AmpGreenTouch":
-                ampGreenFactor = touchValueAnswer.pos.x  / 100.0
+                if touchValueAnswer.pos.x != -1:
+                    ampGreenFactor = touchValueAnswer.pos.x  / 100.0
             if touchValueAnswer.objLabel == "AmpBlueTouch":
-                ampBlueFactor = touchValueAnswer.pos.x  / 100.0
+                if touchValueAnswer.pos.x != -1:
+                    ampBlueFactor = touchValueAnswer.pos.x  / 100.0
 
         if colorAutomationOn:
             if freqRedHz > 0.0 and ampRedFactor > 0.0:
