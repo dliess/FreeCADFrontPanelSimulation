@@ -39,17 +39,15 @@ class PixelContainer:
         ymin = min(subWindowData.p1.y, subWindowData.p2.y)
         ymax = max(subWindowData.p1.y, subWindowData.p2.y)
 
-        pixel = Proto.PixelData()
-        pixel.pos.x = xmin
-        pixel.pos.y = ymin
-        for color in subWindowData.pixelColor:    
-            pixel.color = color
-            self.setPixel(pixel)
-            pixel.pos.x += 1
-            if pixel.pos.x > xmax:
-                pixel.pos.x = xmin
-                pixel.pos.y += 1
-                if pixel.pos.y > ymax:
+        x = xmin
+        y = ymin
+        for color in subWindowData.pixelColor:
+            self.image.putpixel((x, y), (color.r, color.g, color.b, color.a))
+            x += 1
+            if x > xmax:
+                x = xmin
+                y += 1
+                if y > ymax:
                     return
 
     def drawRectangle(self, rectangle):

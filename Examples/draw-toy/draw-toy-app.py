@@ -17,6 +17,27 @@ class Modes:
     DRAW_RECTANGLES       = 3
     DRAW_RECTANGLES_FULL  = 4
 
+def displayImage(stub):
+    # 3x3 bitmap
+    p1 = Proto.PixelPos(x = 5, y = 5)
+    p2 = Proto.PixelPos(x = 7, y = 7)
+    bitmap3x3 = [Proto.Color(r = 255, g = 0, b = 0, a = 255),
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255),
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255),
+                
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255),
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255),
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255),
+
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255),
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255),
+                 Proto.Color(r = 255, g = 0, b = 0, a = 255)]
+
+    data = Proto.DisplaySubWindowData(p1 = p1, p2 = p2)
+    data.pixelColor.extend(bitmap3x3)
+    req = Proto.DisplaySubWindowPixelsRequest(objLabel = "FPSimDisplay", data = data)
+    stub.display_setSubWindowPixels(req)
+
 def run():
     channel = grpc.insecure_channel('localhost:50051')
     stub = GRPC.FPSimulationStub(channel)
