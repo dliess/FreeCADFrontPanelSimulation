@@ -13,6 +13,7 @@ class FPSimTouchSurface:
         obj.addProperty('App::PropertyPythonObject', 'YLen').YLen = 0.0
         obj.addProperty('App::PropertyInteger', 'ResolutionX').ResolutionX = 10
         obj.addProperty('App::PropertyInteger', 'ResolutionY').ResolutionY = 10
+        obj.addProperty('App::PropertyInteger', 'PressureResolution').PressureResolution = 0
         obj.Proxy = self
 
     def _registerEventCallbacks(self, objName):

@@ -19,6 +19,7 @@ class FPSimRotaryEncoder(InitialPlacements):
         obj.addProperty('App::PropertyInteger', 'IncrementsPerRev').IncrementsPerRev = 64
         obj.addProperty('App::PropertyFloat', 'MouseSensitivity').MouseSensitivity = 1.0
         obj.addProperty('App::PropertyBool', 'PushButton').PushButton = False
+        obj.addProperty('App::PropertyBool', 'TouchSensitive').TouchSensitive = False
         obj.addProperty('App::PropertyFloat', 'PushButtonDepth').PushButtonDepth = 1.0
         obj.addProperty('App::PropertyVector', 'RotationAxis').RotationAxis = (0,0,0)
         obj.addProperty('App::PropertyVector', 'RotationCenter').RotationCenter = (0,0,0)

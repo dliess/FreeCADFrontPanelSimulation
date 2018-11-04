@@ -20,6 +20,7 @@ class FPSimLinearPotentiometer(InitialPlacements):
         obj.addProperty('App::PropertyInteger', 'Resolution').Resolution = 1024
         obj.addProperty('App::PropertyInteger', 'NumSnapInPositions').NumSnapInPositions = 0
         obj.addProperty('App::PropertyBool', 'Motorized').Motorized = False
+        obj.addProperty('App::PropertyBool', 'TouchSensitive').TouchSensitive = False
 
         obj.Proxy = self
 
