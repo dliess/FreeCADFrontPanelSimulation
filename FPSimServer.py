@@ -8,6 +8,8 @@ from threading import Lock
 import FreeCAD
 import FPSimDisplay
 
+import time
+
 #import threading
 
 class DataAquisitionCBHolder:
@@ -96,24 +98,28 @@ class FPSimulationService(GRPC.FPSimulationServicer):
 
     def display_setPixels(self, request, context):
         try:
+            start = time.time()
             obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
             obj.Proxy.setPixels(obj, request.pixelDataList)
+            durationUs = int((time.time() - start) * 1000000)
         except IndexError:
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
-            #TODO: return an error message
-        return Proto.Empty()
+        answ = Proto.DisplaySetPixelsAnswer(usec = durationUs)
+        return answ
 
 
     def display_setSubWindowPixels(self, request, context):
         try:
+            start = time.time()
             obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
             obj.Proxy.setSubWindowPixels(obj, request.data)
+            durationUs = int((time.time() - start) * 1000000)
         except IndexError:
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
-            #TODO: return an error message
-        return Proto.Empty()
+        answ = Proto.DisplaySubWindowPixelsAnswer(usec = durationUs)
+        return answ
 
 
     def display_drawRectangle(self, request, context):

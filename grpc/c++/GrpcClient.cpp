@@ -25,11 +25,11 @@ bool GrpcClient::led_setColor(const LedSetColorRequest &request)
     }
 }
 
-bool GrpcClient::display_setPixels(const DisplaySetPixelsRequest &request)
+bool GrpcClient::display_setPixels(const DisplaySetPixelsRequest &request,
+                                   DisplaySetPixelsAnswer        &answer)
 {
-    Empty reply;
     ClientContext context;
-    Status status = m_stub->display_setPixels(&context, request, &reply);
+    Status status = m_stub->display_setPixels(&context, request, &answer);
     if (status.ok()) {
       return true;
     } else {
@@ -39,11 +39,11 @@ bool GrpcClient::display_setPixels(const DisplaySetPixelsRequest &request)
     }
 }
 
-bool GrpcClient::display_setSubWindowPixels(const DisplaySubWindowPixelsRequest &request)
+bool GrpcClient::display_setSubWindowPixels(const DisplaySubWindowPixelsRequest &request,
+                                            DisplaySubWindowPixelsAnswer        &answer)
 {
-    Empty reply;
     ClientContext context;
-    Status status = m_stub->display_setSubWindowPixels(&context, request, &reply);
+    Status status = m_stub->display_setSubWindowPixels(&context, request, &answer);
     if (status.ok()) {
       return true;
     } else {

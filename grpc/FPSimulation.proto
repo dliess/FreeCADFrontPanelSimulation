@@ -2,8 +2,8 @@ syntax = "proto3";
 
 service FPSimulation {
   rpc led_setColor (LedSetColorRequest) returns (Empty) {}
-  rpc display_setPixels (DisplaySetPixelsRequest) returns (Empty) {}
-  rpc display_setSubWindowPixels (DisplaySubWindowPixelsRequest) returns (Empty) {}
+  rpc display_setPixels (DisplaySetPixelsRequest) returns (DisplaySetPixelsAnswer) {}
+  rpc display_setSubWindowPixels (DisplaySubWindowPixelsRequest) returns (DisplaySubWindowPixelsAnswer) {}
   rpc display_drawRectangle (DisplayDrawRectangleRequest) returns (Empty) {}
   rpc display_drawLine (DisplayDrawLineRequest) returns (Empty) {}
   rpc display_setActiveFont (DisplaySetActiveFontRequest) returns (Empty) {}
@@ -58,9 +58,17 @@ message DisplaySetPixelsRequest {
   PixelDataList pixelDataList = 2;
 }
 
+message DisplaySetPixelsAnswer {
+  uint32 usec = 1;
+}
+
 message DisplaySubWindowPixelsRequest{
   string objLabel           = 1;
   DisplaySubWindowData data = 2;
+}
+
+message DisplaySubWindowPixelsAnswer{
+  uint32 usec = 1;
 }
 
 message RectangleData{

@@ -12,8 +12,8 @@ class GrpcClient
 public:
     GrpcClient(const std::string& serverAddress);
     bool led_setColor(const LedSetColorRequest &request);
-    bool display_setPixels(const DisplaySetPixelsRequest &request);
-    bool display_setSubWindowPixels(const DisplaySubWindowPixelsRequest &request);
+    bool display_setPixels(const DisplaySetPixelsRequest &request, DisplaySetPixelsAnswer& answer);
+    bool display_setSubWindowPixels(const DisplaySubWindowPixelsRequest &request, DisplaySubWindowPixelsAnswer& answer);
     bool display_drawRectangle(const DisplayDrawRectangleRequest &request);
     bool display_drawLine(const DisplayDrawLineRequest &request);
     bool display_setActiveFont(const DisplaySetActiveFontRequest &request);
