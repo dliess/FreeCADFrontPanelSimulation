@@ -1,9 +1,16 @@
 import FreeCAD
-import generated.python.FPSimulation_pb2 as Proto
+
+import numpy as np
 
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+
+def convertToRGBAArray(RGBint):
+    Blue =  RGBint & 255
+    Green = (RGBint >> 8) & 255
+    Red =   (RGBint >> 16) & 255
+    return (Red, Green, Blue, 0xff)
 
 class PixelContainer:
     NUM_COLOR_COMPONENTS = 4
@@ -26,13 +33,12 @@ class PixelContainer:
         (x,y) = self.image.size
         self.image.paste( (col[0], col[1], col[2], col[3]), [0, 0, x, y] )
 
-    def setPixel(self, pixel):
+    def setPixel_ARGB32(self, pixel):
         self.modified = True
-        col = [pixel.color.r, pixel.color.g, pixel.color.b, pixel.color.a]
-        self.image.putpixel((pixel.pos.x, pixel.pos.y), (col[0], col[1], col[2], col[3]))
+        self.image.putpixel((pixel.pos.x, pixel.pos.y), convertToRGBAArray(pixel.color.argb))
 
     # interprete subwindow as closed interval on both sides
-    def setSubWindowPixels(self, subWindowData):
+    def setSubWindowPixels_ARGB32(self, subWindowData):
         self.modified = True
         xmin = min(subWindowData.p1.x, subWindowData.p2.x)
         xmax = max(subWindowData.p1.x, subWindowData.p2.x)
@@ -42,7 +48,7 @@ class PixelContainer:
         x = xmin
         y = ymin
         for color in subWindowData.pixelColor:
-            self.image.putpixel((x, y), (color.r, color.g, color.b, color.a))
+            self.image.putpixel((x, y), convertToRGBAArray(color.argb))
             x += 1
             if x > xmax:
                 x = xmin

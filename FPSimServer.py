@@ -96,29 +96,29 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             #TODO: return an error message
         return Proto.Empty()
 
-    def display_setPixels(self, request, context):
+    def display_setPixels_ARGB32(self, request, context):
         try:
             start = time.time()
             obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
-            obj.Proxy.setPixels(obj, request.pixelDataList)
+            obj.Proxy.setPixels_ARGB32(obj, request.pixelDataList)
             durationUs = int((time.time() - start) * 1000000)
         except IndexError:
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
-        answ = Proto.DisplaySetPixelsAnswer(usec = durationUs)
+        answ = Proto.Duration(usec = durationUs)
         return answ
 
 
-    def display_setSubWindowPixels(self, request, context):
+    def display_setSubWindowPixels_ARGB32(self, request, context):
         try:
             start = time.time()
             obj = FreeCAD.ActiveDocument.getObjectsByLabel(request.objLabel)[0]
-            obj.Proxy.setSubWindowPixels(obj, request.data)
+            obj.Proxy.setSubWindowPixels_ARGB32(obj, request.data)
             durationUs = int((time.time() - start) * 1000000)
         except IndexError:
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
-        answ = Proto.DisplaySubWindowPixelsAnswer(usec = durationUs)
+        answ = Proto.Duration(usec = durationUs)
         return answ
 
 
