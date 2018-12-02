@@ -94,6 +94,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
+        server.startTimer()
         return Proto.Empty()
 
     def display_setPixels_ARGB32(self, request, context):
@@ -106,6 +107,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
         answ = Proto.Duration(usec = durationUs)
+        server.startTimer()
         return answ
 
 
@@ -119,6 +121,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
         answ = Proto.Duration(usec = durationUs)
+        server.startTimer()
         return answ
 
 
@@ -130,6 +133,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
+        server.startTimer()
         return Proto.Empty()
 
     def display_drawLine(self, request, context):
@@ -140,6 +144,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
+        server.startTimer()
         return Proto.Empty()
 
     def display_setActiveFont(self, request, context):
@@ -150,6 +155,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
+        server.startTimer()
         return Proto.Empty()
 
     def display_drawText(self, request, context):
@@ -160,6 +166,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
+        server.startTimer()
         return Proto.Empty()
 
     def display_getResolution(self, request, context):
@@ -180,6 +187,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
+        server.startTimer()
         return Proto.Empty()   
 
     def display_getTextSize(self, request, context):
@@ -227,6 +235,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             FreeCAD.Console.PrintError(
                 "Object not found with label " + request.objLabel + "\n")
             #TODO: return an error message
+        server.startTimer()
         return Proto.Empty()
         
 
@@ -253,9 +262,13 @@ class Server:
         GRPC.add_FPSimulationServicer_to_server(FPSimulationService(), self._server)
         self._server.add_insecure_port('[::]:' + str(port))
         self._server.start()
-        self._timer.start(10)
+        self._timer.setSingleShot(True)
+        self._timer.setInterval(1)
 
 
+    def startTimer(self):
+        if not self._timer.isActive():
+            self._timer.start()
 
     def stop(self):
         self._server.stop(0) #TODO: check what this 0 means
