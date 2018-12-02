@@ -100,14 +100,14 @@ class FPSimDisplay:
     def execute(self, obj):
         pass
 
-    def setPixels(self, obj, pixelDataList):
+    def setPixels_ARGB32(self, obj, pixelDataList):
         pixelContainer = _pixelContainer[obj.Name]
         for pixel in pixelDataList.pixelData:
-            pixelContainer.setPixel(pixel)
+            pixelContainer.setPixel_ARGB32(pixel)
 
-    def setSubWindowPixels(self, obj, subWindowData):
+    def setSubWindowPixels_ARGB32(self, obj, subWindowData):
         pixelContainer = _pixelContainer[obj.Name]
-        pixelContainer.setSubWindowPixels(subWindowData)
+        pixelContainer.setSubWindowPixels_ARGB32(subWindowData)
 
     def drawRectangle(self, obj, rectData):
         pixelContainer = _pixelContainer[obj.Name]

@@ -33,10 +33,10 @@ def displayImage(stub):
                  Proto.Color(r = 255, g = 0, b = 0, a = 255),
                  Proto.Color(r = 255, g = 0, b = 0, a = 255)]
 
-    data = Proto.DisplaySubWindowData(p1 = p1, p2 = p2)
+    data = Proto.DisplaySubWindowData_ARGB32(p1 = p1, p2 = p2)
     data.pixelColor.extend(bitmap3x3)
-    req = Proto.DisplaySubWindowPixelsRequest(objLabel = "FPSimDisplay", data = data)
-    stub.display_setSubWindowPixels(req)
+    req = Proto.DisplaySubWindowPixelsRequest_ARGB32(objLabel = "FPSimDisplay", data = data)
+    stub.display_setSubWindowPixels_ARGB32(req)
 
 def run():
     channel = grpc.insecure_channel('localhost:50051')
@@ -251,13 +251,13 @@ def run():
             cursorChanged = False
             pixColor = Proto.Color(r = colRed, g = colGreen, b = colBlue, a = 255)
             if mode == Modes.DRAW_POINTS:
-                pix1 = Proto.PixelData(pos = pixPos1, color = pixColor)
-                pix2 = Proto.PixelData(pos = pixPos2, color = pixColor)
-                pixDataList = Proto.PixelDataList()
+                pix1 = Proto.PixelData_ARGB32(pos = pixPos1, color = pixColor)
+                pix2 = Proto.PixelData_ARGB32(pos = pixPos2, color = pixColor)
+                pixDataList = Proto.PixelDataList_ARGB32()
                 pixDataList.pixelData.extend([pix1])
                 pixDataList.pixelData.extend([pix2])
-                req = Proto.DisplaySetPixelsRequest(objLabel = "FPSimDisplay", pixelDataList = pixDataList)
-                stub.display_setPixels(req)
+                req = Proto.DisplaySetPixelsRequest_ARGB32(objLabel = "FPSimDisplay", pixelDataList = pixDataList)
+                stub.display_setPixels_ARGB32(req)
             elif mode == Modes.DRAW_CONNECTOR_LINES:
                 lineData1 = Proto.LineData(p1 = prevPixPos1, p2 = pixPos1, pixelColor = pixColor)
                 lineData2 = Proto.LineData(p1 = prevPixPos2, p2 = pixPos2, pixelColor = pixColor)

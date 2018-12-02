@@ -2,8 +2,10 @@ syntax = "proto3";
 
 service FPSimulation {
   rpc led_setColor (LedSetColorRequest) returns (Empty) {}
-  rpc display_setPixels (DisplaySetPixelsRequest) returns (DisplaySetPixelsAnswer) {}
-  rpc display_setSubWindowPixels (DisplaySubWindowPixelsRequest) returns (DisplaySubWindowPixelsAnswer) {}
+  rpc display_setPixels_ARGB32 (DisplaySetPixelsRequest_ARGB32) returns (Duration) {}
+  rpc display_setPixels_RGB16 (DisplaySetPixelsRequest_RGB16) returns (Duration) {}
+  rpc display_setSubWindowPixels_ARGB32 (DisplaySubWindowPixelsRequest_ARGB32) returns (Duration) {}
+  rpc display_setSubWindowPixels_RGB16 (DisplaySubWindowPixelsRequest_RGB16) returns (Duration) {}
   rpc display_drawRectangle (DisplayDrawRectangleRequest) returns (Empty) {}
   rpc display_drawLine (DisplayDrawLineRequest) returns (Empty) {}
   rpc display_setActiveFont (DisplaySetActiveFontRequest) returns (Empty) {}
@@ -26,6 +28,16 @@ message PixelPos{
   int32 y = 2;
 }
 
+message PixelARGB32
+{
+  uint32 argb = 1;
+}
+
+message PixelRGB16
+{
+  uint32 rgb = 1;
+}
+
 message Color{
   uint32 r = 1;
   uint32 g = 2;
@@ -33,19 +45,34 @@ message Color{
   uint32 a = 4;
 }
 
-message PixelData{
-  PixelPos pos   = 1;
-  Color color = 2;
+message PixelData_ARGB32{
+  PixelPos    pos   = 1;
+  PixelARGB32 color = 2;
 }
 
-message DisplaySubWindowData{
-  PixelPos p1                  = 1;
-  PixelPos p2                  = 2;
-  repeated Color pixelColor = 3;
+message PixelData_RGB16{
+  PixelPos   pos   = 1;
+  PixelRGB16 color = 2;
 }
 
-message PixelDataList{
-  repeated PixelData pixelData = 1;
+message DisplaySubWindowData_ARGB32{
+  PixelPos p1                     = 1;
+  PixelPos p2                     = 2;
+  repeated PixelARGB32 pixelColor = 3;
+}
+
+message DisplaySubWindowData_RGB16{
+  PixelPos p1                    = 1;
+  PixelPos p2                    = 2;
+  repeated PixelRGB16 pixelColor = 3;
+}
+
+message PixelDataList_ARGB32{
+  repeated PixelData_ARGB32 pixelData = 1;
+}
+
+message PixelDataList_RGB16{
+  repeated PixelData_RGB16 pixelData = 1;
 }
 
 message LedSetColorRequest {
@@ -53,22 +80,28 @@ message LedSetColorRequest {
   Color color  = 2;
 }
 
-message DisplaySetPixelsRequest {
+message Duration {
+  uint32 usec = 1;
+}
+
+message DisplaySetPixelsRequest_ARGB32 {
   string objLabel             = 1;
-  PixelDataList pixelDataList = 2;
+  PixelDataList_ARGB32 pixelDataList = 2;
 }
 
-message DisplaySetPixelsAnswer {
-  uint32 usec = 1;
+message DisplaySetPixelsRequest_RGB16 {
+  string objLabel             = 1;
+  PixelDataList_RGB16 pixelDataList = 2;
 }
 
-message DisplaySubWindowPixelsRequest{
-  string objLabel           = 1;
-  DisplaySubWindowData data = 2;
+message DisplaySubWindowPixelsRequest_ARGB32{
+  string objLabel                  = 1;
+  DisplaySubWindowData_ARGB32 data = 2;
 }
 
-message DisplaySubWindowPixelsAnswer{
-  uint32 usec = 1;
+message DisplaySubWindowPixelsRequest_RGB16{
+  string objLabel                 = 1;
+  DisplaySubWindowData_RGB16 data = 2;
 }
 
 message RectangleData{
