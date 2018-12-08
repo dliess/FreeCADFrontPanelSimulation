@@ -45,16 +45,8 @@ class PixelContainer:
         ymin = min(subWindowData.p1.y, subWindowData.p2.y)
         ymax = max(subWindowData.p1.y, subWindowData.p2.y)
 
-        x = xmin
-        y = ymin
-        for color in subWindowData.pixelColor:
-            self.image.putpixel((x, y), convertToRGBAArray(color.argb))
-            x += 1
-            if x > xmax:
-                x = xmin
-                y += 1
-                if y > ymax:
-                    return
+        im = Image.frombuffer("RGBA", (xmax - xmin + 1, ymax - ymin + 1), subWindowData.pixelColor, 'raw', 0, 1)
+        self.image.paste(im, (xmin, ymin, xmax, ymax))
 
     def drawRectangle(self, rectangle):
         self.modified = True
