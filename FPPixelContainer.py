@@ -1,6 +1,7 @@
 import FreeCAD
 
 import numpy as np
+from array import array
 
 from PIL import Image
 from PIL import ImageDraw
@@ -16,7 +17,7 @@ class PixelContainer:
     NUM_COLOR_COMPONENTS = 4
 
     def __init__(self, resolutionX, resolutionY):
-        self.image = Image.new(mode="RGBA", size=(resolutionX, resolutionY))
+        self.image = Image.new(mode="RGBX", size=(resolutionX, resolutionY))
         self.draw = ImageDraw.Draw(self.image)
         self.font = ImageFont.truetype("truetype/ttf-bitstream-vera/VeraIt.ttf", 32)
         self.modified = False
@@ -45,16 +46,17 @@ class PixelContainer:
         ymin = min(subWindowData.p1.y, subWindowData.p2.y)
         ymax = max(subWindowData.p1.y, subWindowData.p2.y)
 
-        x = xmin
-        y = ymin
-        for color in subWindowData.pixelColor:
-            self.image.putpixel((x, y), convertToRGBAArray(color.argb))
-            x += 1
-            if x > xmax:
-                x = xmin
-                y += 1
-                if y > ymax:
-                    return
+        #FreeCAD.Console.PrintMessage("Type is" + str(type(subWindowData.rgbaStream)) + "\n")
+        #0xRRGGBBff
+        buf = array('I')
+        for rgba32 in subWindowData.rgbaStream:
+            #FreeCAD.Console.PrintMessage("r" + str( (rgba32 >> 24) & 0xff ) + 
+            #                             "g" + str( (rgba32 >> 16) & 0xff ) + 
+            #                             "b" + str( (rgba32 >> 8) & 0xff ) + "\n")
+            buf.append(rgba32)
+        assert(buf.itemsize == 4)
+        im = Image.frombuffer("RGBX", (xmax - xmin + 1, ymax - ymin + 1), buf, 'raw', "BGRX", 0, 1)
+        self.image.paste(im, (xmin, ymin))
 
     def drawRectangle(self, rectangle):
         self.modified = True
