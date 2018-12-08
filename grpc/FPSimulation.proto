@@ -28,16 +28,6 @@ message PixelPos{
   int32 y = 2;
 }
 
-message PixelARGB32
-{
-  uint32 argb = 1;
-}
-
-message PixelRGB16
-{
-  uint32 rgb = 1;
-}
-
 message Color{
   uint32 r = 1;
   uint32 g = 2;
@@ -47,24 +37,24 @@ message Color{
 
 message PixelData_ARGB32{
   PixelPos    pos   = 1;
-  PixelARGB32 color = 2;
+  uint32      rgba  = 2;
 }
 
 message PixelData_RGB16{
   PixelPos   pos   = 1;
-  PixelRGB16 color = 2;
+  uint32     rgb16 = 2;
 }
 
 message DisplaySubWindowData_ARGB32{
   PixelPos p1                     = 1;
   PixelPos p2                     = 2;
-  repeated PixelARGB32 pixelColor = 3;
+  repeated uint32 rgbaStream      = 3;
 }
 
 message DisplaySubWindowData_RGB16{
   PixelPos p1                    = 1;
   PixelPos p2                    = 2;
-  repeated PixelRGB16 pixelColor = 3;
+  repeated uint32 rgb16Stream    = 3;
 }
 
 message PixelDataList_ARGB32{
@@ -107,7 +97,7 @@ message DisplaySubWindowPixelsRequest_RGB16{
 message RectangleData{
   PixelPos p1          = 1;
   PixelPos p2          = 2;
-  Color pixelColor  = 3;
+  Color pixelColor     = 3;
   bool filled          = 4;
 }
 
@@ -119,7 +109,7 @@ message DisplayDrawRectangleRequest{
 message LineData{
   PixelPos p1          = 1;
   PixelPos p2          = 2;
-  Color pixelColor  = 3;
+  Color pixelColor     = 3;
 }
 
 message DisplayDrawLineRequest{
