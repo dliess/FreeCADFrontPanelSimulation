@@ -5,6 +5,7 @@ from pivy import coin
 from random import randint
 import generated.python.FPSimulation_pb2 as Proto
 import FPPixelContainer
+from threading import Lock
 
 
 def _findNodeIn(classTypeId, rootNode):
@@ -18,6 +19,7 @@ def _findNodeIn(classTypeId, rootNode):
         return None
 
 _pixelContainer = dict()
+_mutex = Lock()
 
 def _updateObjectTexture(obj):
     pixelContainer = _pixelContainer[obj.Name]
@@ -30,10 +32,13 @@ def _updateObjectTexture(obj):
         image.setValue(resolution, FPPixelContainer.PixelContainer.NUM_COLOR_COMPONENTS, pixelStr)
 
 def updateObjectTexture():
-    for objName in _pixelContainer:
-        if _pixelContainer[objName].dirty():
-            _updateObjectTexture(FreeCAD.ActiveDocument.getObject(objName))
-
+    _mutex.acquire()
+    try:
+        for objName in _pixelContainer:
+            if _pixelContainer[objName].dirty():
+                _updateObjectTexture(FreeCAD.ActiveDocument.getObject(objName))
+    finally:
+        _mutex.release()
 
 class FPSimDisplay:
     def __init__(self, obj):
@@ -101,26 +106,47 @@ class FPSimDisplay:
         pass
 
     def setPixels_ARGB32(self, obj, pixelDataList):
-        pixelContainer = _pixelContainer[obj.Name]
-        for pixel in pixelDataList.pixelData:
-            pixelContainer.setPixel_ARGB32(pixel)
+        _mutex.acquire()
+        try:
+            pixelContainer = _pixelContainer[obj.Name]
+            for pixel in pixelDataList.pixelData:
+                pixelContainer.setPixel_ARGB32(pixel)
+        finally:
+            _mutex.release()
 
     def setSubWindowPixels_ARGB32(self, obj, subWindowData):
-        pixelContainer = _pixelContainer[obj.Name]
-        pixelContainer.setSubWindowPixels_ARGB32(subWindowData)
+        _mutex.acquire()
+        try:
+            pixelContainer = _pixelContainer[obj.Name]
+            pixelContainer.setSubWindowPixels_ARGB32(subWindowData)
+        finally:
+            _mutex.release()
+
 
     def drawRectangle(self, obj, rectData):
-        pixelContainer = _pixelContainer[obj.Name]
-        pixelContainer.drawRectangle(rectData)
+        _mutex.acquire()
+        try:
+            pixelContainer = _pixelContainer[obj.Name]
+            pixelContainer.drawRectangle(rectData)
+        finally:
+            _mutex.release()
 
 
     def drawLine(self, obj, lineData):
-        pixelContainer = _pixelContainer[obj.Name]
-        pixelContainer.drawLine(lineData)
+        _mutex.acquire()
+        try:
+            pixelContainer = _pixelContainer[obj.Name]
+            pixelContainer.drawLine(lineData)
+        finally:
+            _mutex.release()
 
 
     def clearDisplay(self, obj, color):
-        _pixelContainer[obj.Name].clear(color)
+        _mutex.acquire()
+        try:
+            _pixelContainer[obj.Name].clear(color)
+        finally:
+            _mutex.release()
 
 
     def getResolution(self, obj):
@@ -129,19 +155,31 @@ class FPSimDisplay:
         return answ
 
     def setActiveFont(self, obj, fontData):
-        pixelContainer = _pixelContainer[obj.Name]
-        pixelContainer.setActiveFont(fontData)
+        _mutex.acquire()
+        try:
+            pixelContainer = _pixelContainer[obj.Name]
+            pixelContainer.setActiveFont(fontData)
+        finally:
+            _mutex.release()
 
     def drawText(self, obj, textData):
-        pixelContainer = _pixelContainer[obj.Name]
-        pixelContainer.drawText(textData)
+        _mutex.acquire()
+        try:
+            pixelContainer = _pixelContainer[obj.Name]
+            pixelContainer.drawText(textData)
+        finally:
+            _mutex.release()
 
     def getTextSize(self, obj, txt, fontData):
-        pixelContainer = _pixelContainer[obj.Name]
-        size = pixelContainer.getTextSize(txt, fontData)
-        answ = Proto.DisplayGetTextSizeAnswer(w = size[0],
-                                              h = size[1])
-        return answ
+        _mutex.acquire()
+        try:
+            pixelContainer = _pixelContainer[obj.Name]
+            size = pixelContainer.getTextSize(txt, fontData)
+            answ = Proto.DisplayGetTextSizeAnswer(w = size[0],
+                                                h = size[1])
+            return answ
+        finally:
+            _mutex.release()
 
    
 
