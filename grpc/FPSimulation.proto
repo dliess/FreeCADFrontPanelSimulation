@@ -14,6 +14,8 @@ service FPSimulation {
   rpc display_clearDisplay(DisplayClearDisplayRequest) returns (Empty) {}
   rpc display_getTextSize(DisplayGetTextSizeRequest) returns (DisplayGetTextSizeAnswer) {}
   rpc getButtonStates(Empty) returns (stream GetButtonStateAnswer) {}
+  rpc getButton3dStates(Empty) returns (stream GetButton3dStateAnswer) {}
+  rpc getButton5dStates(Empty) returns (stream GetButton5dStateAnswer) {}
   rpc getEncoderIncrements(Empty) returns (stream GetEncoderIncrementsAnswer) {}
   rpc getPotentiometerValues(Empty) returns (stream GetPotentiometerValuesAnswer) {}
   rpc movePotentiometerToValue(MovePotentiometerRequest) returns(Empty) {}
@@ -173,6 +175,25 @@ message GetButtonStateAnswer{
   ButtonState state = 2;
 }
 
+message GetButton3dStateAnswer{
+  string objLabel   = 1;
+  ButtonState state = 2;
+  uint32      velocity = 3;
+}
+
+message PosOnBtnSurface
+{
+  uint32 x = 1;
+  uint32 y = 2;
+}
+
+message GetButton5dStateAnswer{
+  string objLabel   = 1;
+  ButtonState state = 2;
+  uint32      velocity = 3;
+  PosOnBtnSurface posOnBtn = 4;
+}
+
 message GetEncoderIncrementsAnswer{
   string objLabel   = 1;
   sint32 increments = 2;
@@ -183,9 +204,15 @@ message GetPotentiometerValuesAnswer{
   uint32 value    = 2;
 }
 
+enum TouchState{
+  RELEASED   = 0;
+  TOUCHED    = 1;
+}
+
 message GetTouchValueAnswer{
-  string objLabel = 1;
-  PixelPos pos    = 2;
+  string     objLabel   = 1;
+  TouchState touchState = 2;
+  PixelPos   pos        = 3;
 }
 
 message MovePotentiometerRequest{

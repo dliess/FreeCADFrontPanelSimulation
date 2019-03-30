@@ -171,6 +171,46 @@ bool GrpcClient::getButtonStates(std::vector<GetButtonStateAnswer>& answer)
     }
 }
 
+bool GrpcClient::getButton3dStates(std::vector<GetButton3dStateAnswer>& answer)
+{
+    Empty request;
+    ClientContext context;
+    auto reader = m_stub->getButton3dStates(&context, request);
+    GetButton3dStateAnswer oneAnswer;
+    while(reader->Read(&oneAnswer))
+    {
+        answer.push_back(oneAnswer);
+    }
+    Status status = reader->Finish();
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
+}
+
+bool GrpcClient::getButton5dStates(std::vector<GetButton5dStateAnswer>& answer)
+{
+    Empty request;
+    ClientContext context;
+    auto reader = m_stub->getButton5dStates(&context, request);
+    GetButton5dStateAnswer oneAnswer;
+    while(reader->Read(&oneAnswer))
+    {
+        answer.push_back(oneAnswer);
+    }
+    Status status = reader->Finish();
+    if (status.ok()) {
+      return true;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return false;
+    }
+}
+
 bool GrpcClient::getEncoderIncrements(std::vector<GetEncoderIncrementsAnswer>& answer)
 {
     Empty request;

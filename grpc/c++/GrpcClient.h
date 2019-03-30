@@ -22,6 +22,8 @@ public:
     bool display_clearDisplay(const DisplayClearDisplayRequest &request);
     bool display_getTextSize(const DisplayGetTextSizeRequest &request, DisplayGetTextSizeAnswer& answer);
     bool getButtonStates(std::vector<GetButtonStateAnswer>& answer);
+    bool getButton3dStates(std::vector<GetButton3dStateAnswer>& answer);
+    bool getButton5dStates(std::vector<GetButton5dStateAnswer>& answer);
     bool getEncoderIncrements(std::vector<GetEncoderIncrementsAnswer>& answer);
     bool getPotentiometerValues(std::vector<GetPotentiometerValuesAnswer>& answer);
     bool movePotentiometerToValue(const MovePotentiometerRequest &request);
