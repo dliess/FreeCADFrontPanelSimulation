@@ -2,3 +2,4 @@
 generated/
 #vim 
 *.swp
+.vscode

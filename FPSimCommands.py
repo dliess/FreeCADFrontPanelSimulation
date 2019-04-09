@@ -206,7 +206,7 @@ class ExportWidgetInfo:
 
     def Activated(self):
         import FPWidgetInfoExporter
-        FPWidgetInfoExporter.exportWidgetInfo()
+        FPWidgetInfoExporter.exportWidgetInfo(FreeCAD.ActiveDocument.Name)
 
 
 FreeCAD.Gui.addCommand('CreateDisplay', CreateDisplay())

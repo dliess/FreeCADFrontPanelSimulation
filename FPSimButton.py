@@ -18,6 +18,7 @@ class FPSimButton(InitialPlacements):
         obj.addProperty('App::PropertyBool', 'SwitchMode').SwitchMode = False
         obj.addProperty('App::PropertyVector', 'PressureResolutionLin').PressureResolutionLin = (0,0,0)
         obj.addProperty('App::PropertyVector', 'PressureResolutionAng').PressureResolutionAng = (0,0,0)
+        obj.addProperty('App::PropertyInteger', 'VelocityResolution').VelocityResolution = 0
         obj.Proxy = self
 
     def _registerEventCallbacks(self, objName):
