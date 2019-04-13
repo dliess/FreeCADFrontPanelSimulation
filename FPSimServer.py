@@ -191,6 +191,24 @@ class FPSimulationService(GRPC.FPSimulationServicer):
                 answ.state = dataAquisitionCBHolder.buttonCB[objName](objName) 
                 yield answ
 
+    def getButton3dStates(self, request, context):
+        for objName in dataAquisitionCBHolder.buttonCB:
+            if(dataAquisitionCBHolder.buttonCB[objName]):
+                obj = FreeCAD.ActiveDocument.getObject(objName)
+                answ = Proto.GetButtonStateAnswer()
+                answ.objLabel = obj.Label
+                answ.state = dataAquisitionCBHolder.buttonCB[objName](objName) 
+                yield answ
+
+    def getButton5dStates(self, request, context):
+        for objName in dataAquisitionCBHolder.buttonCB:
+            if(dataAquisitionCBHolder.buttonCB[objName]):
+                obj = FreeCAD.ActiveDocument.getObject(objName)
+                answ = Proto.GetButtonStateAnswer()
+                answ.objLabel = obj.Label
+                answ.state = dataAquisitionCBHolder.buttonCB[objName](objName) 
+                yield answ
+
     def getEncoderIncrements(self, request, context):
         for objName in dataAquisitionCBHolder.encoderCB:
             if(dataAquisitionCBHolder.encoderCB[objName]):
