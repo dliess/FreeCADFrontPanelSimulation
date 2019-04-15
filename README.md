@@ -1,8 +1,10 @@
 ![Overview](/icons/overview.png?raw=true)
-![Screenshot1](/Examples/draw-toy/screenshots/draw-toy1.png?raw=true)
-![Screenshot2](/Examples/draw-toy/screenshots/draw-toy2.png?raw=true)
-![Screenshot3](/Examples/draw-toy/screenshots/draw-toy3.png?raw=true)
-![Screenshot4](/Examples/draw-toy/screenshots/draw-toy4.png?raw=true)
+![Screenshot1](/Examples/draw-toy/screenshots/Push2_1.png?raw=true)
+![Screenshot2](/Examples/draw-toy/screenshots/Push2_2.png?raw=true)
+![Screenshot3](/Examples/draw-toy/screenshots/draw-toy1.png?raw=true)
+![Screenshot4](/Examples/draw-toy/screenshots/draw-toy2.png?raw=true)
+![Screenshot5](/Examples/draw-toy/screenshots/draw-toy3.png?raw=true)
+![Screenshot6](/Examples/draw-toy/screenshots/draw-toy4.png?raw=true)
 
 # Basic description
 With this FreeCAD plugin, you can turn your FreeCAD objects into knobs, faders, displays, etc. that you can push/move/turn by your mouse and that provides/receives data to an external application via grpc. 
