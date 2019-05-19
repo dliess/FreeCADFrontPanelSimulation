@@ -80,7 +80,7 @@ class FPEventDispatcher:
                 self._prevHOverObj = newHOverObj
                 
         elif event.getTypeId() == coin.SoMouseButtonEvent.getClassTypeId():
-            FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in SoMouseButtonEvent\n")
+            #FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in SoMouseButtonEvent\n")
             pos = event.getPosition().getValue()
             if event.getState() == event.DOWN:
                 clickedObj = self._getObjAtPos(pos, self._buttonEventSubscribers)
@@ -92,7 +92,8 @@ class FPEventDispatcher:
                     self._buttonEventSubscribers[self._activeObj](self._activeObj, FPEventDispatcher.RELEASED, pos) 
                 self._activeObj = None
         else:
-            FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in nothing" + event.getTypeId().getName() + "\n")
+            #FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in nothing" + event.getTypeId().getName() + "\n")
+            pass
 
     def _getObjAtPos(self, pos, objList):
         listObjects = self._view.getObjectsInfo((int(pos[0]),int(pos[1])))
