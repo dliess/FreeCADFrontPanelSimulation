@@ -55,7 +55,7 @@ class PixelContainer:
             #                             "b" + str( (rgba32 >> 8) & 0xff ) + "\n")
             buf.append(rgba32)
         assert(buf.itemsize == 4)
-        im = Image.frombuffer("RGBX", (xmax - xmin + 1, ymax - ymin + 1), buf, 'raw', "BGRX", 0, 1)
+        im = Image.frombuffer("RGBX", (xmax - xmin + 1, ymax - ymin + 1), bytes(buf), 'raw', "BGRX", 0, 1)
         self.image.paste(im, (xmin, ymin))
 
     def drawRectangle(self, rectangle):

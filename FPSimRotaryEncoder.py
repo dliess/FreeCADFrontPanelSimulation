@@ -126,7 +126,6 @@ class FPSimRotaryEncoder(InitialPlacements):
                 child.Placement.Base = base          
 
     def getIncrements(self, objName):
-        FPSimServer.dataAquisitionCBHolder.clearEncoderCB(objName)
         obj = FreeCAD.ActiveDocument.getObject(objName)
         # take a sample of rot angle because of thread concurrency
         actRotIncr = int( (float(obj.RotationAngle) / 360.0) * float(obj.IncrementsPerRev) )
@@ -137,7 +136,6 @@ class FPSimRotaryEncoder(InitialPlacements):
         return ret
 
     def getButtonState(self, objName):
-        FPSimServer.dataAquisitionCBHolder.clearButtonCB(objName)
         return buttonState[objName]
 
 class FPSimRotaryEncoderViewProvider:

@@ -12,14 +12,19 @@ import time
 
 class DataAquisitionCBHolder:
     def __init__(self):
-        # TODO: check if this lock is really necessary
-        # for multithreaded dictionary access in python 
         self._mutex = Lock()
         self.buttonCB = {}
+        self.button3dCB = {}
+        self.button5dCB = {}
         self.encoderCB = {}
         self.potentiometerCB = {}
         self.touchSurfaceCB = {}
 
+    def lock(self):
+        self._mutex.acquire()
+
+    def unlock(self):
+        self._mutex.release()
 
     def setButtonCB(self, objName, cb):
         self._mutex.acquire()
@@ -29,11 +34,27 @@ class DataAquisitionCBHolder:
             self._mutex.release()
     
     def clearButtonCB(self, objName):
+        self.buttonCB[objName] = None
+
+    def setButton3dCB(self, objName, cb):
         self._mutex.acquire()
         try:
-            self.buttonCB[objName] = None
+            self.button3dCB[objName] = cb
         finally:
             self._mutex.release()
+    
+    def clearButton3dCB(self, objName):
+        self.button3dCB[objName] = None
+
+    def setButton5dCB(self, objName, cb):
+        self._mutex.acquire()
+        try:
+            self.button5dCB[objName] = cb
+        finally:
+            self._mutex.release()
+    
+    def clearButton5dCB(self, objName):
+        self.button5dCB[objName] = None
 
     def setEncoderCB(self, objName, cb):
         self._mutex.acquire()
@@ -43,39 +64,19 @@ class DataAquisitionCBHolder:
             self._mutex.release()
     
     def clearEncoderCB(self, objName):
-        self._mutex.acquire()
-        try:
-            self.encoderCB[objName] = None
-        finally:
-            self._mutex.release()
+        self.encoderCB[objName] = None
 
     def setPotentiometerCB(self, objName, cb):
-        self._mutex.acquire()
-        try:
-            self.potentiometerCB[objName] = cb
-        finally:
-            self._mutex.release()
+        self.potentiometerCB[objName] = cb
     
     def clearPotentiometerCB(self, objName):
-        self._mutex.acquire()
-        try:
-            self.potentiometerCB[objName] = None
-        finally:
-            self._mutex.release()
+        self.potentiometerCB[objName] = None
 
     def setTouchSurfaceCB(self, objName, cb):
-        self._mutex.acquire()
-        try:
-            self.touchSurfaceCB[objName] = cb
-        finally:
-            self._mutex.release()
+        self.touchSurfaceCB[objName] = cb
     
     def clearTouchSurfaceCB(self, objName):
-        self._mutex.acquire()
-        try:
-            self.touchSurfaceCB[objName] = None
-        finally:
-            self._mutex.release()
+        self.touchSurfaceCB[objName] = None
     
 dataAquisitionCBHolder = DataAquisitionCBHolder()
 _commandedValues = dict()
@@ -183,49 +184,77 @@ class FPSimulationService(GRPC.FPSimulationServicer):
             return answ
    
     def getButtonStates(self, request, context):
-        for objName in dataAquisitionCBHolder.buttonCB:
-            if(dataAquisitionCBHolder.buttonCB[objName]):
-                obj = FreeCAD.ActiveDocument.getObject(objName)
-                answ = Proto.GetButtonStateAnswer()
-                answ.objLabel = obj.Label
-                answ.state = dataAquisitionCBHolder.buttonCB[objName](objName) 
-                yield answ
+        try:
+            dataAquisitionCBHolder.lock()
+            for objName in dataAquisitionCBHolder.buttonCB:
+                FreeCAD.Console.PrintMessage("getButtonStates " + objName + "\n")
+                if(dataAquisitionCBHolder.buttonCB[objName]):
+                    obj = FreeCAD.ActiveDocument.getObject(objName)
+                    answ = Proto.GetButtonStateAnswer()
+                    answ.objLabel = obj.Label
+                    answ.state = dataAquisitionCBHolder.buttonCB[objName](objName)
+                    dataAquisitionCBHolder.clearButtonCB(objName)
+                    yield answ
+        finally:
+            dataAquisitionCBHolder.unlock()
 
     def getButton3dStates(self, request, context):
-        for objName in dataAquisitionCBHolder.buttonCB:
-            if(dataAquisitionCBHolder.buttonCB[objName]):
-                obj = FreeCAD.ActiveDocument.getObject(objName)
-                answ = Proto.GetButtonStateAnswer()
-                answ.objLabel = obj.Label
-                answ.state = dataAquisitionCBHolder.buttonCB[objName](objName) 
-                yield answ
+        try:
+            dataAquisitionCBHolder.lock()
+            for objName in dataAquisitionCBHolder.button3dCB:
+                FreeCAD.Console.PrintMessage("getButton3dStates " + objName + "\n")
+                if(dataAquisitionCBHolder.button3dCB[objName]):
+                    obj = FreeCAD.ActiveDocument.getObject(objName)
+                    answ = Proto.GetButtonStateAnswer()
+                    answ.objLabel = obj.Label
+                    answ.state = dataAquisitionCBHolder.button3dCB[objName](objName)
+                    dataAquisitionCBHolder.clearButton3dCB(objName)
+                    yield answ
+        finally:
+            dataAquisitionCBHolder.unlock()
 
     def getButton5dStates(self, request, context):
-        for objName in dataAquisitionCBHolder.buttonCB:
-            if(dataAquisitionCBHolder.buttonCB[objName]):
-                obj = FreeCAD.ActiveDocument.getObject(objName)
-                answ = Proto.GetButtonStateAnswer()
-                answ.objLabel = obj.Label
-                answ.state = dataAquisitionCBHolder.buttonCB[objName](objName) 
-                yield answ
+        try:
+            dataAquisitionCBHolder.lock()
+            for objName in dataAquisitionCBHolder.button5dCB:
+                FreeCAD.Console.PrintMessage("getButton5dStates " + objName + "\n")
+                if(dataAquisitionCBHolder.button5dCB[objName]):
+                    obj = FreeCAD.ActiveDocument.getObject(objName)
+                    answ = Proto.GetButtonStateAnswer()
+                    answ.objLabel = obj.Label
+                    answ.state = dataAquisitionCBHolder.button5dCB[objName](objName) 
+                    dataAquisitionCBHolder.clearButton5dCB(objName)
+                    yield answ
+        finally:
+            dataAquisitionCBHolder.unlock()
 
     def getEncoderIncrements(self, request, context):
-        for objName in dataAquisitionCBHolder.encoderCB:
-            if(dataAquisitionCBHolder.encoderCB[objName]):
-                obj = FreeCAD.ActiveDocument.getObject(objName)
-                answ = Proto.GetEncoderIncrementsAnswer()
-                answ.objLabel = obj.Label
-                answ.increments = dataAquisitionCBHolder.encoderCB[objName](objName) 
-                yield answ
+        try:
+            dataAquisitionCBHolder.lock()
+            for objName in dataAquisitionCBHolder.encoderCB:
+                if(dataAquisitionCBHolder.encoderCB[objName]):
+                    obj = FreeCAD.ActiveDocument.getObject(objName)
+                    answ = Proto.GetEncoderIncrementsAnswer()
+                    answ.objLabel = obj.Label
+                    answ.increments = dataAquisitionCBHolder.encoderCB[objName](objName)
+                    dataAquisitionCBHolder.clearEncoderCB(objName)
+                    yield answ
+        finally:
+            dataAquisitionCBHolder.unlock()
 
     def getPotentiometerValues(self, request, context):
-        for objName in dataAquisitionCBHolder.potentiometerCB:
-            if(dataAquisitionCBHolder.potentiometerCB[objName]):
-                obj = FreeCAD.ActiveDocument.getObject(objName)
-                answ = Proto.GetPotentiometerValuesAnswer()
-                answ.objLabel = obj.Label
-                answ.value = dataAquisitionCBHolder.potentiometerCB[objName](objName) 
-                yield answ
+        try:
+            dataAquisitionCBHolder.lock()
+            for objName in dataAquisitionCBHolder.potentiometerCB:
+                if(dataAquisitionCBHolder.potentiometerCB[objName]):
+                    obj = FreeCAD.ActiveDocument.getObject(objName)
+                    answ = Proto.GetPotentiometerValuesAnswer()
+                    answ.objLabel = obj.Label
+                    answ.value = dataAquisitionCBHolder.potentiometerCB[objName](objName)
+                    # do not clear potentiometer aquisition callback
+                    yield answ
+        finally:
+            dataAquisitionCBHolder.unlock()
 
     def movePotentiometerToValue(self, request, context):
         try:
@@ -238,15 +267,20 @@ class FPSimulationService(GRPC.FPSimulationServicer):
         
 
     def getTouchValue(self, request, context):
-        for objName in dataAquisitionCBHolder.touchSurfaceCB:
-            if(dataAquisitionCBHolder.touchSurfaceCB[objName]):
-                obj = FreeCAD.ActiveDocument.getObject(objName)
-                answ = Proto.GetTouchValueAnswer()
-                answ.objLabel = obj.Label
-                tup = dataAquisitionCBHolder.touchSurfaceCB[objName](objName)
-                answ.pos.x = tup[0]
-                answ.pos.y = tup[1]                  
-                yield answ
+        try:
+            dataAquisitionCBHolder.lock()
+            for objName in dataAquisitionCBHolder.touchSurfaceCB:
+                if(dataAquisitionCBHolder.touchSurfaceCB[objName]):
+                    obj = FreeCAD.ActiveDocument.getObject(objName)
+                    answ = Proto.GetTouchValueAnswer()
+                    answ.objLabel = obj.Label
+                    tup = dataAquisitionCBHolder.touchSurfaceCB[objName](objName)
+                    # do not clear touchSurfaceCB aquisition callback
+                    answ.pos.x = tup[0]
+                    answ.pos.y = tup[1]              
+                    yield answ
+        finally:
+            dataAquisitionCBHolder.unlock()
 
 import math
 class Server:

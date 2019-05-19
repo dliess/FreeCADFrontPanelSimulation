@@ -7,6 +7,14 @@ import generated.python.FPSimulation_pb2 as Proto
 
 buttonState = dict()
 
+def has5dButtonTraits(buttonObj):
+    return hasattr(buttonObj, 'PressureResolutionLin') and \
+           (buttonObj.PressureResolutionLin.x != 0 or buttonObj.PressureResolutionLin.y != 0)
+
+def has3dButtonTraits(buttonObj):
+    return (hasattr(buttonObj, 'PressureResolutionLin') and (buttonObj.PressureResolutionLin.z != 0)) or \
+           (hasattr(buttonObj, 'VelocityResolution')    and (buttonObj.VelocityResolution != 0))
+
 class FPSimButton(InitialPlacements):
     def __init__(self, obj):
         InitialPlacements.__init__(self, obj)
@@ -66,8 +74,13 @@ class FPSimButton(InitialPlacements):
 
     def onButtonEvent(self, objName, state, pos):
         obj = FreeCAD.ActiveDocument.getObject(objName)
-
-        FPSimServer.dataAquisitionCBHolder.setButtonCB(objName, self.getState)
+        FreeCAD.Console.PrintMessage("onButtonEvent: " + objName + "\n")
+        if(has5dButtonTraits(obj)):
+            FPSimServer.dataAquisitionCBHolder.setButton5dCB(objName, self.getState)
+        elif(has3dButtonTraits(obj)):
+            FPSimServer.dataAquisitionCBHolder.setButton3dCB(objName, self.getState)
+        else:
+            FPSimServer.dataAquisitionCBHolder.setButtonCB(objName, self.getState)
         rot = FreeCAD.Rotation(obj.RotationAxis, obj.RotationAngle)
         if state == FPEventDispatcher.FPEventDispatcher.PRESSED:
             if not obj.SwitchMode:
@@ -95,9 +108,8 @@ class FPSimButton(InitialPlacements):
 
         
     def getState(self, objName):
-        FPSimServer.dataAquisitionCBHolder.clearButtonCB(objName)
+        FreeCAD.Console.PrintMessage("getState " + objName + "\n")
         return buttonState[objName]
-
 
 class FPSimButtonViewProvider:
     def __init__(self, obj):
@@ -139,4 +151,3 @@ def createFPSimLinButton():
                 buttonObj.addObject(theObj)
     except IndexError:
         FreeCAD.Console.PrintError("Usage Error, select objects and a surface\n")
-

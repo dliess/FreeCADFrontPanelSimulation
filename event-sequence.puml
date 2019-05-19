@@ -1,0 +1,29 @@
+@startuml
+
+participant button
+participant eventDispatcher
+participant dataAquisitionCBHolder
+participant server
+participant client
+participant qtEventSystem
+
+button -> eventDispatcher : registerForButtonEvent(self.onButtonEvent)
+...
+qtEventSystem --> eventDispatcher : click on btn widget
+activate eventDispatcher
+eventDispatcher -> button : onButtonEvent()
+activate button
+button -> dataAquisitionCBHolder : setButtonCB(self.getState)
+activate dataAquisitionCBHolder
+button <-- dataAquisitionCBHolder
+deactivate dataAquisitionCBHolder
+eventDispatcher <-- button
+deactivate button
+deactivate eventDispatcher
+...
+client --> server : getButtonStates()
+activate server
+server -> dataAquisitionCBHolder : for all registered button callbacks
+client <-- server
+deactivate server
+@enduml 
