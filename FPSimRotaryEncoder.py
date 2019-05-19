@@ -71,7 +71,6 @@ class FPSimRotaryEncoder(InitialPlacements):
                 FPEventDispatcher.eventDispatcher.registerForHoverKeyPress(obj.Name, CTRL_KEYCODE,self.onKeyEvent)
                 FPSimServer.dataAquisitionCBHolder.setButtonCB(obj.Name, self.getButtonState)
             else:
-                FPSimServer.dataAquisitionCBHolder.clearButtonCB(obj.Name)
                 FPEventDispatcher.eventDispatcher.unregisterHoverKeyPress(obj.Name, CTRL_KEYCODE)
             # Called on parameter change (followed by execute-cb when it gets applied)
 
