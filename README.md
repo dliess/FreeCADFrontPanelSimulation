@@ -111,7 +111,7 @@ You can test the FreeCAD Front Panel Simulation workbench using the prebundled `
 
 # Problems/Workarounds:
 * Setting pixel 0,0 causes border of display to be set with the color of the pixel
-   Workaround: Cover 0,5 mm of the dispaly border with the front panel
+   Workaround: Cover 0,5 mm of the display border with the front panel
 
 # Author
 [@dliess](https://github.com/dliess)
