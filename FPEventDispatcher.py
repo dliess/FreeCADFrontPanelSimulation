@@ -43,7 +43,7 @@ class FPEventDispatcher:
                         objDict[keyPressedObj](keyPressedObj, event.getKey(), FPEventDispatcher.PRESSED)
                 else:
                     if self._activeObjKeypress in objDict:
-                        objDict[self._activeObjKeypress](self._activeObjKeypress, event.getKey(), FPEventDispatcher.RELEASED) 
+                        objDict[self._activeObjKeypress](self._activeObjKeypress, event.getKey(), FPEventDispatcher.RELEASED)
                     self._activeObjKeypress = None
 
         elif event.getTypeId() == coin.SoLocation2Event.getClassTypeId():
@@ -67,7 +67,7 @@ class FPEventDispatcher:
             #    if step < steps:
             #        time.sleep(0.0001)
             #self._lastPos = pos
-            
+
             newHOverObj = self._getObjAtPos(pos, self._hOverSubscribers)
             # HOver change
             if newHOverObj != self._prevHOverObj:
@@ -78,7 +78,7 @@ class FPEventDispatcher:
                     if (not self._activeObj) or (newHOverObj == self._activeObj):
                         self._hOverSubscribers[newHOverObj](newHOverObj, FPEventDispatcher.HOVER_IN)
                 self._prevHOverObj = newHOverObj
-                
+
         elif event.getTypeId() == coin.SoMouseButtonEvent.getClassTypeId():
             #FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in SoMouseButtonEvent\n")
             pos = event.getPosition().getValue()
@@ -89,7 +89,7 @@ class FPEventDispatcher:
                     self._buttonEventSubscribers[clickedObj](clickedObj, FPEventDispatcher.PRESSED, pos)
             else:
                 if self._activeObj in self._buttonEventSubscribers:
-                    self._buttonEventSubscribers[self._activeObj](self._activeObj, FPEventDispatcher.RELEASED, pos) 
+                    self._buttonEventSubscribers[self._activeObj](self._activeObj, FPEventDispatcher.RELEASED, pos)
                 self._activeObj = None
         else:
             #FreeCAD.Console.PrintMessage("FPEventDispatcher: We are in nothing" + event.getTypeId().getName() + "\n")
@@ -100,7 +100,7 @@ class FPEventDispatcher:
         if listObjects:
             # only inspect upmost object in respect to the camera
             objName = listObjects[0]["Object"]
-            #FreeCAD.Console.PrintMessage("FPEventDispatcher: upmost object is: " + objName + "\n") 
+            #FreeCAD.Console.PrintMessage("FPEventDispatcher: upmost object is: " + objName + "\n")
             if objName in objList:
                 return objName
             else:
@@ -124,7 +124,7 @@ class FPEventDispatcher:
         self._view =  FreeCADGui.ActiveDocument.ActiveView
         self._disableObjectSelection()
         self._eventHandle = self._view.addEventCallbackPivy( coin.SoEvent.getClassTypeId(), self._handleEvent )
-        return  
+        return
 
     def deactivate(self):
         self._view.removeEventCallbackPivy( coin.SoEvent.getClassTypeId(), self._eventHandle )
@@ -134,24 +134,24 @@ class FPEventDispatcher:
 
     def registerForButtonEvent(self, objName, cb):
         # pass objName, PRESS/RELEASE and location
-        self._buttonEventSubscribers[objName] = cb 
+        self._buttonEventSubscribers[objName] = cb
 
     def unregisterForButtonEvent(self, objName):
         if objName in self._buttonEventSubscribers:
             del self._buttonEventSubscribers[objName]
 
     def registerForLocation(self, objName, cb):
-        # pass objName, position 
-        self._locationSubscribers[objName] = cb 
-        
+        # pass objName, position
+        self._locationSubscribers[objName] = cb
+
     def unregisterForLocation(self, objName, cb):
         if objName in self._locationSubscribers:
             del self._locationSubscribers[objName]
 
     def registerForHOver(self, objName, cb):
         # pass objName, HOVER_IN/HOVER_OUT
-        # Only call when there is no active oject or object is the active object
-        self._hOverSubscribers[objName] = cb 
+        # Only call when there is no active object or object is the active object
+        self._hOverSubscribers[objName] = cb
 
     def unregisterForHOver(self, objName):
         if objName in self._hOverSubscribers:
@@ -176,6 +176,5 @@ class FPEventDispatcher:
         if key in self._hoverKeyEventSubscribers:
             if objName in self._hoverKeyEventSubscribers[key]:
                 del self._hoverKeyEventSubscribers[key][objName]
-    
+
 eventDispatcher = FPEventDispatcher()
-        

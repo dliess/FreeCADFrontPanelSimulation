@@ -238,7 +238,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
                     answ.value = dataAquisitionCBHolder.potentiometerCB[objName](objName)
                     yield answ
         finally:
-            # do not clear potentiometer aquisition callback
+            # do not clear potentiometer acquisition callback
             dataAquisitionCBHolder.unlock()
 
     def movePotentiometerToValue(self, request, context):
@@ -264,7 +264,7 @@ class FPSimulationService(GRPC.FPSimulationServicer):
                     answ.pos.y = tup[1]              
                     yield answ
         finally:
-            # do not clear touchSurfaceCB aquisition callback
+            # do not clear touchSurfaceCB acquisition callback
             dataAquisitionCBHolder.unlock()
 
 import math

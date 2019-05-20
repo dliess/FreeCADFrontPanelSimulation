@@ -70,7 +70,7 @@ class FPSimLinearPotentiometer(InitialPlacements):
 
         
     def onDragged(self, objName, pointerPos):
-        # Used coordinate sytem names
+        # Used coordinate system names
         # K0 -> Part1 -> ... -> PartN(parentPart) -> ObjPlacement -> OnObjectPlacement
 
         obj = FreeCAD.ActiveDocument.getObject(objName)
