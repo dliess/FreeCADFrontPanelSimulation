@@ -38,7 +38,7 @@ class PixelContainer:
         self.modified = True
         self.image.putpixel((pixel.pos.x, pixel.pos.y), convertToRGBAArray(pixel.rgba))
 
-    # interprete subwindow as closed interval on both sides
+    # interpret subwindow as closed interval on both sides
     def setSubWindowPixels_ARGB32(self, subWindowData):
         self.modified = True
         xmin = min(subWindowData.p1.x, subWindowData.p2.x)
