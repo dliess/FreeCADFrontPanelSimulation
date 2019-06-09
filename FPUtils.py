@@ -49,3 +49,8 @@ def getChildsWithPlacement(obj):
     ret = []
     getChildsWithPlacementRecursive(obj, ret)
     return ret
+
+def arrayRootObject(obj):
+    import re
+    label = re.sub("\[\d+]", '[0]', obj.Label)
+    return FreeCAD.ActiveDocument.getObjectsByLabel(label)[0]

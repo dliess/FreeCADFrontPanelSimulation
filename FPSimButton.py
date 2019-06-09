@@ -74,10 +74,10 @@ class FPSimButton(InitialPlacements):
 
     def onButtonEvent(self, objName, state, pos):
         obj = FreeCAD.ActiveDocument.getObject(objName)
-        #FreeCAD.Console.PrintMessage("onButtonEvent: " + objName + "\n")
-        if(has5dButtonTraits(obj)):
+        arrayRootObj = FPUtils.arrayRootObject(obj)
+        if(has5dButtonTraits(arrayRootObj)):
             FPSimServer.dataAquisitionCBHolder.setButton5dCB(objName, self.getState)
-        elif(has3dButtonTraits(obj)):
+        elif(has3dButtonTraits(arrayRootObj)):
             FPSimServer.dataAquisitionCBHolder.setButton3dCB(objName, self.getState)
         else:
             FPSimServer.dataAquisitionCBHolder.setButtonCB(objName, self.getState)
