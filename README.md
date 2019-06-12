@@ -110,8 +110,8 @@ You can test the FreeCAD Front Panel Simulation workbench using the prebundled `
 * Render QT-Framebuffer into display widgets
 
 # Problems/Workarounds:
-* Setting pixel 0,0 causes border of display to be set with the color of the pixel
-   Workaround: Cover 0,5 mm of the display border with the front panel
+* Setting `pixel 0,0` causes border of display to be set with the color of the pixel  
+   Workaround: Cover `0,5 mm` of the display border with the front panel
 
 # Author
 [@dliess](https://github.com/dliess)
