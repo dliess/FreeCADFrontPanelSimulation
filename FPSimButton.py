@@ -31,9 +31,11 @@ class FPSimButton(InitialPlacements):
 
     def _registerEventCallbacks(self, objName):
         FPEventDispatcher.eventDispatcher.registerForButtonEvent(objName, self.onButtonEvent)
+        FPEventDispatcher.eventDispatcher.registerForHoverKeyPress(objName, FPEventDispatcher.FPEventDispatcher.CTRL_KEYCODE,self.onKeyEvent)
 
     def _unregisterEventCallbacks(self, objName):
         FPEventDispatcher.eventDispatcher.unregisterForButtonEvent(objName)
+        FPEventDispatcher.eventDispatcher.unregisterHoverKeyPress(objName, FPEventDispatcher.FPEventDispatcher.CTRL_KEYCODE)
 
     def onChanged(self, obj, prop):
         #FreeCAD.Console.PrintMessage("in onChanged obj.Name: " + str(obj.Name) + " obj.Label: " + str(obj.Label) + " prop: " + str(prop) + "\n")
@@ -106,6 +108,8 @@ class FPSimButton(InitialPlacements):
             elif buttonState[objName] == Proto.BUTTON_RELEASED:
                 child.Placement = self.getInitialPlacement(obj, child.Name)
 
+    def onKeyEvent(self, objName, keyCode, state):
+        self.onButtonEvent(objName, state, "")
         
     def getState(self, objName):
         return buttonState[objName]

@@ -7,7 +7,6 @@ import generated.python.FPSimulation_pb2 as Proto
 
 lastRotationIncrementsAtAquire = dict()
 buttonState = dict()
-CTRL_KEYCODE = 65507
 
 class FPSimRotaryEncoder(InitialPlacements):
     def __init__(self, obj):
@@ -68,10 +67,10 @@ class FPSimRotaryEncoder(InitialPlacements):
                 self.saveInitialPlacements(obj)
         elif prop == 'PushButton':
             if obj.PushButton == True:
-                FPEventDispatcher.eventDispatcher.registerForHoverKeyPress(obj.Name, CTRL_KEYCODE,self.onKeyEvent)
+                FPEventDispatcher.eventDispatcher.registerForHoverKeyPress(obj.Name, FPEventDispatcher.FPEventDispatcher.CTRL_KEYCODE,self.onKeyEvent)
                 FPSimServer.dataAquisitionCBHolder.setButtonCB(obj.Name, self.getButtonState)
             else:
-                FPEventDispatcher.eventDispatcher.unregisterHoverKeyPress(obj.Name, CTRL_KEYCODE)
+                FPEventDispatcher.eventDispatcher.unregisterHoverKeyPress(obj.Name, FPEventDispatcher.FPEventDispatcher.CTRL_KEYCODE)
             # Called on parameter change (followed by execute-cb when it gets applied)
 
     def execute(self, fp):

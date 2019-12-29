@@ -8,6 +8,7 @@ class FPEventDispatcher:
     RELEASED = 1
     HOVER_IN = 0
     HOVER_OUT = 1
+    CTRL_KEYCODE = 65507
 
     def __init__(self):
         self._view              = None
